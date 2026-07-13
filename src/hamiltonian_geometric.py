@@ -21,6 +21,7 @@ import numpy as np
 Array = np.ndarray
 GradientFn = Callable[[Array], Array]
 MetricFn = Callable[[Array], Array]
+LossFn = Callable[[Array], float]
 
 
 @dataclass(frozen=True)
@@ -36,6 +37,9 @@ class HamiltonianGeometricConfig:
     finite_difference_step: float = 1e-5
     use_geometric_correction: bool = True
     use_memory_correction: bool = True
+    max_energy_backtracks: int = 0
+    energy_backtrack_factor: float = 0.5
+    energy_tolerance: float = 0.0
 
     def __post_init__(self) -> None:
         if self.learning_rate <= 0.0:
@@ -52,6 +56,12 @@ class HamiltonianGeometricConfig:
             raise ValueError("spectral_weight must be non-negative")
         if self.finite_difference_step <= 0.0:
             raise ValueError("finite_difference_step must be positive")
+        if self.max_energy_backtracks < 0:
+            raise ValueError("max_energy_backtracks must be non-negative")
+        if not 0.0 < self.energy_backtrack_factor < 1.0:
+            raise ValueError("energy_backtrack_factor must be in the range (0.0, 1.0)")
+        if self.energy_tolerance < 0.0:
+            raise ValueError("energy_tolerance must be non-negative")
 
 
 @dataclass(frozen=True)
@@ -82,8 +92,25 @@ def hamiltonian_geometric_step(
     gradient_fn: GradientFn,
     metric_fn: MetricFn,
     config: HamiltonianGeometricConfig,
+    loss_fn: LossFn | None = None,
 ) -> HamiltonianGeometricState:
-    """Advance one Euler step of the paper's optimizer equations."""
+    """Advance one Euler step of the paper's optimizer equations.
+
+    If `loss_fn` is given and `config.max_energy_backtracks > 0`, the step is
+    followed by an energy-dissipation safeguard: a dissipative Hamiltonian
+    system's total energy (here, the loss stands in for the potential term
+    L(theta)) must not spontaneously increase, but a finite discrete Euler
+    step can still overshoot on a rugged or chaotic potential and violate
+    that invariant. When it does, the momentum that produced the violating
+    step is repeatedly damped by `energy_backtrack_factor` (recomputing the
+    resulting position from that same metric and momentum) until the loss no
+    longer exceeds its pre-step value by more than `energy_tolerance`, or the
+    backtrack budget is exhausted. This is the discrete analogue of adding
+    more Rayleigh dissipation exactly when the system needs it to stay
+    physical, rather than a fixed damping guess; it changes nothing when the
+    step already decreases the loss (backtracking config defaults to 0, so
+    existing callers are unaffected unless they opt in).
+    """
 
     theta = state.parameters
     gradient = gradient_fn(theta)
@@ -118,6 +145,11 @@ def hamiltonian_geometric_step(
     momentum = config.beta * state.momentum - config.learning_rate * force
     parameters = theta + config.learning_rate * (inverse_metric @ momentum)
 
+    if loss_fn is not None and config.max_energy_backtracks > 0:
+        momentum, parameters = _apply_energy_backtracking(
+            theta, momentum, inverse_metric, loss_fn, config
+        )
+
     return HamiltonianGeometricState(
         parameters=parameters,
         momentum=momentum,
@@ -128,6 +160,25 @@ def hamiltonian_geometric_step(
         memory_force_norm=float(np.linalg.norm(memory_force)),
         spectral_force_norm=float(np.linalg.norm(config.spectral_weight * spectral_force)),
     )
+
+
+def _apply_energy_backtracking(
+    theta: Array,
+    momentum: Array,
+    inverse_metric: Array,
+    loss_fn: LossFn,
+    config: HamiltonianGeometricConfig,
+) -> tuple[Array, Array]:
+    """Damp momentum until the step no longer increases the loss (or budget runs out)."""
+
+    current_loss = loss_fn(theta)
+    parameters = theta + config.learning_rate * (inverse_metric @ momentum)
+    for _ in range(config.max_energy_backtracks):
+        if loss_fn(parameters) <= current_loss * (1.0 + config.energy_tolerance) + config.energy_tolerance:
+            break
+        momentum = config.energy_backtrack_factor * momentum
+        parameters = theta + config.learning_rate * (inverse_metric @ momentum)
+    return momentum, parameters
 
 
 def positive_definite_metric(raw_metric: Array, regularization: float) -> Array:

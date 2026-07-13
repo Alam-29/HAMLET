@@ -171,7 +171,18 @@ def train_optimizer(
     y_val: np.ndarray,
     args: argparse.Namespace,
 ) -> OptimizerResult:
-    rng = np.random.default_rng(args.seed + hash(name) % 10_000)
+    # A per-optimizer seed offset needs to be stable across processes so the
+    # minibatch order (and therefore every reported number) is reproducible;
+    # Python's built-in hash() of a str is randomized per-process (PYTHONHASHSEED)
+    # unless explicitly disabled, so it cannot be used here.
+    seed_offsets = {
+        "sgd": 1,
+        "adam": 2,
+        "falling_ball": 3,
+        "entropy_descent": 4,
+        "hamiltonian_geometric": 5,
+    }
+    rng = np.random.default_rng(args.seed + seed_offsets[name] * 1_000)
     theta = theta0.copy()
     velocity = np.zeros_like(theta)
     memory = np.zeros_like(theta)
@@ -185,7 +196,19 @@ def train_optimizer(
         "adam": 0.012,
         "falling_ball": 0.018,
         "entropy_descent": 0.045,
-        "hamiltonian_geometric": 0.035,
+        # The Hamiltonian-geometric update applies its learning rate twice --
+        # once building momentum (velocity = beta*velocity - lr*force), again
+        # mapping that momentum to a position step (theta += lr*g^-1*velocity),
+        # per the paper's own Sec. 17 convention (see the comparison in
+        # src.pinn.train_falling_ball's docstring). That means its effective
+        # step scales like lr^2, not lr, so it needs a noticeably larger lr
+        # than the other optimizers here for a comparable step size; 0.035
+        # under-shot badly (val_loss 0.045 after 120 epochs, far behind Adam).
+        # 0.25 was found by a learning-rate sweep on this benchmark and is the
+        # point where the final-epoch loss still matches the best-epoch loss
+        # seen during training (i.e. training has stabilized rather than
+        # still oscillating), not merely wherever loss is lowest.
+        "hamiltonian_geometric": 0.25,
     }
     lr = learning_rates[name]
     batch_size = min(args.batch_size, x_train.shape[0])

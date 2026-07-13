@@ -76,6 +76,59 @@ class HamiltonianGeometricCoreTests(unittest.TestCase):
             HamiltonianGeometricConfig(memory_decay=1.0)
         with self.assertRaises(ValueError):
             HamiltonianGeometricConfig(metric_regularization=0.0)
+        with self.assertRaises(ValueError):
+            HamiltonianGeometricConfig(max_energy_backtracks=-1)
+        with self.assertRaises(ValueError):
+            HamiltonianGeometricConfig(energy_backtrack_factor=1.0)
+
+    def test_energy_backtracking_is_a_no_op_without_loss_fn(self) -> None:
+        # A large step that would overshoot a quadratic bowl still applies
+        # unmodified when no loss_fn is given, even if max_energy_backtracks > 0:
+        # backtracking is strictly opt-in per call, not just per config.
+        config = HamiltonianGeometricConfig(
+            learning_rate=5.0, beta=0.0, use_geometric_correction=False,
+            use_memory_correction=False, max_energy_backtracks=4,
+        )
+        state = initial_state(1)
+
+        def gradient_fn(theta: np.ndarray) -> np.ndarray:
+            return 2.0 * theta - 4.0  # gradient of (theta-2)^2, minimum at theta=2
+
+        def metric_fn(_theta: np.ndarray) -> np.ndarray:
+            return np.eye(1)
+
+        updated = hamiltonian_geometric_step(state, gradient_fn, metric_fn, config)
+
+        # No loss_fn given, so the raw (overshooting) step is used unchanged.
+        expected_momentum = -config.learning_rate * gradient_fn(state.parameters)
+        np.testing.assert_allclose(updated.momentum, expected_momentum)
+
+    def test_energy_backtracking_prevents_loss_increase_on_a_quadratic_bowl(self) -> None:
+        # Same oversized step as above, but now with loss_fn + backtracking
+        # enabled: the momentum that would overshoot past the minimum and
+        # increase the loss must be damped until the loss no longer rises,
+        # mirroring the paper's own dissipative-energy invariant.
+        config = HamiltonianGeometricConfig(
+            learning_rate=5.0, beta=0.0, use_geometric_correction=False,
+            max_energy_backtracks=8, energy_backtrack_factor=0.5,
+        )
+        state = initial_state(1)
+
+        def gradient_fn(theta: np.ndarray) -> np.ndarray:
+            return 2.0 * theta - 4.0
+
+        def metric_fn(_theta: np.ndarray) -> np.ndarray:
+            return np.eye(1)
+
+        def loss_fn(theta: np.ndarray) -> float:
+            return float((theta[0] - 2.0) ** 2)
+
+        current_loss = loss_fn(state.parameters)
+        updated = hamiltonian_geometric_step(
+            state, gradient_fn, metric_fn, config, loss_fn=loss_fn
+        )
+
+        self.assertLessEqual(loss_fn(updated.parameters), current_loss)
 
 
 if __name__ == "__main__":

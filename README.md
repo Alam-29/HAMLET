@@ -1,9 +1,49 @@
-# Capacitor Fringing Effects Project
+# Hamiltonian Metric Learning and Energy-Based Training
 
-This project is a small research workspace for modeling how a real finite
-parallel-plate capacitor differs from the ideal infinite-plate result.
+This project is a research workspace for a single, generalized energy-based
+optimizer that aims to unify the common gradient-descent family (SGD,
+momentum/Heavy Ball, Nesterov, Adam, AdamW, ...) as special cases of one
+Hamiltonian dynamic, rather than treating each as a separate hand-tuned
+update rule:
 
-The first version keeps the physics assumptions visible:
+```
+p_{t+1}     = beta p_t - eta [grad L + F_geo + F_mem + alpha grad S(g)]
+theta_{t+1} = theta_t + eta g^-1(theta) p_{t+1}
+```
+
+`theta` and `p` are treated as Hamiltonian position/momentum coordinates, so
+each step conserves and dissipates energy the way a physical system would
+rather than following a plain gradient. Setting the metric `g` to the
+identity and turning off `F_geo`, `F_mem`, and the spectral term recovers
+plain (momentum) SGD; a diagonal, curvature-adaptive `g` moves the family
+toward Adam-style preconditioning. In general `g(theta)` is a *learned*
+parameter-space metric that rescales and reorients each step (metric
+learning); `F_geo` is a curvature correction derived from that metric,
+`F_mem` is a decaying memory force over past updates, and `alpha grad S(g)`
+couples training to the spectral entropy of the metric so the optimizer
+favors better-conditioned regions of parameter space (energy-based
+training). The reusable core is implemented in `src/hamiltonian_geometric.py`
+as plain NumPy, accepting callables for the loss gradient and the metric so
+it works with fixed features today and a theta-dependent metric (via
+finite-difference `F_geo` and `grad S(g)`) for full-network experiments
+later.
+
+Because the optimizer is meant to generalize, it is validated against
+plain SGD, Adam, and AlgoPerf-style baselines on more than one workload:
+
+- A physics-informed neural network (PINN), `main/run_pinn_benchmark.py`,
+  trained on a finite-plate capacitor fringing-field problem. This is one
+  physical benchmark among several, not the subject of the project — it
+  exists to give the optimizer a nonconvex problem with a known, checkable
+  physical baseline.
+- A DeepOBS-style nonconvex MLP classification task,
+  `main/run_deepobs_style_benchmark.py`.
+- AlgoPerf-style baseline families (`AdamW`, `Nesterov Momentum`, `Heavy Ball
+  Momentum`) with a local fixed tuning budget,
+  `main/run_algoperf_style_benchmark.py`.
+
+The physics assumptions behind the capacitor benchmark problem are kept
+visible for anyone extending or auditing that particular workload:
 
 - `ideal_parallel_plate`: textbook capacitance, `C = epsilon A / d`.
 - `effective_area_fringe`: a simple engineering approximation that pretends the
@@ -34,23 +74,20 @@ grid electrode dimensions. It also reports a dimensionless Laplace residual so
 the solved field can be judged by equation error, not only by iteration-to-
 iteration change.
 
-The literature-review optimizer architecture is implemented in
-`src/hamiltonian_geometric.py` and used by the PINN benchmark in `src/pinn.py`
-and `main/run_pinn_benchmark.py`. It trains a lightweight physics-informed
-model for the same finite-plate fringing-field problem and compares plain SGD,
-Adam, and a Hessian-metric Hamiltonian optimizer with geometric, memory, and
-spectral-entropy forces. Because the benchmark uses fixed nonlinear features,
-the benchmark metric is exact and constant; the reusable optimizer core also
-supports theta-dependent metrics through finite-difference `F_geo` and
-`grad S(g)` terms for later full-network experiments.
+The PINN model itself lives in `src/pinn.py`. Because this benchmark uses
+fixed nonlinear features, its metric `g` is exact and constant; the reusable
+optimizer core still supports theta-dependent metrics for the full-network
+experiments described above.
 
 ## Suggested Roadmap
 
-1. Build the analytical baseline.
+1. Build the analytical baseline for the capacitor benchmark problem.
 2. Add a 2D numerical Laplace solver for a capacitor cross-section.
 3. Estimate capacitance from stored electrostatic energy.
 4. Compare numerical results against the analytical baseline.
 5. Add parameter sweeps and visualizations.
+6. Extend the Hamiltonian-geometric optimizer to a theta-dependent metric and
+   a full-network (non-fixed-feature) benchmark.
 
 For more detail on the equations, assumptions, and limitations, read
 `docs/model_notes.md`. For the mathematical consistency review of the PDF's
@@ -102,6 +139,29 @@ budget:
 ```powershell
 python .\main\run_algoperf_style_benchmark.py
 ```
+
+To benchmark the optimizer on a chaotic quantum-control workload, run the
+quantum kicked-top state-transfer comparison. This compares SGD, AdamW,
+Nesterov Momentum, Heavy Ball Momentum, entropy descent, and the
+Hamiltonian-geometric optimizer:
+
+```powershell
+python .\main\run_quantum_chaos_benchmark.py
+```
+
+To see the optimizer's theta trajectory as a 3D PCA phase-space plot (theta
+lives in a 64-dimensional space by default; this projects every optimizer's
+recorded path onto the top 3 shared principal components so their routes
+through parameter space can be compared directly):
+
+```powershell
+python .\main\run_phase_space_visualization.py
+```
+
+This writes `visualizations\phase_space\phase_space_trajectories.csv` (PCA
+coordinates and loss per step per optimizer), `phase_space.png` (a static 3D
+view), `phase_space_rotation.gif` (a rotating 3D view), and `phase_space.html`
+(a self-contained, dependency-free interactive view -- drag to rotate).
 
 To regenerate the mathematical validation report for the PDF:
 

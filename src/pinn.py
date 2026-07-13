@@ -88,6 +88,7 @@ class TrainingResult:
     outer_loss: float
     gradient_norm: float
     spectral_entropy: float = 0.0
+    theta_history: list[np.ndarray] | None = None
 
     @property
     def final_loss(self) -> float:
@@ -197,16 +198,20 @@ def train_sgd(
     parameter_count: int,
     steps: int = 600,
     learning_rate: float = 1e-7,
+    record_theta: bool = False,
 ) -> TrainingResult:
     """Train with plain gradient descent."""
 
     parameters = np.zeros(parameter_count)
     history: list[float] = []
+    theta_history: list[np.ndarray] | None = [] if record_theta else None
     for _ in range(steps):
         loss, gradient = _loss_and_gradient(dataset.design_matrix, dataset.targets, parameters)
         history.append(loss)
+        if theta_history is not None:
+            theta_history.append(parameters.copy())
         parameters -= learning_rate * gradient
-    return _training_result("sgd", dataset, parameters, history)
+    return _training_result("sgd", dataset, parameters, history, theta_history=theta_history)
 
 
 def train_adam(
@@ -217,6 +222,7 @@ def train_adam(
     beta1: float = 0.9,
     beta2: float = 0.999,
     epsilon: float = 1e-8,
+    record_theta: bool = False,
 ) -> TrainingResult:
     """Train with Adam, the paper's diagonal-metric comparison baseline."""
 
@@ -224,15 +230,18 @@ def train_adam(
     first_moment = np.zeros(parameter_count)
     second_moment = np.zeros(parameter_count)
     history: list[float] = []
+    theta_history: list[np.ndarray] | None = [] if record_theta else None
     for step in range(1, steps + 1):
         loss, gradient = _loss_and_gradient(dataset.design_matrix, dataset.targets, parameters)
         history.append(loss)
+        if theta_history is not None:
+            theta_history.append(parameters.copy())
         first_moment = beta1 * first_moment + (1.0 - beta1) * gradient
         second_moment = beta2 * second_moment + (1.0 - beta2) * gradient**2
         corrected_first = first_moment / (1.0 - beta1**step)
         corrected_second = second_moment / (1.0 - beta2**step)
         parameters -= learning_rate * corrected_first / (np.sqrt(corrected_second) + epsilon)
-    return _training_result("adam", dataset, parameters, history)
+    return _training_result("adam", dataset, parameters, history, theta_history=theta_history)
 
 
 def train_falling_ball(
@@ -241,6 +250,7 @@ def train_falling_ball(
     steps: int = 600,
     learning_rate: float = 1e-7,
     friction: float = 0.85,
+    record_theta: bool = False,
 ) -> TrainingResult:
     """Train with the literal 'ball rolling downhill with friction' optimizer.
 
@@ -271,12 +281,15 @@ def train_falling_ball(
     parameters = np.zeros(parameter_count)
     momentum = np.zeros(parameter_count)
     history: list[float] = []
+    theta_history: list[np.ndarray] | None = [] if record_theta else None
     for _ in range(steps):
         loss, gradient = _loss_and_gradient(dataset.design_matrix, dataset.targets, parameters)
         history.append(loss)
+        if theta_history is not None:
+            theta_history.append(parameters.copy())
         momentum = friction * momentum + gradient
         parameters = parameters - learning_rate * momentum
-    return _training_result("falling_ball", dataset, parameters, history)
+    return _training_result("falling_ball", dataset, parameters, history, theta_history=theta_history)
 
 
 def train_entropy_descent(
@@ -285,6 +298,7 @@ def train_entropy_descent(
     steps: int = 600,
     learning_rate: float = 0.02,
     metric_regularization: float = 1e-3,
+    record_theta: bool = False,
 ) -> TrainingResult:
     """Train with pure metric-preconditioned ('natural gradient') descent.
 
@@ -308,12 +322,20 @@ def train_entropy_descent(
     spectral_entropy = _spectral_entropy(hessian_metric)
 
     history: list[float] = []
+    theta_history: list[np.ndarray] | None = [] if record_theta else None
     for _ in range(steps):
         loss, gradient = _loss_and_gradient(dataset.design_matrix, dataset.targets, parameters)
         history.append(loss)
+        if theta_history is not None:
+            theta_history.append(parameters.copy())
         parameters = parameters - learning_rate * (inverse_metric @ gradient)
     return _training_result(
-        "entropy_descent", dataset, parameters, history, spectral_entropy=spectral_entropy
+        "entropy_descent",
+        dataset,
+        parameters,
+        history,
+        spectral_entropy=spectral_entropy,
+        theta_history=theta_history,
     )
 
 
@@ -329,6 +351,7 @@ def train_hamiltonian_geometric(
     spectral_weight: float = 0.0,
     use_geometric_correction: bool = True,
     use_memory_correction: bool = True,
+    record_theta: bool = False,
 ) -> TrainingResult:
     """Train with the paper's proposed Hamiltonian-geometric optimizer.
 
@@ -398,12 +421,20 @@ def train_hamiltonian_geometric(
         return raw_hessian
 
     history: list[float] = []
+    theta_history: list[np.ndarray] | None = [] if record_theta else None
     for _ in range(steps):
         loss, _gradient = _loss_and_gradient(dataset.design_matrix, dataset.targets, state.parameters)
         history.append(loss)
+        if theta_history is not None:
+            theta_history.append(state.parameters.copy())
         state = hamiltonian_geometric_step(state, gradient_fn, metric_fn, optimizer_config)
     return _training_result(
-        "hamiltonian_geometric", dataset, state.parameters, history, spectral_entropy=spectral_entropy
+        "hamiltonian_geometric",
+        dataset,
+        state.parameters,
+        history,
+        spectral_entropy=spectral_entropy,
+        theta_history=theta_history,
     )
 
 
@@ -413,6 +444,7 @@ def run_optimizer_comparison(
     hamiltonian_kwargs: dict | None = None,
     falling_ball_kwargs: dict | None = None,
     entropy_descent_kwargs: dict | None = None,
+    record_theta: bool = False,
 ) -> tuple[FixedFeaturePotentialModel, PINNDataset, list[TrainingResult]]:
     """Train SGD, Adam, falling-ball, entropy-descent, and Hamiltonian-geometric
     optimizers on one dataset.
@@ -434,16 +466,28 @@ def run_optimizer_comparison(
     model = FixedFeaturePotentialModel(config)
     dataset = build_pinn_dataset(model, config)
     results = [
-        train_sgd(dataset, model.parameter_count, steps=steps),
-        train_adam(dataset, model.parameter_count, steps=steps),
+        train_sgd(dataset, model.parameter_count, steps=steps, record_theta=record_theta),
+        train_adam(dataset, model.parameter_count, steps=steps, record_theta=record_theta),
         train_falling_ball(
-            dataset, model.parameter_count, steps=steps, **(falling_ball_kwargs or {})
+            dataset,
+            model.parameter_count,
+            steps=steps,
+            record_theta=record_theta,
+            **(falling_ball_kwargs or {}),
         ),
         train_entropy_descent(
-            dataset, model.parameter_count, steps=steps, **(entropy_descent_kwargs or {})
+            dataset,
+            model.parameter_count,
+            steps=steps,
+            record_theta=record_theta,
+            **(entropy_descent_kwargs or {}),
         ),
         train_hamiltonian_geometric(
-            dataset, model.parameter_count, steps=steps, **(hamiltonian_kwargs or {})
+            dataset,
+            model.parameter_count,
+            steps=steps,
+            record_theta=record_theta,
+            **(hamiltonian_kwargs or {}),
         ),
     ]
     return model, dataset, results
@@ -551,6 +595,7 @@ def _training_result(
     parameters: np.ndarray,
     history: list[float],
     spectral_entropy: float = 0.0,
+    theta_history: list[np.ndarray] | None = None,
 ) -> TrainingResult:
     _, gradient = _loss_and_gradient(dataset.design_matrix, dataset.targets, parameters)
     pde_residual = dataset.pde_features @ parameters - dataset.pde_targets
@@ -565,4 +610,5 @@ def _training_result(
         outer_loss=float(np.mean(outer_residual**2)),
         gradient_norm=float(np.linalg.norm(gradient)),
         spectral_entropy=spectral_entropy,
+        theta_history=theta_history,
     )
