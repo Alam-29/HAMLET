@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1783971081.6749 "hamiltonian_geometric_consolidated_report.tex" "hamiltonian_geometric_consolidated_report.pdf" "hamiltonian_geometric_consolidated_report" 1783971089.44246 0
+["pdflatex"] 1783972138.86584 "hamiltonian_geometric_consolidated_report.tex" "hamiltonian_geometric_consolidated_report.pdf" "hamiltonian_geometric_consolidated_report" 1783972145.4039 0
   "../visualizations/ablation_study/ablation_study_figure.png" 1783955333.23998 266376 d7073d6c6583b03b43dc5ffaccf6f472 ""
   "../visualizations/algoperf_style_benchmark/algoperf_style_validation_loss.png" 1783963786.06605 131411 b0ae29cf75d3a54ced0ff1d617de1ced ""
   "../visualizations/deepobs_style_benchmark/deepobs_style_loss.png" 1783962861.11278 201082 447e7bf3d2acd1d01b94e5154d426278 ""
@@ -150,9 +150,9 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1707919699 40399 f2c302f7d2af602abb742093540a5834 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1767983718.71602 5472669 54eaf61a88b6b7896ebd0dac973cb29c ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1767983892 8215118 6767b11204c84fb63981dd4aae92c546 ""
-  "hamiltonian_geometric_consolidated_report.aux" 1783971089.18166 22638 da948f4bf8fcd5e8aeaa9ab0e237d22e "pdflatex"
-  "hamiltonian_geometric_consolidated_report.out" 1783971089.18366 5832 05d67560406ff8007de7ceca06432738 "pdflatex"
-  "hamiltonian_geometric_consolidated_report.tex" 1783970828.52231 81307 ddbdebe03155cd1fbca58d83c4e97653 ""
+  "hamiltonian_geometric_consolidated_report.aux" 1783972145.17017 23584 f69d8488567ec0d925077a91c7939d23 "pdflatex"
+  "hamiltonian_geometric_consolidated_report.out" 1783972145.17217 6040 1cf5e9033cf71a6ef0c909d5e6894556 "pdflatex"
+  "hamiltonian_geometric_consolidated_report.tex" 1783972064.0651 91713 69935ce7f4c0114e18c0cbf7103791c3 ""
   (generated)
   "hamiltonian_geometric_consolidated_report.aux"
   "hamiltonian_geometric_consolidated_report.log"

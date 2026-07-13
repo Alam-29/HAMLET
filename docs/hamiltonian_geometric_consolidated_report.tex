@@ -138,6 +138,66 @@ optimization is especially effective when full-metric structure is available,
 while remaining competitive rather than uniformly dominant against the
 strongest modern baselines.
 
+\section{Related Work}
+\label{sec:related-work}
+
+The dynamical-systems view of optimization is not new, and the contribution
+here must be positioned against it precisely rather than implied to be
+novel by omission. Su, Boyd \& Cand\`es~\cite{su2016differential} first
+modeled Nesterov's accelerated gradient method as the small-step-size limit
+of a second-order ODE, opening a line of work that reads discrete optimizers
+as discretizations of continuous-time dynamics.
+Wibisono, Wilson \& Jordan~\cite{wibisono2016variational} generalized this to
+a family of Bregman-Lagrangian dynamics whose Euler--Lagrange equations
+recover essentially all known accelerated first-order methods, already
+placing momentum and mirror-descent-style metrics in one variational
+framework. Betancourt, Jordan \& Wilson~\cite{betancourt2018symplectic}
+and Maddison et al.~\cite{maddison2018hamiltonian} go further and cast
+accelerated methods explicitly as (dissipative, symplectic, or conformal)
+Hamiltonian systems on parameter-momentum phase space, with
+Fran\c ca et al.~\cite{franca2021conformal} analyzing the conformal-symplectic
+integrators that make such dynamics stable under discretization -- the same
+concern this report's own energy-backtracking safeguard
+(\S\ref{sec:quantum-benchmark}) addresses empirically rather than through a
+structured integrator. Natural gradient~\cite{amari1998natural} and mirror
+descent~\cite{nemirovski1983problem} are older, narrower instances of the
+same idea: replace the Euclidean metric implicit in gradient descent with a
+task-dependent Riemannian or Bregman geometry. Riemannian and manifold
+optimization~\cite{absil2008optimization} develops optimization directly on
+curved manifolds using retractions and parallel transport; this report's
+$g_{ij}(\theta)$ and its curvature correction $F_{\mathrm{geo}}$
+(Eq.~\eqref{eq:fgeo}) are closely related to that literature's
+Christoffel-symbol corrections for a moving metric, a connection worth
+making precise in future work rather than only qualitatively here. A
+distinction that must also be drawn explicitly: Hamiltonian Monte
+Carlo~\cite{betancourt2017conceptual} uses the identical
+coordinate/momentum/Hamiltonian machinery, but for \emph{sampling} from a
+target distribution via conservative (energy-preserving) trajectories:
+what distinguishes the present, optimization-oriented use is precisely the
+dissipative modification (Rayleigh damping, Eq.~\eqref{eq:dissipative}) that
+HMC deliberately avoids in order to preserve the target measure.
+
+What is not already established in this literature, and is the actual
+contribution tested here, is threefold. First, the prior work above is
+almost entirely a \emph{descriptive} theory of existing accelerated methods
+(showing that Nesterov, heavy-ball, and mirror descent already are
+instances of a continuous-time dynamical system); this report instead
+treats the dynamical system as a \emph{prescriptive} template for a new,
+directly trainable optimizer with a metric built from the loss's own
+regularized Hessian, an explicit non-Markovian memory force, and a
+spectral-entropy regularizer on the metric's own eigenvalue spread --
+none of which appear as a package in the works above. Second,
+\S\ref{sec:modern-optimizers} extends the same correspondence to
+optimizers published independently and after this line of theoretical
+work (AdamW, Lion, Shampoo, Muon), which to our knowledge have not been
+placed on a single metric/kinetic-term/potential-splitting axis elsewhere.
+Third, \S\ref{sec:experimental-validation}--\S\ref{sec:robustness-followup}
+subject the resulting optimizer to the same empirical stress-testing
+(multi-seed variance, width scaling, ablation of each additive term) that a
+purely theoretical ODE-limit analysis does not by itself provide, and report
+the negative and mixed results (\S\ref{sec:robustness-followup},
+Table~\ref{tab:quantum-ablation}) alongside the favorable ones.
+
 \section{Mathematical Background}
 \label{sec:mathematical-background}
 
@@ -1545,6 +1605,89 @@ Bottom-right: spectral entropy $S(g)$ is flat under rotation of $g$.}
 \label{fig:symmetry}
 \end{figure}
 
+\section{Limitations}
+\label{sec:limitations}
+
+\begin{enumerate}
+\item \textbf{Scale.} Every benchmark in this report is small: MLPs with a
+few dozen hidden units, a 64-dimensional fixed-feature PINN, a 14-angle
+quantum control sequence. The full $n\times n$ metric this framework depends
+on for its clearest advantages (Table~\ref{tab:condition-scaling}) is
+tractable at these sizes but is not a scalable substitute for Adam-family
+optimizers on models with millions or billions of parameters; every result
+here about a full-matrix metric should be read as evidence about the
+\emph{mechanism}, not as a claim that it scales to production-size networks.
+The scaling sweep in \S\ref{sec:robustness-followup} is the one direct test
+of this concern, and it is unfavorable: Hamiltonian-geometric's advantage at
+the tuned width does not persist as width grows.
+\item \textbf{Seed coverage is uneven across benchmarks.} The multi-seed
+check (10 seeds, \S\ref{sec:robustness-followup}) and the quantum robustness
+check (5 seeds, \S\ref{sec:quantum-benchmark}) are the only places variance
+across random seeds is reported; the four classical tables
+(Tables~\ref{tab:mnist}--\ref{tab:pinn}) and the quantum ablation
+(Table~\ref{tab:quantum-ablation}) are single-seed point estimates. $n=10$
+seeds is itself underpowered to resolve the near-tie with Adam and Muon
+decisively (\S\ref{sec:robustness-followup}).
+\item \textbf{Hyperparameter tuning is a small grid search, not a proof of
+optimality.} Every optimizer's learning rate in every benchmark was found by
+sweeping a modest number of values on that same benchmark; the
+learning-rate sensitivity curves (\S\ref{sec:robustness-followup}) show this
+grid was in at least one case (the modern-optimizer benchmark) coarser than
+ideal. Tuning effort was kept comparable across optimizers within each
+benchmark, but is not identical in the sense of an exhaustive or
+seed-averaged search for any of them.
+\item \textbf{The energy-backtracking safeguard changes the compute budget,
+not just the trajectory.} An accepted Hamiltonian-geometric step on the
+quantum benchmark can cost up to $31$ loss evaluations against exactly $1$
+for every baseline (\S\ref{sec:quantum-benchmark}); the reported wall-clock
+runtimes account for this, but iteration counts alone would not.
+\item \textbf{The memory-metric term $M_{ij}$ was tested on exactly one real
+benchmark} (the quantum kicked-top task, \S\ref{sec:robustness-followup})
+and found to hurt there. This is one negative data point, not a general
+characterization of when the term would or would not help on other losses.
+\item \textbf{The modern-optimizer benchmark's Hamiltonian-geometric
+configuration is a diagonal-metric reduction}, not the full architecture
+with $F_{\mathrm{geo}}$, $F_{\mathrm{mem}}$, and the spectral term active
+(\S\ref{sec:modern-benchmark}); the full architecture is exercised only on
+the exact-Hessian PINN benchmark and the quantum-control benchmark.
+Consequently, the near-tie with Adam and Muon in
+\S\ref{sec:robustness-followup} is not evidence that the framework's
+distinctive curvature/memory/entropy machinery outperforms modern adaptive
+methods -- only that a diagonal reduction of it does about as well as they
+do.
+\item \textbf{No large-scale, standard deep-learning benchmark (ImageNet-scale
+vision, language-model pretraining) is included.} The AlgoPerf- and
+DeepOBS-style benchmarks here are local, small-scale re-implementations
+inspired by those suites, not the official harnesses, because the official
+external dependencies are not present in this workspace
+(\S\ref{sec:experimental-validation}).
+\end{enumerate}
+
+\section*{Reproducibility Statement}
+
+Every table and figure in this report is generated by a checked-in,
+deterministically seeded script and can be regenerated exactly. The
+mathematical claims are backed by executable unit tests, not asserted:
+\texttt{tests/test\_hamiltonian\_geometric.py} verifies the energy-backtracking
+safeguard and the $M_{ij}$ construction (symmetry, positive
+semidefiniteness, exact agreement with the closed-form recursion);
+\texttt{tests/test\_modern\_optimizers.py} verifies the $L_1$-kinetic sign
+bound (Lion), the decoupled-decay/$L_2$ distinction (AdamW), the
+$\operatorname{vec}(AXB)$ Kronecker identity (Shampoo), and the
+spectral-entropy maximality of orthogonalization (Muon). The benchmark
+scripts are \texttt{main/run\_mnist\_optimizer\_benchmark.py},
+\texttt{main/run\_algoperf\_style\_benchmark.py},
+\texttt{main/run\_deepobs\_style\_benchmark.py},
+\texttt{main/run\_pinn\_benchmark.py},
+\texttt{main/run\_quantum\_chaos\_benchmark.py},
+\texttt{main/run\_qaoa\_benchmark.py},
+\texttt{main/run\_modern\_optimizer\_benchmark.py},
+\texttt{main/run\_modern\_optimizer\_robustness\_study.py},
+\texttt{main/run\_hyperparameter\_sensitivity\_study.py}, and
+\texttt{main/run\_memory\_metric\_study.py}; each writes its CSV/PNG outputs
+under \texttt{visualizations/} and prints the exact numbers quoted in this
+report. All code is NumPy-only with fixed, documented random seeds.
+
 \section{Conclusion}
 
 The analysis supports three conclusions. First, the Hamiltonian--geometric
@@ -1595,6 +1738,49 @@ improvement. Both results are included because the honest boundary of a
 method matters as much as its favorable cases.
 
 \begin{thebibliography}{99}
+
+\bibitem{su2016differential}
+W.~Su, S.~Boyd, and E.~J.~Cand\`es,
+``A Differential Equation for Modeling Nesterov's Accelerated Gradient
+Method: Theory and Insights,''
+\emph{Journal of Machine Learning Research}, 17(153):1--43, 2016.
+
+\bibitem{wibisono2016variational}
+A.~Wibisono, A.~C.~Wilson, and M.~I.~Jordan,
+``A Variational Perspective on Accelerated Methods in Optimization,''
+\emph{Proceedings of the National Academy of Sciences},
+113(47):E7351--E7358, 2016.
+
+\bibitem{betancourt2018symplectic}
+M.~Betancourt, M.~I.~Jordan, and A.~C.~Wilson,
+``On Symplectic Optimization,'' 2018.
+arXiv:1802.03653.
+
+\bibitem{maddison2018hamiltonian}
+C.~J.~Maddison, D.~Paulin, Y.~W.~Teh, B.~O'Donoghue, and A.~Doucet,
+``Hamiltonian Descent Methods,'' 2018.
+arXiv:1809.05042.
+
+\bibitem{franca2021conformal}
+G.~Fran\c ca, J.~Sulam, D.~P.~Robinson, and R.~Vidal,
+``Conformal Symplectic and Relativistic Optimization,''
+\emph{Journal of Statistical Mechanics: Theory and Experiment},
+2021(4):043402, 2021.
+
+\bibitem{nemirovski1983problem}
+A.~Nemirovski and D.~Yudin,
+\emph{Problem Complexity and Method Efficiency in Optimization},
+Wiley, 1983.
+
+\bibitem{absil2008optimization}
+P.-A.~Absil, R.~Mahony, and R.~Sepulchre,
+\emph{Optimization Algorithms on Matrix Manifolds},
+Princeton University Press, 2008.
+
+\bibitem{betancourt2017conceptual}
+M.~Betancourt,
+``A Conceptual Introduction to Hamiltonian Monte Carlo,'' 2017.
+arXiv:1701.02434.
 
 \bibitem{kingma2015adam}
 D.~P.~Kingma and J.~Ba,

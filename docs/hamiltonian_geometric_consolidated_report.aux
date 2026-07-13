@@ -2,147 +2,168 @@
 \providecommand\hyper@newdestlabel[2]{}
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{su2016differential}
+\citation{wibisono2016variational}
+\citation{betancourt2018symplectic}
+\citation{maddison2018hamiltonian}
+\citation{franca2021conformal}
+\citation{amari1998natural}
+\citation{nemirovski1983problem}
+\citation{absil2008optimization}
+\citation{betancourt2017conceptual}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {2}Mathematical Background}{1}{section.2}\protected@file@percent }
-\newlabel{sec:mathematical-background}{{2}{1}{Mathematical Background}{section.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Coordinates, potential, and the Hamiltonian}{1}{subsection.2.1}\protected@file@percent }
-\newlabel{eq:hamiltonian}{{2}{1}{Coordinates, potential, and the Hamiltonian}{equation.2.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Hamilton's equations and the geometric force}{1}{subsection.2.2}\protected@file@percent }
-\newlabel{eq:theta-dot}{{3}{1}{Hamilton's equations and the geometric force}{equation.2.3}{}}
-\newlabel{eq:p-dot}{{4}{1}{Hamilton's equations and the geometric force}{equation.2.4}{}}
-\newlabel{eq:fgeo}{{5}{1}{Hamilton's equations and the geometric force}{equation.2.5}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Dissipation}{2}{subsection.2.3}\protected@file@percent }
-\newlabel{eq:dissipative}{{6}{2}{Dissipation}{equation.2.6}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}The generalized update rule}{2}{subsection.2.4}\protected@file@percent }
-\newlabel{eq:fmem}{{7}{2}{The generalized update rule}{equation.2.7}{}}
-\newlabel{eq:update-p}{{8}{2}{The generalized update rule}{equation.2.8}{}}
-\newlabel{eq:update-theta}{{9}{2}{The generalized update rule}{equation.2.9}{}}
-\newlabel{sec:memory-metric}{{2.4}{2}{Memory-metric term $M_{ij}$}{section*.2}{}}
-\newlabel{eq:memory-metric}{{10}{2}{Memory-metric term $M_{ij}$}{equation.2.10}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {3}Standard Optimizers as Special Cases}{2}{section.3}\protected@file@percent }
-\newlabel{sec:special-cases}{{3}{2}{Standard Optimizers as Special Cases}{section.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Related Work}{1}{section.2}\protected@file@percent }
+\newlabel{sec:related-work}{{2}{1}{Related Work}{section.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Mathematical Background}{2}{section.3}\protected@file@percent }
+\newlabel{sec:mathematical-background}{{3}{2}{Mathematical Background}{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Coordinates, potential, and the Hamiltonian}{2}{subsection.3.1}\protected@file@percent }
+\newlabel{eq:hamiltonian}{{2}{2}{Coordinates, potential, and the Hamiltonian}{equation.3.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Hamilton's equations and the geometric force}{2}{subsection.3.2}\protected@file@percent }
+\newlabel{eq:theta-dot}{{3}{2}{Hamilton's equations and the geometric force}{equation.3.3}{}}
+\newlabel{eq:p-dot}{{4}{2}{Hamilton's equations and the geometric force}{equation.3.4}{}}
+\newlabel{eq:fgeo}{{5}{2}{Hamilton's equations and the geometric force}{equation.3.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Dissipation}{2}{subsection.3.3}\protected@file@percent }
+\newlabel{eq:dissipative}{{6}{2}{Dissipation}{equation.3.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}The generalized update rule}{2}{subsection.3.4}\protected@file@percent }
+\newlabel{eq:fmem}{{7}{2}{The generalized update rule}{equation.3.7}{}}
+\newlabel{eq:update-p}{{8}{2}{The generalized update rule}{equation.3.8}{}}
+\newlabel{eq:update-theta}{{9}{2}{The generalized update rule}{equation.3.9}{}}
+\newlabel{sec:memory-metric}{{3.4}{2}{Memory-metric term $M_{ij}$}{section*.2}{}}
+\newlabel{eq:memory-metric}{{10}{2}{Memory-metric term $M_{ij}$}{equation.3.10}{}}
 \citation{tieleman2012rmsprop}
 \citation{kingma2015adam}
-\citation{amari1998natural}
 \@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Optimizer families as limits or approximations of the Hamiltonian--geometric update.}}{3}{table.caption.3}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
 \newlabel{tab:special-cases}{{1}{3}{Optimizer families as limits or approximations of the Hamiltonian--geometric update}{table.caption.3}{}}
-\newlabel{eq:adam-variational-objective}{{27}{3}{RMSProp and Adam}{equation.3.27}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Standard Optimizers as Special Cases}{3}{section.4}\protected@file@percent }
+\newlabel{sec:special-cases}{{4}{3}{Standard Optimizers as Special Cases}{section.4}{}}
+\citation{amari1998natural}
 \citation{loshchilov2019decoupled}
 \citation{chen2023lion}
+\newlabel{eq:adam-variational-objective}{{27}{4}{RMSProp and Adam}{equation.4.27}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Modern Optimizers as Further Derivations}{4}{section.5}\protected@file@percent }
+\newlabel{sec:modern-optimizers}{{5}{4}{Modern Optimizers as Further Derivations}{section.5}{}}
+\newlabel{eq:adamw}{{35}{4}{AdamW: decoupled weight decay as a split metric}{equation.5.35}{}}
+\newlabel{eq:adamw-split}{{36}{4}{AdamW: decoupled weight decay as a split metric}{equation.5.36}{}}
 \citation{gupta2018shampoo}
 \citation{martens2015kfac}
 \citation{jordan2024muon}
 \citation{jordan2025muonscalable}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Modern Optimizers as Further Derivations}{4}{section.4}\protected@file@percent }
-\newlabel{sec:modern-optimizers}{{4}{4}{Modern Optimizers as Further Derivations}{section.4}{}}
-\newlabel{eq:adamw}{{35}{4}{AdamW: decoupled weight decay as a split metric}{equation.4.35}{}}
-\newlabel{eq:adamw-split}{{36}{4}{AdamW: decoupled weight decay as a split metric}{equation.4.36}{}}
-\newlabel{eq:lion-step}{{37}{4}{Lion: an $L_1$ kinetic term}{equation.4.37}{}}
-\newlabel{eq:l1-kinetic}{{38}{4}{Lion: an $L_1$ kinetic term}{equation.4.38}{}}
-\newlabel{eq:shampoo}{{39}{4}{Shampoo and K-FAC: Kronecker-factored metrics}{equation.4.39}{}}
 \citation{shazeer2018adafactor}
 \citation{you2017lars}
 \citation{you2020lamb}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Spectral entropy}{5}{subsection.4.1}\protected@file@percent }
-\newlabel{sec:spectral-entropy}{{4.1}{5}{Spectral entropy}{subsection.4.1}{}}
-\newlabel{eq:spectral-entropy}{{40}{5}{Spectral entropy}{equation.4.40}{}}
-\newlabel{eq:hamiltonian-spectral}{{41}{5}{Spectral entropy}{equation.4.41}{}}
-\newlabel{eq:spectral-force-derivation}{{42}{5}{Spectral entropy}{equation.4.42}{}}
-\newlabel{eq:spectral-force-corrected}{{43}{5}{Spectral entropy}{equation.4.43}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Analytical Validation}{5}{section.5}\protected@file@percent }
-\newlabel{sec:review}{{5}{5}{Analytical Validation}{section.5}{}}
+\newlabel{eq:lion-step}{{37}{5}{Lion: an $L_1$ kinetic term}{equation.5.37}{}}
+\newlabel{eq:l1-kinetic}{{38}{5}{Lion: an $L_1$ kinetic term}{equation.5.38}{}}
+\newlabel{eq:shampoo}{{39}{5}{Shampoo and K-FAC: Kronecker-factored metrics}{equation.5.39}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Optimizer families ordered by how much metric structure they retain, from the full matrix down to one global scalar.}}{6}{table.caption.15}\protected@file@percent }
+\newlabel{tab:metric-hierarchy}{{2}{6}{Optimizer families ordered by how much metric structure they retain, from the full matrix down to one global scalar}{table.caption.15}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Spectral entropy}{6}{subsection.5.1}\protected@file@percent }
+\newlabel{sec:spectral-entropy}{{5.1}{6}{Spectral entropy}{subsection.5.1}{}}
+\newlabel{eq:spectral-entropy}{{40}{6}{Spectral entropy}{equation.5.40}{}}
+\newlabel{eq:hamiltonian-spectral}{{41}{6}{Spectral entropy}{equation.5.41}{}}
+\newlabel{eq:spectral-force-derivation}{{42}{6}{Spectral entropy}{equation.5.42}{}}
+\newlabel{eq:spectral-force-corrected}{{43}{6}{Spectral entropy}{equation.5.43}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Analytical Validation}{6}{section.6}\protected@file@percent }
+\newlabel{sec:review}{{6}{6}{Analytical Validation}{section.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Computational Form}{6}{section.7}\protected@file@percent }
 \citation{lecun1998mnist}
 \citation{dahl2023algoperf}
 \citation{schneider2019deepobs}
 \citation{farhi2014qaoa}
 \citation{dahl2023algoperf}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Optimizer families ordered by how much metric structure they retain, from the full matrix down to one global scalar.}}{6}{table.caption.15}\protected@file@percent }
-\newlabel{tab:metric-hierarchy}{{2}{6}{Optimizer families ordered by how much metric structure they retain, from the full matrix down to one global scalar}{table.caption.15}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Direct numerical checks of the analytical equations on a seeded synthetic problem with a $\theta $-dependent metric (the capacitor PINN benchmark's fixed-feature metric is constant in $\theta $ and cannot exercise $F_{\mathrm  {geo}}$ or $\nabla _\theta S(g)$).}}{6}{table.caption.20}\protected@file@percent }
-\newlabel{tab:numeric-checks}{{3}{6}{Direct numerical checks of the analytical equations on a seeded synthetic problem with a $\theta $-dependent metric (the capacitor PINN benchmark's fixed-feature metric is constant in $\theta $ and cannot exercise $F_{\mathrm {geo}}$ or $\nabla _\theta S(g)$)}{table.caption.20}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Computational Form}{6}{section.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {7}Experimental Validation}{6}{section.7}\protected@file@percent }
-\newlabel{sec:experimental-validation}{{7}{6}{Experimental Validation}{section.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Direct numerical checks of the analytical equations on a seeded synthetic problem with a $\theta $-dependent metric (the capacitor PINN benchmark's fixed-feature metric is constant in $\theta $ and cannot exercise $F_{\mathrm  {geo}}$ or $\nabla _\theta S(g)$).}}{7}{table.caption.20}\protected@file@percent }
+\newlabel{tab:numeric-checks}{{3}{7}{Direct numerical checks of the analytical equations on a seeded synthetic problem with a $\theta $-dependent metric (the capacitor PINN benchmark's fixed-feature metric is constant in $\theta $ and cannot exercise $F_{\mathrm {geo}}$ or $\nabla _\theta S(g)$)}{table.caption.20}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces MNIST softmax regression benchmark. Lower test loss is better; higher test accuracy is better.}}{7}{table.caption.21}\protected@file@percent }
 \newlabel{tab:mnist}{{4}{7}{MNIST softmax regression benchmark. Lower test loss is better; higher test accuracy is better}{table.caption.21}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Local AlgoPerf-style MLP benchmark with equal short tuning budgets. Lower validation loss is better.}}{7}{table.caption.22}\protected@file@percent }
-\newlabel{tab:algoperf-local}{{5}{7}{Local AlgoPerf-style MLP benchmark with equal short tuning budgets. Lower validation loss is better}{table.caption.22}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Phase-space visualization of the optimizer trajectory}{7}{subsection.7.1}\protected@file@percent }
-\newlabel{sec:phase-space}{{7.1}{7}{Phase-space visualization of the optimizer trajectory}{subsection.7.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.2}Modern Optimizer Benchmark}{7}{subsection.7.2}\protected@file@percent }
-\newlabel{sec:modern-benchmark}{{7.2}{7}{Modern Optimizer Benchmark}{subsection.7.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Experimental Validation}{7}{section.8}\protected@file@percent }
+\newlabel{sec:experimental-validation}{{8}{7}{Experimental Validation}{section.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1}Phase-space visualization of the optimizer trajectory}{7}{subsection.8.1}\protected@file@percent }
+\newlabel{sec:phase-space}{{8.1}{7}{Phase-space visualization of the optimizer trajectory}{subsection.8.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Local AlgoPerf-style MLP benchmark with equal short tuning budgets. Lower validation loss is better.}}{8}{table.caption.22}\protected@file@percent }
+\newlabel{tab:algoperf-local}{{5}{8}{Local AlgoPerf-style MLP benchmark with equal short tuning budgets. Lower validation loss is better}{table.caption.22}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces DeepOBS-style nonconvex MLP benchmark. Lower validation loss is better.}}{8}{table.caption.23}\protected@file@percent }
 \newlabel{tab:deepobs-local}{{6}{8}{DeepOBS-style nonconvex MLP benchmark. Lower validation loss is better}{table.caption.23}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Capacitor PINN benchmark. Lower final loss is better.}}{8}{table.caption.24}\protected@file@percent }
-\newlabel{tab:pinn}{{7}{8}{Capacitor PINN benchmark. Lower final loss is better}{table.caption.24}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.3}Robustness follow-up: does the near-tie hold up?}{8}{subsection.7.3}\protected@file@percent }
-\newlabel{sec:robustness-followup}{{7.3}{8}{Robustness follow-up: does the near-tie hold up?}{subsection.7.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.4}Does the memory-metric term actually help?}{8}{subsection.7.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2}Modern Optimizer Benchmark}{8}{subsection.8.2}\protected@file@percent }
+\newlabel{sec:modern-benchmark}{{8.2}{8}{Modern Optimizer Benchmark}{subsection.8.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3}Robustness follow-up: does the near-tie hold up?}{8}{subsection.8.3}\protected@file@percent }
+\newlabel{sec:robustness-followup}{{8.3}{8}{Robustness follow-up: does the near-tie hold up?}{subsection.8.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Capacitor PINN benchmark. Lower final loss is better.}}{9}{table.caption.24}\protected@file@percent }
+\newlabel{tab:pinn}{{7}{9}{Capacitor PINN benchmark. Lower final loss is better}{table.caption.24}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Classical benchmark loss curves. From left to right: MNIST softmax test loss, local AlgoPerf-style validation loss, and DeepOBS-style nonconvex MLP loss. These plots complement Tables~\ref {tab:mnist}--\ref {tab:deepobs-local} by distinguishing smooth convergence, late-training instability, and short-budget plateaus.}}{9}{figure.caption.25}\protected@file@percent }
 \newlabel{fig:classical-benchmark-graphs}{{1}{9}{Classical benchmark loss curves. From left to right: MNIST softmax test loss, local AlgoPerf-style validation loss, and DeepOBS-style nonconvex MLP loss. These plots complement Tables~\ref {tab:mnist}--\ref {tab:deepobs-local} by distinguishing smooth convergence, late-training instability, and short-budget plateaus}{figure.caption.25}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Log-scale training loss vs.\ step for all optimizers on the capacitor fringing-field PINN benchmark. Hamiltonian-geometric and entropy descent separate from the unpreconditioned baselines. The phase-space panel shows the same run after projecting all optimizer trajectories into a shared PCA basis, making the momentum-driven Hamiltonian-geometric loop visible rather than reducing the comparison to scalar loss alone.}}{9}{figure.caption.26}\protected@file@percent }
-\newlabel{fig:convergence}{{2}{9}{Log-scale training loss vs.\ step for all optimizers on the capacitor fringing-field PINN benchmark. Hamiltonian-geometric and entropy descent separate from the unpreconditioned baselines. The phase-space panel shows the same run after projecting all optimizer trajectories into a shared PCA basis, making the momentum-driven Hamiltonian-geometric loop visible rather than reducing the comparison to scalar loss alone}{figure.caption.26}{}}
-\newlabel{fig:phase-space}{{2}{9}{Log-scale training loss vs.\ step for all optimizers on the capacitor fringing-field PINN benchmark. Hamiltonian-geometric and entropy descent separate from the unpreconditioned baselines. The phase-space panel shows the same run after projecting all optimizer trajectories into a shared PCA basis, making the momentum-driven Hamiltonian-geometric loop visible rather than reducing the comparison to scalar loss alone}{figure.caption.26}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Validation loss vs.\ epoch for all six optimizers on the spiral MLP (log scale). Adam, Hamiltonian-geometric, and Muon occupy the same noisy band for most of training; Lion converges markedly slower under this sign-based update; AdamW and Shampoo sit between the two groups.}}{9}{figure.caption.28}\protected@file@percent }
-\newlabel{fig:modern-optimizers}{{3}{9}{Validation loss vs.\ epoch for all six optimizers on the spiral MLP (log scale). Adam, Hamiltonian-geometric, and Muon occupy the same noisy band for most of training; Lion converges markedly slower under this sign-based update; AdamW and Shampoo sit between the two groups}{figure.caption.28}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {8}Chaotic Quantum-Control Benchmark and Ablation}{9}{section.8}\protected@file@percent }
-\newlabel{sec:quantum-benchmark}{{8}{9}{Chaotic Quantum-Control Benchmark and Ablation}{section.8}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {8.1}Variational quantum algorithm benchmark: QAOA MaxCut}{9}{subsection.8.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.4}Does the memory-metric term actually help?}{9}{subsection.8.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {9}Chaotic Quantum-Control Benchmark and Ablation}{9}{section.9}\protected@file@percent }
+\newlabel{sec:quantum-benchmark}{{9}{9}{Chaotic Quantum-Control Benchmark and Ablation}{section.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.1}Variational quantum algorithm benchmark: QAOA MaxCut}{9}{subsection.9.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Log-scale training loss vs.\ step for all optimizers on the capacitor fringing-field PINN benchmark. Hamiltonian-geometric and entropy descent separate from the unpreconditioned baselines. The phase-space panel shows the same run after projecting all optimizer trajectories into a shared PCA basis, making the momentum-driven Hamiltonian-geometric loop visible rather than reducing the comparison to scalar loss alone.}}{10}{figure.caption.26}\protected@file@percent }
+\newlabel{fig:convergence}{{2}{10}{Log-scale training loss vs.\ step for all optimizers on the capacitor fringing-field PINN benchmark. Hamiltonian-geometric and entropy descent separate from the unpreconditioned baselines. The phase-space panel shows the same run after projecting all optimizer trajectories into a shared PCA basis, making the momentum-driven Hamiltonian-geometric loop visible rather than reducing the comparison to scalar loss alone}{figure.caption.26}{}}
+\newlabel{fig:phase-space}{{2}{10}{Log-scale training loss vs.\ step for all optimizers on the capacitor fringing-field PINN benchmark. Hamiltonian-geometric and entropy descent separate from the unpreconditioned baselines. The phase-space panel shows the same run after projecting all optimizer trajectories into a shared PCA basis, making the momentum-driven Hamiltonian-geometric loop visible rather than reducing the comparison to scalar loss alone}{figure.caption.26}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Modern-optimizer benchmark on the spiral MLP, ranked by best-epoch validation loss. Lower is better.}}{10}{table.caption.27}\protected@file@percent }
 \newlabel{tab:modern-optimizers}{{8}{10}{Modern-optimizer benchmark on the spiral MLP, ranked by best-epoch validation loss. Lower is better}{table.caption.27}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Robustness follow-up on the modern-optimizer benchmark. Left: 10-seed spread of best-epoch validation loss (log scale). Middle: best-epoch loss vs.\ hidden-layer width, same hyperparameters at every width -- Adam's loss falls monotonically with width while Hamiltonian-geometric's does not, so Adam overtakes it by width 96. Right: mean runtime vs.\ mean loss over the 10 seeds; Hamiltonian-geometric is Pareto-optimal \emph  {at this specific model size}.}}{10}{figure.caption.30}\protected@file@percent }
-\newlabel{fig:robustness}{{4}{10}{Robustness follow-up on the modern-optimizer benchmark. Left: 10-seed spread of best-epoch validation loss (log scale). Middle: best-epoch loss vs.\ hidden-layer width, same hyperparameters at every width -- Adam's loss falls monotonically with width while Hamiltonian-geometric's does not, so Adam overtakes it by width 96. Right: mean runtime vs.\ mean loss over the 10 seeds; Hamiltonian-geometric is Pareto-optimal \emph {at this specific model size}}{figure.caption.30}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces Best-epoch validation loss, mean $\pm $ std over 10 seeds, same hyperparameters as Table~\ref {tab:modern-optimizers}.}}{10}{table.caption.29}\protected@file@percent }
 \newlabel{tab:seed-sweep}{{9}{10}{Best-epoch validation loss, mean $\pm $ std over 10 seeds, same hyperparameters as Table~\ref {tab:modern-optimizers}}{table.caption.29}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces Quantum kicked-top benchmark with $M_{ij}$ enabled at increasing coupling strength $\mu _M$, all other hyperparameters unchanged from Table~\ref {tab:quantum}.}}{10}{table.caption.31}\protected@file@percent }
 \newlabel{tab:memory-metric-test}{{10}{10}{Quantum kicked-top benchmark with $M_{ij}$ enabled at increasing coupling strength $\mu _M$, all other hyperparameters unchanged from Table~\ref {tab:quantum}}{table.caption.31}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Validation loss vs.\ epoch for all six optimizers on the spiral MLP (log scale). Adam, Hamiltonian-geometric, and Muon occupy the same noisy band for most of training; Lion converges markedly slower under this sign-based update; AdamW and Shampoo sit between the two groups.}}{10}{figure.caption.28}\protected@file@percent }
+\newlabel{fig:modern-optimizers}{{3}{10}{Validation loss vs.\ epoch for all six optimizers on the spiral MLP (log scale). Adam, Hamiltonian-geometric, and Muon occupy the same noisy band for most of training; Lion converges markedly slower under this sign-based update; AdamW and Shampoo sit between the two groups}{figure.caption.28}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Robustness follow-up on the modern-optimizer benchmark. Left: 10-seed spread of best-epoch validation loss (log scale). Middle: best-epoch loss vs.\ hidden-layer width, same hyperparameters at every width -- Adam's loss falls monotonically with width while Hamiltonian-geometric's does not, so Adam overtakes it by width 96. Right: mean runtime vs.\ mean loss over the 10 seeds; Hamiltonian-geometric is Pareto-optimal \emph  {at this specific model size}.}}{11}{figure.caption.30}\protected@file@percent }
+\newlabel{fig:robustness}{{4}{11}{Robustness follow-up on the modern-optimizer benchmark. Left: 10-seed spread of best-epoch validation loss (log scale). Middle: best-epoch loss vs.\ hidden-layer width, same hyperparameters at every width -- Adam's loss falls monotonically with width while Hamiltonian-geometric's does not, so Adam overtakes it by width 96. Right: mean runtime vs.\ mean loss over the 10 seeds; Hamiltonian-geometric is Pareto-optimal \emph {at this specific model size}}{figure.caption.30}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {11}{\ignorespaces Chaotic quantum kicked-top benchmark with the energy-backtracking safeguard enabled (see text). Lower loss and higher fidelity are better.}}{11}{table.caption.32}\protected@file@percent }
 \newlabel{tab:quantum}{{11}{11}{Chaotic quantum kicked-top benchmark with the energy-backtracking safeguard enabled (see text). Lower loss and higher fidelity are better}{table.caption.32}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {12}{\ignorespaces QAOA MaxCut benchmark. Hamiltonian-geometric ties heavy-ball on approximation ratio while entropy descent lags slightly.}}{11}{table.caption.33}\protected@file@percent }
-\newlabel{tab:qaoa}{{12}{11}{QAOA MaxCut benchmark. Hamiltonian-geometric ties heavy-ball on approximation ratio while entropy descent lags slightly}{table.caption.33}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {9}Geometric Evidence Suite}{11}{section.9}\protected@file@percent }
-\newlabel{sec:geometric-evidence}{{9}{11}{Geometric Evidence Suite}{section.9}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {10}Architecture Ablation: A Controlled Statistical Study}{11}{section.10}\protected@file@percent }
-\newlabel{sec:architecture-ablation}{{10}{11}{Architecture Ablation: A Controlled Statistical Study}{section.10}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {10.1}Design}{11}{subsection.10.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {10}Geometric Evidence Suite}{11}{section.10}\protected@file@percent }
+\newlabel{sec:geometric-evidence}{{10}{11}{Geometric Evidence Suite}{section.10}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {12}{\ignorespaces QAOA MaxCut benchmark. Hamiltonian-geometric ties heavy-ball on approximation ratio while entropy descent lags slightly.}}{12}{table.caption.33}\protected@file@percent }
+\newlabel{tab:qaoa}{{12}{12}{QAOA MaxCut benchmark. Hamiltonian-geometric ties heavy-ball on approximation ratio while entropy descent lags slightly}{table.caption.33}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Variational quantum benchmark curves. Left: QAOA MaxCut approximation ratio over optimizer steps. Right: chaotic kicked-top state-transfer fidelity. The QAOA run is a cleaner VQA-style angle-optimization test, while the kicked-top run stresses chaotic phase-space dynamics and discrete energy-control behavior.}}{12}{figure.caption.34}\protected@file@percent }
 \newlabel{fig:quantum-benchmark-graphs}{{5}{12}{Variational quantum benchmark curves. Left: QAOA MaxCut approximation ratio over optimizer steps. Right: chaotic kicked-top state-transfer fidelity. The QAOA run is a cleaner VQA-style angle-optimization test, while the kicked-top run stresses chaotic phase-space dynamics and discrete energy-control behavior}{figure.caption.34}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {13}{\ignorespaces Critical quantum ablation study. The table isolates which Hamiltonian-geometric ingredients help or hurt on the chaotic kicked-top task.}}{12}{table.caption.35}\protected@file@percent }
-\newlabel{tab:quantum-ablation}{{13}{12}{Critical quantum ablation study. The table isolates which Hamiltonian-geometric ingredients help or hurt on the chaotic kicked-top task}{table.caption.35}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {10.2}Results: average-case effects differ sharply by metric}{12}{subsection.10.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {10.3}Results: the Hessian metric reveals a stability effect the toy metric cannot}{12}{subsection.10.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {10.4}Interpretation}{12}{subsection.10.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {11}Architecture Ablation: A Controlled Statistical Study}{12}{section.11}\protected@file@percent }
+\newlabel{sec:architecture-ablation}{{11}{12}{Architecture Ablation: A Controlled Statistical Study}{section.11}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.1}Design}{12}{subsection.11.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.2}Results: average-case effects differ sharply by metric}{12}{subsection.11.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {13}{\ignorespaces Critical quantum ablation study. The table isolates which Hamiltonian-geometric ingredients help or hurt on the chaotic kicked-top task.}}{13}{table.caption.35}\protected@file@percent }
+\newlabel{tab:quantum-ablation}{{13}{13}{Critical quantum ablation study. The table isolates which Hamiltonian-geometric ingredients help or hurt on the chaotic kicked-top task}{table.caption.35}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {14}{\ignorespaces Ill-conditioned rotated quadratic. Final loss after a fixed step budget. Lower is better.}}{13}{table.caption.36}\protected@file@percent }
 \newlabel{tab:condition-scaling}{{14}{13}{Ill-conditioned rotated quadratic. Final loss after a fixed step budget. Lower is better}{table.caption.36}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {15}{\ignorespaces Additional geometric diagnostics. Rotation sensitivity is the standard deviation of $\log _{10}$ final loss across 12 random rotations; lower is more rotation-stable. Saddle escape is measured across 40 random starts.}}{13}{table.caption.37}\protected@file@percent }
-\newlabel{tab:geometric-diagnostics}{{15}{13}{Additional geometric diagnostics. Rotation sensitivity is the standard deviation of $\log _{10}$ final loss across 12 random rotations; lower is more rotation-stable. Saddle escape is measured across 40 random starts}{table.caption.37}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {11}Symmetry Structure of the Metric}{13}{section.11}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {12}Conclusion}{13}{section.12}\protected@file@percent }
-\bibcite{kingma2015adam}{1}
-\bibcite{tieleman2012rmsprop}{2}
-\bibcite{amari1998natural}{3}
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.3}Results: the Hessian metric reveals a stability effect the toy metric cannot}{13}{subsection.11.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.4}Interpretation}{13}{subsection.11.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {12}Symmetry Structure of the Metric}{13}{section.12}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {15}{\ignorespaces Additional geometric diagnostics. Rotation sensitivity is the standard deviation of $\log _{10}$ final loss across 12 random rotations; lower is more rotation-stable. Saddle escape is measured across 40 random starts.}}{14}{table.caption.37}\protected@file@percent }
+\newlabel{tab:geometric-diagnostics}{{15}{14}{Additional geometric diagnostics. Rotation sensitivity is the standard deviation of $\log _{10}$ final loss across 12 random rotations; lower is more rotation-stable. Saddle escape is measured across 40 random starts}{table.caption.37}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Mechanism-focused diagnostic graphs. Left: scaling with condition number on rotated quadratics, where the full metric removes the dominant ill-conditioning. Middle: double-well loss and Hamiltonian-style energy traces. Right: saddle/basin escape behavior across random starts. These plots separate geometry-driven performance from gains attributable only to task-specific step-size calibration.}}{14}{figure.caption.38}\protected@file@percent }
 \newlabel{fig:geometric-evidence-graphs}{{6}{14}{Mechanism-focused diagnostic graphs. Left: scaling with condition number on rotated quadratics, where the full metric removes the dominant ill-conditioning. Middle: double-well loss and Hamiltonian-style energy traces. Right: saddle/basin escape behavior across random starts. These plots separate geometry-driven performance from gains attributable only to task-specific step-size calibration}{figure.caption.38}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {16}{\ignorespaces Full $2^3$ factorial-effects decomposition (OLS, $\pm 1$-coded factors) of $\log _{10}(\text  {final loss}-L^\ast +\epsilon )$ across all 320 runs per metric ($L^\ast $ = best final loss observed across every run). Negative effects correspond to lower excess loss.}}{14}{table.caption.39}\protected@file@percent }
-\newlabel{tab:factorial-effects}{{16}{14}{Full $2^3$ factorial-effects decomposition (OLS, $\pm 1$-coded factors) of $\log _{10}(\text {final loss}-L^\ast +\epsilon )$ across all 320 runs per metric ($L^\ast $ = best final loss observed across every run). Negative effects correspond to lower excess loss}{table.caption.39}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces (a) Full architecture (Hessian metric) tracks tuned SGD/Adam. (b) Main effects by metric: only the spectral term matters on average, and only under the true Hessian metric. (c) Divergence counts by configuration, Hessian metric -- only all-off and all-on are divergence-free. (d) Final-loss distributions for the four divergence-free configurations are similar.}}{14}{figure.caption.41}\protected@file@percent }
 \newlabel{fig:ablation}{{7}{14}{(a) Full architecture (Hessian metric) tracks tuned SGD/Adam. (b) Main effects by metric: only the spectral term matters on average, and only under the true Hessian metric. (c) Divergence counts by configuration, Hessian metric -- only all-off and all-on are divergence-free. (d) Final-loss distributions for the four divergence-free configurations are similar}{figure.caption.41}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Top: a random raw metric decomposed into symmetric part $S$ (kept) and antisymmetric part $A$ (discarded). Bottom-left: $p^{\mathsf  T}Sp$ varies with $p$; $p^{\mathsf  T}Ap$ is zero to floating-point precision for every $p$. Bottom-right: spectral entropy $S(g)$ is flat under rotation of $g$.}}{14}{figure.caption.42}\protected@file@percent }
 \newlabel{fig:symmetry}{{8}{14}{Top: a random raw metric decomposed into symmetric part $S$ (kept) and antisymmetric part $A$ (discarded). Bottom-left: $p^{\mathsf T}Sp$ varies with $p$; $p^{\mathsf T}Ap$ is zero to floating-point precision for every $p$. Bottom-right: spectral entropy $S(g)$ is flat under rotation of $g$}{figure.caption.42}{}}
-\bibcite{loshchilov2019decoupled}{4}
-\bibcite{chen2023lion}{5}
-\bibcite{gupta2018shampoo}{6}
-\bibcite{martens2015kfac}{7}
-\bibcite{jordan2024muon}{8}
-\bibcite{jordan2025muonscalable}{9}
-\bibcite{shazeer2018adafactor}{10}
-\bibcite{you2017lars}{11}
-\bibcite{you2020lamb}{12}
-\bibcite{schneider2019deepobs}{13}
-\bibcite{dahl2023algoperf}{14}
-\bibcite{farhi2014qaoa}{15}
-\bibcite{lecun1998mnist}{16}
+\@writefile{toc}{\contentsline {section}{\numberline {13}Limitations}{14}{section.13}\protected@file@percent }
+\newlabel{sec:limitations}{{13}{14}{Limitations}{section.13}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {16}{\ignorespaces Full $2^3$ factorial-effects decomposition (OLS, $\pm 1$-coded factors) of $\log _{10}(\text  {final loss}-L^\ast +\epsilon )$ across all 320 runs per metric ($L^\ast $ = best final loss observed across every run). Negative effects correspond to lower excess loss.}}{15}{table.caption.39}\protected@file@percent }
+\newlabel{tab:factorial-effects}{{16}{15}{Full $2^3$ factorial-effects decomposition (OLS, $\pm 1$-coded factors) of $\log _{10}(\text {final loss}-L^\ast +\epsilon )$ across all 320 runs per metric ($L^\ast $ = best final loss observed across every run). Negative effects correspond to lower excess loss}{table.caption.39}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {17}{\ignorespaces Divergence counts (of 40 seeds, final $|{\rm  loss}|>100$), Hessian metric. Only the all-off and all-on configurations are divergence-free.}}{15}{table.caption.40}\protected@file@percent }
 \newlabel{tab:divergence}{{17}{15}{Divergence counts (of 40 seeds, final $|{\rm loss}|>100$), Hessian metric. Only the all-off and all-on configurations are divergence-free}{table.caption.40}{}}
-\gdef \@abspage@last{15}
+\bibcite{su2016differential}{1}
+\bibcite{wibisono2016variational}{2}
+\bibcite{betancourt2018symplectic}{3}
+\bibcite{maddison2018hamiltonian}{4}
+\bibcite{franca2021conformal}{5}
+\bibcite{nemirovski1983problem}{6}
+\bibcite{absil2008optimization}{7}
+\bibcite{betancourt2017conceptual}{8}
+\bibcite{kingma2015adam}{9}
+\bibcite{tieleman2012rmsprop}{10}
+\bibcite{amari1998natural}{11}
+\bibcite{loshchilov2019decoupled}{12}
+\bibcite{chen2023lion}{13}
+\bibcite{gupta2018shampoo}{14}
+\@writefile{toc}{\contentsline {section}{\numberline {14}Conclusion}{16}{section.14}\protected@file@percent }
+\bibcite{martens2015kfac}{15}
+\bibcite{jordan2024muon}{16}
+\bibcite{jordan2025muonscalable}{17}
+\bibcite{shazeer2018adafactor}{18}
+\bibcite{you2017lars}{19}
+\bibcite{you2020lamb}{20}
+\bibcite{schneider2019deepobs}{21}
+\bibcite{dahl2023algoperf}{22}
+\bibcite{farhi2014qaoa}{23}
+\bibcite{lecun1998mnist}{24}
+\gdef \@abspage@last{17}
