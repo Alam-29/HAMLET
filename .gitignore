@@ -1,0 +1,7 @@
+.venv/
+.venv_algoperf/
+__pycache__/
+*.pyc
+
+# Generated benchmark/demo outputs (regenerate via README commands)
+visualizations/

@@ -1,0 +1,36 @@
+{
+  "learning_rate": {
+    "min": 0.0003,
+    "max": 0.03,
+    "scaling": "log"
+  },
+  "beta1": {
+    "feasible_points": [0.88, 0.9, 0.92]
+  },
+  "weight_decay": {
+    "min": 1e-6,
+    "max": 1e-3,
+    "scaling": "log"
+  },
+  "end_factor": {
+    "feasible_points": [0.001, 0.01]
+  },
+  "decay_steps_factor": {
+    "feasible_points": [0.8, 0.9, 1.0]
+  },
+  "warmup_steps": {
+    "feasible_points": [1, 50, 100, 500]
+  },
+  "metric_decay": {
+    "feasible_points": [0.99, 0.995, 0.999]
+  },
+  "metric_epsilon": {
+    "feasible_points": [1e-8, 1e-6, 1e-4]
+  },
+  "memory_decay": {
+    "feasible_points": [0.8, 0.9, 0.95]
+  },
+  "memory_coupling": {
+    "feasible_points": [0.001, 0.003, 0.01, 0.03]
+  }
+}
