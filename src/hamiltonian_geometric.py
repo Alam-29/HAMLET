@@ -40,6 +40,8 @@ class HamiltonianGeometricConfig:
     max_energy_backtracks: int = 0
     energy_backtrack_factor: float = 0.5
     energy_tolerance: float = 0.0
+    use_memory_metric: bool = False
+    memory_metric_coupling: float = 0.0
 
     def __post_init__(self) -> None:
         if self.learning_rate <= 0.0:
@@ -62,6 +64,8 @@ class HamiltonianGeometricConfig:
             raise ValueError("energy_backtrack_factor must be in the range (0.0, 1.0)")
         if self.energy_tolerance < 0.0:
             raise ValueError("energy_tolerance must be non-negative")
+        if self.memory_metric_coupling < 0.0:
+            raise ValueError("memory_metric_coupling must be non-negative")
 
 
 @dataclass(frozen=True)
@@ -71,6 +75,7 @@ class HamiltonianGeometricState:
     parameters: Array
     momentum: Array
     memory: Array
+    memory_metric: Array
     step: int = 0
     spectral_entropy: float = 0.0
     geometric_force_norm: float = 0.0
@@ -79,12 +84,17 @@ class HamiltonianGeometricState:
 
 
 def initial_state(parameter_count: int) -> HamiltonianGeometricState:
-    """Return zero-initialized theta, momentum, and memory."""
+    """Return zero-initialized theta, momentum, memory, and memory-metric."""
 
     if parameter_count <= 0:
         raise ValueError("parameter_count must be positive")
     zeros = np.zeros(parameter_count, dtype=float)
-    return HamiltonianGeometricState(parameters=zeros.copy(), momentum=zeros.copy(), memory=zeros.copy())
+    return HamiltonianGeometricState(
+        parameters=zeros.copy(),
+        momentum=zeros.copy(),
+        memory=zeros.copy(),
+        memory_metric=np.zeros((parameter_count, parameter_count), dtype=float),
+    )
 
 
 def hamiltonian_geometric_step(
@@ -114,7 +124,25 @@ def hamiltonian_geometric_step(
 
     theta = state.parameters
     gradient = gradient_fn(theta)
-    metric = positive_definite_metric(metric_fn(theta), config.metric_regularization)
+
+    if config.use_memory_metric:
+        # M_ij completion of the paper's g_ij = H_ij + mu*M_ij (Sec. 12): the
+        # paper asserts M_ij is "the memory term implied by" the vector F_mem
+        # but never builds a matrix from it. Since F_mem is itself an EMA of
+        # gradients (Eq. 25), the natural matrix completion with the same
+        # decay is the EMA of gradient outer products -- the same
+        # uncentered-empirical-Fisher construction already used to motivate
+        # Adam's diagonal metric (Sec. 10), just kept as a full matrix instead
+        # of truncated to its diagonal. It is symmetric PSD by construction
+        # (a nonnegative sum of rank-1 PSD terms), so it can only add
+        # curvature, never break positive-definiteness.
+        memory_metric = config.memory_decay * state.memory_metric + np.outer(gradient, gradient)
+        metric_input = metric_fn(theta) + config.memory_metric_coupling * memory_metric
+    else:
+        memory_metric = state.memory_metric
+        metric_input = metric_fn(theta)
+
+    metric = positive_definite_metric(metric_input, config.metric_regularization)
     inverse_metric = np.linalg.pinv(metric)
     entropy = spectral_entropy(metric)
 
@@ -154,6 +182,7 @@ def hamiltonian_geometric_step(
         parameters=parameters,
         momentum=momentum,
         memory=memory,
+        memory_metric=memory_metric,
         step=state.step + 1,
         spectral_entropy=entropy,
         geometric_force_norm=float(np.linalg.norm(geometric_force)),

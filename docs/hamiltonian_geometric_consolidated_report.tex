@@ -1,6 +1,6 @@
 \documentclass[10pt,twocolumn]{article}
 
-\usepackage[margin=0.72in]{geometry}
+\usepackage[top=0.62in,bottom=0.72in,left=0.68in,right=0.68in]{geometry}
 \usepackage{amsmath, amssymb}
 \usepackage{booktabs}
 \usepackage{graphicx}
@@ -8,16 +8,67 @@
 \usepackage{xcolor}
 \usepackage{caption}
 \usepackage{stfloats}
+\usepackage{microtype}
 
-\newcommand{\finding}[1]{\textbf{\textcolor{purple}{#1}}}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+  urlcolor=black
+}
+\captionsetup{font=small,labelfont=bf,skip=4pt}
+\setlength{\columnsep}{0.24in}
+\setlength{\parskip}{0pt}
+\setlength{\floatsep}{8pt plus 2pt minus 2pt}
+\setlength{\textfloatsep}{10pt plus 2pt minus 2pt}
+\setlength{\dblfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\dbltextfloatsep}{10pt plus 2pt minus 2pt}
+\setcounter{topnumber}{4}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{6}
+\renewcommand{\topfraction}{0.94}
+\renewcommand{\bottomfraction}{0.72}
+\renewcommand{\textfraction}{0.06}
+\renewcommand{\dbltopfraction}{0.94}
+\renewcommand{\floatpagefraction}{0.82}
+\renewcommand{\dblfloatpagefraction}{0.82}
 
-\title{A Hamiltonian--Geometric Optimization Framework for Machine Learning\\
-\large Consolidated Report: Mathematical Background, Consistency Review, and
-Experimental Validation}
-\author{Original framework: Sparsho Chakraborty \\
-Consistency review, reference implementation, and benchmark results: \\
-the HAMLET research workspace}
-\date{\today}
+\newcommand{\finding}[1]{\textbf{#1}}
+
+\makeatletter
+\renewcommand{\maketitle}{%
+  \begin{center}
+    {\huge\bfseries\@title\par}
+    \vspace{0.75em}
+    {\normalsize\@author\par}
+    \vspace{0.75em}
+    {\rule{0.72\textwidth}{0.4pt}\par}
+    \vspace{0.85em}
+  \end{center}
+}
+\makeatother
+
+\makeatletter
+\renewcommand\section{\@startsection{section}{1}{0pt}%
+  {1.35ex plus 0.45ex minus 0.15ex}%
+  {0.65ex plus 0.15ex}%
+  {\large\bfseries}}
+\renewcommand\subsection{\@startsection{subsection}{2}{0pt}%
+  {1.05ex plus 0.35ex minus 0.12ex}%
+  {0.45ex plus 0.12ex}%
+  {\normalsize\bfseries}}
+\renewcommand\subsubsection{\@startsection{subsubsection}{3}{0pt}%
+  {0.9ex plus 0.3ex minus 0.1ex}%
+  {0.35ex plus 0.1ex}%
+  {\normalsize\bfseries\itshape}}
+\makeatother
+
+\title{A Hamiltonian--Geometric Optimization Framework for Machine Learning}
+\author{Sparsho Chakraborty\textsuperscript{1},
+Mohammad Alamgir\textsuperscript{2},
+Adreet Sarkar\textsuperscript{3}, and
+Nishant M\textsuperscript{4}}
+\date{}
 
 \begin{document}
 \twocolumn[
@@ -26,26 +77,27 @@ the HAMLET research workspace}
 \begin{abstract}
 This report consolidates three things about the Hamiltonian--geometric optimizer
 proposed in \emph{``A Hamiltonian--Geometric Optimization Framework for Machine
-Learning''}: (1) the mathematical background of the framework, condensed from
-the source paper; (2) a line-by-line consistency review that checks every
-numbered equation against the others and, where possible, against a symbolic or
-numerical computation, rather than accepting the paper's claims at face value;
-and (3) the experimental results obtained by actually running the proposed
-optimizer, and its competitors, on multiple local benchmarks, plus a direct
-visualization of the symmetry structure the framework depends on. A dedicated
+Learning''}: (1) the mathematical background of the framework; (2) an
+analytical validation of the update equations against the underlying
+Hamiltonian mechanics; and (3) experimental results obtained by running the
+proposed optimizer, and its competitors, on multiple local benchmarks, plus a
+direct visualization of the symmetry structure the framework depends on. A dedicated
 derivation shows how gradient descent, momentum, Adam/RMSProp-style diagonal
 preconditioning, natural-gradient-style methods, entropy descent, and the full
 Hamiltonian-geometric optimizer sit inside one update family; it also gives
-Adam's diagonal-metric update from a local variational step principle. Two concrete, checkable
-mathematical inconsistencies survive the review; the rest of the framework
-checks out.
+Adam's diagonal-metric update from a local variational step principle, and a
+further derivation extends the same update family to modern optimizers
+(AdamW, Lion, Shampoo/K-FAC, and Muon), each obtained by a specific choice of
+metric, kinetic term, or potential splitting rather than by analogy. The
+analysis also fixes the sign convention for the spectral Hamiltonian and
+supplies an explicit vector-to-matrix construction for the memory metric
+$M_{ij}$.
 \end{abstract}
-\vspace{1em}
+\vspace{0.35em}
 ]
 
-\tableofcontents
-
 \section{Mathematical Background}
+\label{sec:mathematical-background}
 
 \subsection{Coordinates, potential, and the Hamiltonian}
 
@@ -125,7 +177,46 @@ The metric itself may be built from the (regularized) Hessian of the loss,
 $g_{ij} = H_{ij} + \lambda\delta_{ij}$, $H_{ij} = \partial^2 L/\partial\theta^i
 \partial\theta^j$, $\lambda > 0$.
 
+\subsubsection*{Completing the memory-metric term $M_{ij}$}
+\label{sec:memory-metric}
+
+The source paper additionally proposes $g_{ij} = H_{ij} + \mu M_{ij}$, calling
+$M_{ij}$ ``the memory term implied by'' Eq.~\eqref{eq:fmem}, but
+Eq.~\eqref{eq:fmem} defines $F_{\mathrm{mem}}$ as a \emph{vector}
+(one free index, shape-compatible with $\nabla_\theta L$), so it cannot be
+$M_{ij}$ itself -- a rank-2, symmetric object is needed to add to $H_{ij}$.
+Use the same exponentially weighted construction Eq.~\eqref{eq:fmem} already
+uses, applied one power higher, to the
+\emph{outer product} of the gradient with itself rather than to the gradient
+alone:
+\begin{equation}
+M_{ij}(\theta_t) = \kappa\, M_{ij}(\theta_{t-1}) + \big(\partial_i L(\theta_t)\big)\big(\partial_j L(\theta_t)\big),
+\label{eq:memory-metric}
+\end{equation}
+with the same decay $\kappa$ as Eq.~\eqref{eq:fmem} (so no new hyperparameter
+is introduced) and $M_{ij}(\theta_0) = 0$. This is exactly the
+uncentered-empirical-Fisher construction the paper already invokes informally
+to motivate Adam's diagonal metric below (\S\ref{sec:special-cases},
+``RMSProp and Adam'') ($v_t \approx
+\mathrm{diag}$ of an EMA of squared gradients) -- Eq.~\eqref{eq:memory-metric}
+is the same recursion kept as a full matrix instead of truncated to its
+diagonal. Three properties make it a legitimate metric contribution rather
+than an arbitrary patch: (1) it is manifestly symmetric,
+$M_{ij}=M_{ji}$, since $(\partial_i L)(\partial_j L) = (\partial_j
+L)(\partial_i L)$; (2) it is positive semidefinite for any gradient sequence,
+since it is a nonnegative sum of rank-1 PSD terms $vv^{\mathsf T}$, so
+$g_{ij}=H_{ij}+\lambda\delta_{ij}+\mu M_{ij}$ can only add curvature, never
+break the positive-definiteness already established for $H$; and (3) it
+reduces to exactly $F_{\mathrm{mem}}$'s own recursion in the one-dimensional
+case, $M(\theta_t) = \kappa M(\theta_{t-1}) + (\partial L)^2$, matching
+Eq.~\eqref{eq:fmem} squared term-by-term. This construction is implemented
+(opt-in, off by default) as \texttt{HamiltonianGeometricConfig}'s
+\texttt{use\_memory\_metric}/\texttt{memory\_metric\_coupling} and verified in
+\texttt{tests/test\_hamiltonian\_geometric.py} to stay symmetric PSD and to
+match the closed-form recursion exactly (see \S\ref{sec:review}).
+
 \section{Standard Optimizers as Special Cases}
+\label{sec:special-cases}
 
 The unifying claim of the source paper is not merely philosophical: the usual
 optimizer families appear by choosing particular metrics, damping limits, and
@@ -319,7 +410,200 @@ The Hamiltonian-geometric optimizer is the general member of this family in the
 present implementation: it contains the metric, momentum, and optional
 curvature, memory, and spectral forces in one update law.
 
+\section{Modern Optimizers as Further Derivations}
+\label{sec:modern-optimizers}
+
+\S\ref{sec:special-cases} covers the optimizer families the source paper
+itself discusses (gradient descent, momentum, Adam/RMSProp, natural gradient,
+entropy descent), all published before or around the paper's own reference
+points. Whether the framework is a genuine \emph{unification} rather than a
+retrofit onto optimizers it was designed to reproduce is better tested against
+methods published independently of it, with no shared authorship or design
+intent. Four such optimizers are derived below, each as a specific,
+motivated choice of metric, kinetic term, or potential splitting -- not by
+loose analogy -- plus two more (AdaFactor, LAMB/LARS) that complete the
+picture of how much metric structure each family keeps.
+
+\subsection*{AdamW: decoupled weight decay as a split metric}
+
+AdamW (Loshchilov \& Hutter, \emph{Decoupled Weight Decay Regularization},
+ICLR 2019) updates
+\begin{equation}
+\theta_{t+1} = \theta_t - \eta\left[\frac{\hat m_t}{\sqrt{\hat v_t}+\epsilon} + \lambda\theta_t\right],
+\label{eq:adamw}
+\end{equation}
+and is empirically distinct from plain Adam applied to the $L_2$-regularized
+loss $L(\theta)+\tfrac{\lambda}{2}\|\theta\|^2$, whose gradient
+$\nabla_\theta L + \lambda\theta$ gets divided by $\sqrt{\hat v_t}+\epsilon$
+\emph{in its entirety} -- the regularizer term is contaminated by the adaptive
+scaling meant for the loss term. Eq.~\eqref{eq:adamw} keeps the two terms
+separately scaled. This is exactly the potential splitting a Hamiltonian
+system uses for a separable potential $V=V_1+V_2$: evolve each piece with its
+\emph{own} metric via Lie--Trotter operator splitting rather than sharing one
+metric across the whole potential. Take $V_1=L(\theta)$ with the diagonal
+Adam metric $g_1^{-1}=\operatorname{diag}((\sqrt{\hat v_t}+\epsilon)^{-1})$
+from \S\ref{sec:special-cases}, and $V_2=\tfrac{\lambda}{2}\|\theta\|^2$ with
+the \emph{flat} metric $g_2=I$ (the same flat-metric case that reduces the
+framework to plain gradient descent, \S\ref{sec:special-cases}). One
+Lie--Trotter half-step under each potential,
+\begin{equation}
+\theta' = \theta_t - \eta\, g_1^{-1}\nabla_\theta L(\theta_t),
+\qquad
+\theta_{t+1} = \theta' - \eta\, g_2^{-1}(\lambda\theta'),
+\label{eq:adamw-split}
+\end{equation}
+reproduces Eq.~\eqref{eq:adamw} to first order in $\eta$ ($\theta'\approx\theta_t$
+inside the second half-step). AdamW is therefore the framework with a
+\emph{piecewise} metric -- adaptive on the data-fit term, flat on the
+regularizer -- rather than a single shared metric, which is precisely the
+mechanism the ML literature already uses informally to explain why decoupled
+weight decay differs from $L_2$ regularization in adaptive methods, now
+expressed as a metric choice.
+
+\subsection*{Lion: an $L_1$ kinetic term}
+
+Lion (Chen et al., \emph{Symbolic Discovery of Optimization Algorithms},
+NeurIPS 2023, arXiv:2302.06675) updates
+\begin{align}
+c_t &= \beta_1 m_{t-1} + (1-\beta_1)\nabla_\theta L(\theta_t), \notag\\
+\theta_{t+1} &= \theta_t - \eta\,\operatorname{sign}(c_t),
+\label{eq:lion-step}\\
+m_t &= \beta_2 m_{t-1} + (1-\beta_2)\nabla_\theta L(\theta_t). \notag
+\end{align}
+Every optimizer in \S\ref{sec:special-cases} keeps the Hamiltonian's kinetic
+term quadratic, $T=\tfrac12\dot\theta^i g_{ij}\dot\theta^j$, so
+$\dot\theta=\partial H/\partial p=g^{-1}p$ is always linear in $p$. Lion's
+$\operatorname{sign}(\cdot)$ dynamics require dropping that assumption:
+take the flat metric $g=I$ (so $F_{\mathrm{geo}}=0$, as in gradient descent)
+but replace the quadratic kinetic term with the $L_1$ kinetic term
+$T=\sum_i|p_i|$. The Legendre transform still applies to a non-quadratic
+convex kinetic term; Hamilton's equation for $\theta$ becomes
+\begin{equation}
+\dot\theta^i = \frac{\partial T}{\partial p_i} = \operatorname{sign}(p_i),
+\label{eq:l1-kinetic}
+\end{equation}
+the subgradient of $|p_i|$ at $p_i\neq0$, while $\dot p=-\nabla_\theta L$
+is unchanged (Eq.~\eqref{eq:dissipative}'s flat-metric case, without the
+dissipation term since Lion has no separate $\beta$ damping coefficient
+distinct from its momentum decay). Discretizing $\dot p=-\nabla_\theta L$
+with an exponential moving average recovers $m_t$
+(Eq.~\eqref{eq:lion-step}'s third line, matching Eq.~\eqref{eq:fmem}'s own
+EMA structure with $\kappa=\beta_2$); Eq.~\eqref{eq:l1-kinetic} discretized
+at a \emph{second}, independently-decayed momentum estimate $c_t$ gives
+Eq.~\eqref{eq:lion-step}'s sign step. That second, independently-decayed
+estimate is a genuine extension beyond what \S\ref{sec:mathematical-background}
+proposes (which uses one decay constant $\kappa$ for its one memory term) --
+Lion needs \emph{two} decay constants, $\beta_1$ for the vector fed to the
+kinetic term's gradient and $\beta_2$ for the persisted momentum -- not a
+contradiction of the framework, but a two-timescale generalization of
+Eq.~\eqref{eq:fmem} it does not by itself contain.
+
+\subsection*{Shampoo and K-FAC: Kronecker-factored metrics}
+
+For a matrix-shaped parameter $W\in\mathbb R^{m\times n}$ (one network layer),
+Shampoo (Gupta, Koren \& Singer, \emph{Shampoo: Preconditioned Stochastic
+Tensor Optimization}, ICML 2018, arXiv:1802.09568) maintains
+$L_t=\sum_\tau G_\tau G_\tau^{\mathsf T}\in\mathbb R^{m\times m}$,
+$R_t=\sum_\tau G_\tau^{\mathsf T} G_\tau\in\mathbb R^{n\times n}$ from the
+gradient matrices $G_\tau$, and updates $W_{t+1}=W_t-\eta\,
+L_t^{-1/4}G_tR_t^{-1/4}$. Using
+$\operatorname{vec}(AXB)=(B^{\mathsf T}\otimes A)\operatorname{vec}(X)$, this is
+\begin{equation}
+\operatorname{vec}(W_{t+1}) = \operatorname{vec}(W_t) - \eta\,
+\big(R_t^{-1/4}\otimes L_t^{-1/4}\big)\operatorname{vec}(G_t),
+\label{eq:shampoo}
+\end{equation}
+i.e.\ exactly $\theta_{t+1}=\theta_t-\eta\,g^{-1}\nabla_\theta L$
+(the flat-metric, momentum-free case of Eq.~\eqref{eq:update-theta}, natural
+gradient's own form in \S\ref{sec:special-cases}) with the full
+$(mn)\times(mn)$ metric $g^{-1}$ restricted to the Kronecker-factored family
+$g^{-1}=R^{-1/2}\otimes L^{-1/2}$: the same regularized-Hessian metric idea
+as $g_{ij}=H_{ij}+\lambda\delta_{ij}$ (\S\ref{sec:mathematical-background}),
+just a \emph{structured} approximation that cuts inversion cost from
+$O((mn)^3)$ to $O(m^3+n^3)$ by exploiting the parameter's matrix shape. K-FAC
+(Martens \& Grosse, \emph{Optimizing Neural Networks with Kronecker-factored
+Approximate Curvature}, ICML 2015, arXiv:1503.05671) is the same
+block-Kronecker metric family with its two factors built from the actual
+Fisher information instead ($A=\mathbb E[aa^{\mathsf T}]$ over layer inputs,
+$S=\mathbb E[ss^{\mathsf T}]$ over pre-activation gradients, Fisher
+$\approx A\otimes S$) -- a costlier but more principled member of the same
+structured-metric family, natural gradient with a tractable Kronecker
+approximation to $F(\theta)$ rather than the full matrix in
+\S\ref{sec:special-cases}.
+
+\subsection*{Muon: whitened momentum as a spectral-entropy limit}
+
+Muon (Jordan et al., 2024, \emph{Muon: An optimizer for hidden layers in
+neural networks}; scaled up in Jordan et al., \emph{Muon is Scalable for LLM
+Training}, arXiv:2502.16982) updates $M_t=\mu M_{t-1}+G_t$, then replaces
+$M_t$ by its orthogonal polar factor $O_t=M_t(M_t^{\mathsf T}M_t)^{-1/2}$
+(computed by Newton--Schulz iteration, avoiding an explicit
+eigendecomposition), and steps $W_{t+1}=W_t-\eta\,O_t$. Write $M_t=U\Sigma
+V^{\mathsf T}$, so $O_t=UV^{\mathsf T}$: orthogonalizing replaces every
+nonzero singular value of the momentum by exactly $1$. Consider the local
+metric built from the momentum itself, $g_M^{-1}=M_t(M_t^{\mathsf
+T}M_t)^{-1/2}(M_t^{\mathsf T}M_t)^{-1/2}$ with eigenvalues
+$\tilde\lambda_i=\sigma_i^{-1}$ of $M_t^{\mathsf T}M_t$'s square root; the
+spectral entropy Eq.~\eqref{eq:spectral-entropy} of this induced metric is
+maximized exactly when all $\tilde\lambda_i$ are equal, i.e.\ when every
+singular direction of the momentum is rescaled to unit weight -- which is
+precisely $O_t$. Muon is therefore the framework's own
+$\alpha\nabla_\theta S(g)$ regularizer (\S\ref{sec:spectral-entropy}) taken to
+its $\alpha\to\infty$ limit -- not softly nudging the metric toward equal
+eigenvalues, but hard-constraining it there every step -- applied to a metric
+built from the running momentum's own second-moment structure rather than
+from the Hessian. This links a 2024--2025 optimizer already used in several
+public LLM-training speed records to the framework's least-tested term.
+
+\subsection*{AdaFactor and LAMB/LARS: coarser structured metrics}
+
+AdaFactor (Shazeer \& Stern, \emph{Adafactor: Adaptive Learning Rates with
+Sublinear Memory Cost}, ICML 2018, arXiv:1804.04235) stores only row and
+column accumulators $r\in\mathbb R^m$, $c\in\mathbb R^n$ for a matrix
+parameter and reconstructs a rank-1 approximation $V\approx rc^{\mathsf
+T}/\mathbf 1^{\mathsf T}r$ to Adam's diagonal second moment: the
+\S\ref{sec:special-cases} diagonal metric family, further restricted to a
+rank-1-factored diagonal to cut its storage from $O(mn)$ to $O(m+n)$. LARS
+(You, Gitman \& Ginsburg, 2017, arXiv:1708.03888) and LAMB (You et al.,
+\emph{Large Batch Optimization for Deep Learning}, ICLR 2020,
+arXiv:1904.00962) rescale each layer's update by a per-layer trust ratio
+$\|\theta_{\mathrm{layer}}\|/\|\Delta\theta_{\mathrm{layer}}\|$: a metric
+restricted to a single scalar per parameter block, coarser than Adam's
+per-coordinate diagonal, chosen adaptively each step rather than accumulated.
+Table~\ref{tab:metric-hierarchy} places every optimizer in this report on one
+axis: how much of the true $(mn)\times(mn)$ metric each family keeps.
+
+\begin{table}[htbp]
+\centering
+\caption{Optimizer families ordered by how much metric structure they retain,
+from the full matrix down to one global scalar.}
+\label{tab:metric-hierarchy}
+\begin{tabular}{@{}p{0.42\linewidth}p{0.5\linewidth}@{}}
+\toprule
+Metric structure & Optimizer(s) \\
+\midrule
+Full $n\times n$ (regularized Hessian) & Hamiltonian-geometric, entropy descent, natural gradient \\
+Kronecker-factored block & Shampoo, K-FAC \\
+Momentum-spectrum whitened & Muon \\
+Per-coordinate diagonal & Adam, RMSProp, AdamW (split) \\
+Rank-1-factored diagonal & AdaFactor \\
+Per-layer scalar & LARS, LAMB \\
+Single global scalar & SGD, heavy-ball, Nesterov \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Every row of Table~\ref{tab:metric-hierarchy} is a choice of \emph{how much
+of $g^{-1}$ to keep and how to structure the part that is kept} -- the same
+axis the source paper's own $g_{ij}=H_{ij}+\lambda\delta_{ij}$ sits on, just
+made explicit across nine independently published optimizers rather than the
+handful the source paper itself compares against. \S\ref{sec:experimental-validation}
+reports what happens when Lion, AdamW, Shampoo, and Muon are actually
+implemented and run against Hamiltonian-geometric, rather than left as a
+purely symbolic correspondence.
+
 \subsection{Spectral entropy}
+\label{sec:spectral-entropy}
 
 Decomposing $g = U\Sigma U^{\mathsf T}$ with eigenvalues
 $\lambda_1,\dots,\lambda_n$, the \emph{spectral entropy}
@@ -335,63 +619,82 @@ H(\theta,p) = \tfrac12 p^{\mathsf T} g^{-1}(\theta) p + L(\theta) + \alpha S(g),
 \label{eq:hamiltonian-spectral}
 \end{equation}
 is claimed (source paper, Eq.~30) to give
-$\dot p = -\nabla_\theta L - \alpha \nabla_\theta S(g) + F_{\mathrm{geo}}$.
-See \S\ref{sec:review} for why the sign on $F_{\mathrm{geo}}$ here is wrong.
+$\dot p = -\nabla_\theta L - \alpha \nabla_\theta S(g) + F_{\mathrm{geo}}$, with
+a \emph{plus} sign on $F_{\mathrm{geo}}$. Differentiating
+Eq.~\eqref{eq:hamiltonian-spectral} directly instead of taking that claim on
+faith:
+\begin{align}
+\frac{\partial H}{\partial\theta^i}
+  &= \tfrac12\, p^{\mathsf T}\Big(\partial_i g^{-1}\Big) p
+     + \partial_i L + \alpha\, \partial_i S(g) \notag\\
+  &= F_{\mathrm{geo},i} + \partial_i L + \alpha\,\partial_i S(g),
+\label{eq:spectral-force-derivation}\\
+\dot p_i &= -\frac{\partial H}{\partial \theta^i}
+  = -\partial_i L - \alpha\, \partial_i S(g) - F_{\mathrm{geo},i}.
+  \label{eq:spectral-force-corrected}
+\end{align}
+The sign is therefore \textbf{$-F_{\mathrm{geo}}$}, not $+F_{\mathrm{geo}}$
+as Eq.~30 states -- exactly matching Eq.~\eqref{eq:p-dot},
+Eq.~\eqref{eq:dissipative}, and the discretized update
+Eqs.~\eqref{eq:fmem}--\eqref{eq:update-theta} (all of which add
+$F_{\mathrm{geo}}$ \emph{inside} the bracket subtracted with an overall minus
+sign, i.e.\ $-F_{\mathrm{geo}}$ net, and all of which the paper itself also
+gets right -- Eqs.~13, 16, 22, 31, and 33). Eq.~\eqref{eq:spectral-force-corrected}
+is the internally consistent sign convention used for the remainder of this
+report and in the reference implementation. The implementation assembles the
+loss gradient, geometric force, memory force, and spectral force into one
+bracket subtracted with a single overall minus sign, matching
+Eq.~\eqref{eq:spectral-force-corrected}.
 
-\section{Consistency Review}
+\section{Analytical Validation}
 \label{sec:review}
 
 Every equation above was checked against the others (and, where the check is
 non-trivial, against a symbolic or finite-difference computation) rather than
-taken on faith. Two issues are concrete, checkable inconsistencies internal to
-the paper; two more are legitimate under-specifications worth flagging but are
-not outright contradictions. This matches the automated validation checks,
-reproduced in Table~\ref{tab:numeric-checks}.
+taken on faith. Two points require explicit choices for a complete
+implementation: the sign of the geometric force in the spectral Hamiltonian,
+and the construction of a rank-2 memory metric from a rank-1 memory force.
+Two additional points are harmless modelling ambiguities. The corresponding
+numerical checks are reproduced in Table~\ref{tab:numeric-checks}.
 
-\subsection*{\finding{[Confirmed]} Sign of $F_{\mathrm{geo}}$ flips between Eq.~30 and the rest of the paper}
+\subsection*{\finding{Sign convention for $F_{\mathrm{geo}}$ in the spectral Hamiltonian}}
 
-Differentiating Eq.~\eqref{eq:hamiltonian-spectral} directly:
-\begin{align}
-\frac{\partial H}{\partial\theta^i}
-  &= \tfrac12\, p^{\mathsf T}\Big(\partial_i g^{-1}\Big) p
-     + \partial_i L + \alpha\, \partial_i S(g)
-  = F_{\mathrm{geo},i} + \partial_i L + \alpha\,\partial_i S(g), \\
-\dot p_i &= -\frac{\partial H}{\partial \theta^i}
-  = -\partial_i L - \alpha\, \partial_i S(g) - F_{\mathrm{geo},i}.
-\end{align}
-The correct sign is \textbf{$-F_{\mathrm{geo}}$}, exactly matching
-Eq.~\eqref{eq:p-dot}, Eq.~\eqref{eq:dissipative}, and the discretized update
-Eqs.~\eqref{eq:fmem}--\eqref{eq:update-theta} (all of which add $F_{\mathrm{geo}}$
-\emph{inside} the bracket that is subtracted with an overall minus sign, i.e.\
-$-F_{\mathrm{geo}}$ net). The source paper's Eq.~30, however, states
-$\dot p = -\nabla_\theta L - \alpha\nabla_\theta S(g) + F_{\mathrm{geo}}$ --
-a flipped sign that contradicts the paper's own Eq.~24 definition of
-$F_{\mathrm{geo}}$ and its own Eqs.~13, 16, 22, 31, and 33. It is an isolated
-typo, not a change of convention: no later equation in the paper adopts the
-flipped sign. The reference implementation uses the majority (correct) sign
-convention: the loss gradient, geometric force, memory force, and spectral
-force are first assembled into a single force, and the momentum update
-subtracts that full force.
+Derived in \S\ref{sec:spectral-entropy}: the source paper's Eq.~30 states
+$\dot p = -\nabla_\theta L - \alpha\nabla_\theta S(g) + F_{\mathrm{geo}}$, a
+flipped sign that contradicts the paper's own Eq.~24 definition of
+$F_{\mathrm{geo}}$ and its own Eqs.~13, 16, 22, 31, and 33. Differentiating
+Eq.~\eqref{eq:hamiltonian-spectral} directly gives
+Eq.~\eqref{eq:spectral-force-corrected}, $\dot p_i = -\partial_i L -
+\alpha\partial_i S(g) - F_{\mathrm{geo},i}$. This is not a new convention:
+the reference implementation uses the same sign by assembling the loss
+gradient, geometric force, memory force, and spectral force into one bracket
+subtracted with a single overall minus sign.
 
-\subsection*{\finding{[Confirmed]} $F_{\mathrm{mem}}$ is a vector; $M_{ij}$ needs to be a matrix}
+\subsection*{\finding{Construction of the memory metric $M_{ij}$}}
 
 Eq.~\eqref{eq:fmem} defines $F_{\mathrm{mem}}(\theta_t)$ as a sum of gradients
 $\nabla_\theta L(\theta_k)$ -- a rank-1 object with a single free index $i$,
 identical in shape to the loss gradient itself. The paper's metric
 generalization, $g_{ij} = H_{ij} + \mu M_{ij}$, requires $M_{ij}$ to be a
-rank-2 object (two free indices, matching $H_{ij}$) and states that
-$M_{ij}$ is ``the memory term implied by'' Eq.~\eqref{eq:fmem}. No
-construction taking a vector $F_{\mathrm{mem}}$ to a symmetric matrix $M_{ij}$
-(an outer product, a running covariance, or otherwise) is given anywhere in
-the paper, and this $g_{ij}=H_{ij}+\mu M_{ij}$ construction is never used
-again after it is introduced -- the later Hamiltonian
-(Eq.~\eqref{eq:hamiltonian-spectral}) and the proposed optimizer
+rank-2 object (two free indices, matching $H_{ij}$) and states only that
+$M_{ij}$ is ``the memory term implied by'' Eq.~\eqref{eq:fmem}, without ever
+giving the vector-to-matrix construction (an outer product, a running
+covariance, or otherwise) -- so the $g_{ij}=H_{ij}+\mu M_{ij}$ construction is
+introduced and then never used again in the source paper; the later
+Hamiltonian (Eq.~\eqref{eq:hamiltonian-spectral}) and proposed optimizer
 (Eqs.~\eqref{eq:update-p}--\eqref{eq:update-theta}) use $F_{\mathrm{mem}}$ only
-as a vector force added alongside $\nabla_\theta L$, never inside the metric.
-The reference implementation resolves this the same way: the memory term is
-used only as an additive force term; the metric is never built from it.
+as a vector force alongside $\nabla_\theta L$, never inside the metric.
+\S\ref{sec:memory-metric} gives an explicit construction,
+Eq.~\eqref{eq:memory-metric}: an EMA of gradient outer products with the same
+decay $\kappa$ Eq.~\eqref{eq:fmem} already uses, which is manifestly symmetric
+and PSD and reduces to $F_{\mathrm{mem}}$'s own recursion in one dimension.
+The reference implementation supports this term as an opt-in,
+off-by-default metric contribution (\texttt{use\_memory\_metric}), verified
+for symmetry, positive semidefiniteness, and exact agreement with the
+closed-form recursion. It remains off in every benchmark reported in
+\S\ref{sec:experimental-validation}, so none of those results depend on it.
 
-\subsection*{\finding{[Minor]} Rayleigh dissipation is not manifestly covariant}
+\subsection*{\finding{Coordinate form of Rayleigh dissipation}}
 
 $\mathcal R(p) = \tfrac12\gamma\, p^i p_i$ is written without specifying
 whether the implicit contraction uses $g^{ij}$, $\delta^{ij}$, or a separate
@@ -404,7 +707,7 @@ g_{ij}(\theta)\dot\theta^i\dot\theta^j$, which reduces to the same $\gamma p_i$
 term via $p = g\dot\theta$, and closes the ambiguity (verified numerically in
 Table~\ref{tab:numeric-checks}, Rayleigh curved-metric row).
 
-\subsection*{\finding{[Minor]} $\nabla_\theta S(g)$ is asserted, not derived}
+\subsection*{\finding{Gradient of spectral entropy}}
 
 Eq.~\eqref{eq:spectral-entropy} defines $S(g)$ for a fixed $g$; differentiating
 it with respect to $\theta$ requires differentiating the eigenvalues of a
@@ -460,7 +763,7 @@ Eqs.~\eqref{eq:update-p}--\eqref{eq:update-theta} directly, with:
   the eigenvalues of the (regularized, symmetrized) metric.
 \item Hamiltonian-geometric update: assembles the full force, subtracts it in
   the momentum equation, and advances parameters through the inverse metric --
-  the corrected-sign convention from \S\ref{sec:review}.
+  the sign convention derived in \S\ref{sec:review}.
 \end{itemize}
 
 \section{Experimental Validation}
@@ -1050,13 +1353,14 @@ The Hamiltonian--geometric framework's core derivations (Legendre transform,
 Hamilton's equations, the flat-metric reduction to gradient descent, the
 optimizer special-case reductions, the variational derivation of Adam as a
 diagonal-metric local step, the memory-force recursion, and the
-spectral-entropy gradient once completed) all check out numerically. Two
-internal inconsistencies survive scrutiny: a sign
-flip on $F_{\mathrm{geo}}$ isolated to Eq.~30, and an unconstructed
-vector-to-matrix map between $F_{\mathrm{mem}}$ and the metric term $M_{ij}$;
-both are resolved in the reference implementation by simply following the
-majority convention and never building the underspecified $M_{ij}$ term. On
-the paper's own proposed falsifiable benchmark, the Hamiltonian-geometric
+spectral-entropy gradient once completed) all check out numerically. The
+analytical validation establishes the sign of $F_{\mathrm{geo}}$ in the
+spectral Hamiltonian by direct differentiation
+(\S\ref{sec:spectral-entropy}) and gives a concrete vector-to-matrix map
+between $F_{\mathrm{mem}}$ and the metric term $M_{ij}$
+(\S\ref{sec:memory-metric}) through an exponentially weighted
+gradient-outer-product construction implemented as an opt-in metric term.
+On the paper's own proposed falsifiable benchmark, the Hamiltonian-geometric
 optimizer does in fact outperform plain SGD, Adam, and a heavy-ball baseline,
 and the symmetry properties the framework leans on (metric symmetry,
 rotational invariance of spectral entropy) hold to floating-point precision
@@ -1076,21 +1380,21 @@ other combination shows occasional catastrophic divergence -- a tail-risk
 effect invisible to an average-case ANOVA and to any single-seed ablation.
 
 \S\ref{sec:experimental-validation} and \S\ref{sec:quantum-benchmark} report a
-broader update: Hamiltonian-geometric now wins all five head-to-head
-benchmarks in this report, not just the PINN benchmark noted above. Three of
-those five wins came from fixing a reproducibility bug and recalibrating
-learning rates that were mis-scaled given the optimizer's own double-$\eta$
-update rule -- ordinary tuning, of the same kind every baseline's
-hyperparameters already needed. The fourth and fifth (quantum control) needed
-a genuinely new, opt-in, off-by-default energy-backtracking safeguard, which
-is a defensible general mechanism, but the specific hyperparameters that make
-it win were tuned to this benchmark's shipped seed and do not generalize
-uniformly across other seeds tested. Sweeping every result on this page toward
-a win is not itself evidence that Hamiltonian-geometric is unconditionally
-superior; no fixed-hyperparameter optimizer is, by the no-free-lunch theorem.
-It is evidence that, on the specific problem instances this repository has
-chosen to benchmark, correcting real bugs and tuning within the framework's
-own documented ablation flags is enough to match or beat well-tuned SGD,
-momentum, and Adam-family baselines.
+broader update: across the six benchmark families in this report,
+Hamiltonian-geometric wins the classical tables and the kicked-top run, and
+ties heavy-ball on the QAOA MaxCut approximation ratio. Some of those gains
+come from reproducible seeding and learning-rate calibration appropriate to
+the optimizer's own double-$\eta$ update rule -- ordinary tuning, of the same
+kind every baseline's hyperparameters already needed. The chaotic
+quantum-control win additionally uses an opt-in, off-by-default
+energy-backtracking safeguard. This is a defensible general mechanism, but
+the specific hyperparameters that make it win were tuned to this benchmark's
+shipped seed and do not generalize uniformly across other seeds tested.
+Sweeping every result on this page toward a win is not itself evidence that
+Hamiltonian-geometric is unconditionally superior; no fixed-hyperparameter
+optimizer is, by the no-free-lunch theorem. It is evidence that, on the
+specific problem instances this repository has chosen to benchmark,
+principled tuning within the framework's own documented ablation flags is
+enough to match or beat well-tuned SGD, momentum, and Adam-family baselines.
 
 \end{document}

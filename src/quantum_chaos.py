@@ -251,6 +251,7 @@ def train_quantum_optimizer(
             parameters=theta.copy(),
             momentum=state.momentum,
             memory=state.memory,
+            memory_metric=state.memory_metric,
             step=state.step,
         )
         hg_config = HamiltonianGeometricConfig(

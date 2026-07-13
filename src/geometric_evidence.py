@@ -83,7 +83,12 @@ def run_optimizer(
 
     if name == "hamiltonian_geometric":
         state = initial_state(theta.size)
-        state = state.__class__(parameters=theta.copy(), momentum=state.momentum, memory=state.memory)
+        state = state.__class__(
+            parameters=theta.copy(),
+            momentum=state.momentum,
+            memory=state.memory,
+            memory_metric=state.memory_metric,
+        )
         config = HamiltonianGeometricConfig(
             learning_rate=learning_rate,
             beta=0.7,

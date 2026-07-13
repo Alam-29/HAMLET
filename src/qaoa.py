@@ -162,7 +162,12 @@ def train_qaoa_optimizer(problem: QAOAProblem, optimizer: str, iterations: int, 
 
     if optimizer == "hamiltonian_geometric":
         state = initial_state(theta.size)
-        state = state.__class__(parameters=theta.copy(), momentum=state.momentum, memory=state.memory)
+        state = state.__class__(
+            parameters=theta.copy(),
+            momentum=state.momentum,
+            memory=state.memory,
+            memory_metric=state.memory_metric,
+        )
         config = HamiltonianGeometricConfig(
             learning_rate=hyperparameters.get("learning_rate", 0.18),
             beta=hyperparameters.get("beta", 0.45),

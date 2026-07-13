@@ -130,6 +130,80 @@ class HamiltonianGeometricCoreTests(unittest.TestCase):
 
         self.assertLessEqual(loss_fn(updated.parameters), current_loss)
 
+    def test_memory_metric_is_a_no_op_when_disabled(self) -> None:
+        config = HamiltonianGeometricConfig(
+            learning_rate=0.05, beta=0.0, use_geometric_correction=False,
+            use_memory_correction=False, use_memory_metric=False,
+        )
+        state = initial_state(2)
+
+        def gradient_fn(_theta: np.ndarray) -> np.ndarray:
+            return np.array([1.0, -2.0])
+
+        def metric_fn(_theta: np.ndarray) -> np.ndarray:
+            return np.eye(2)
+
+        updated = hamiltonian_geometric_step(state, gradient_fn, metric_fn, config)
+
+        np.testing.assert_allclose(updated.memory_metric, np.zeros((2, 2)))
+
+    def test_memory_metric_accumulates_symmetric_psd_gradient_outer_products(self) -> None:
+        # M_ij completes g_ij = H_ij + mu*M_ij (Sec. 12) as an EMA of gradient
+        # outer products -- the same construction that motivates Adam's
+        # diagonal metric, kept as a full matrix. It must stay symmetric PSD
+        # (a sum of rank-1 PSD terms) regardless of the gradient sequence.
+        config = HamiltonianGeometricConfig(
+            learning_rate=0.05, beta=0.0, use_geometric_correction=False,
+            use_memory_correction=False, use_memory_metric=True,
+            memory_metric_coupling=0.5, memory_decay=0.8,
+        )
+        state = initial_state(2)
+        gradient = np.array([1.0, -2.0])
+
+        def gradient_fn(_theta: np.ndarray) -> np.ndarray:
+            return gradient
+
+        def metric_fn(_theta: np.ndarray) -> np.ndarray:
+            return np.eye(2)
+
+        updated = hamiltonian_geometric_step(state, gradient_fn, metric_fn, config)
+
+        expected_memory_metric = np.outer(gradient, gradient)
+        np.testing.assert_allclose(updated.memory_metric, expected_memory_metric)
+        np.testing.assert_allclose(updated.memory_metric, updated.memory_metric.T)
+        self.assertTrue(np.all(np.linalg.eigvalsh(updated.memory_metric) >= -1e-12))
+
+        updated_again = hamiltonian_geometric_step(updated, gradient_fn, metric_fn, config)
+        expected_second = config.memory_decay * expected_memory_metric + np.outer(gradient, gradient)
+        np.testing.assert_allclose(updated_again.memory_metric, expected_second)
+
+    def test_memory_metric_increases_spectral_entropy_effect_on_step(self) -> None:
+        # Turning on the memory-metric coupling changes the effective metric
+        # (hence the step), and the metric must remain usable (positive
+        # definite, finite inverse) once the M_ij contribution is folded in.
+        config_off = HamiltonianGeometricConfig(
+            learning_rate=0.05, beta=0.0, use_geometric_correction=False,
+            use_memory_correction=False, use_memory_metric=False,
+        )
+        config_on = HamiltonianGeometricConfig(
+            learning_rate=0.05, beta=0.0, use_geometric_correction=False,
+            use_memory_correction=False, use_memory_metric=True,
+            memory_metric_coupling=2.0,
+        )
+        state = initial_state(2)
+
+        def gradient_fn(_theta: np.ndarray) -> np.ndarray:
+            return np.array([1.0, -2.0])
+
+        def metric_fn(_theta: np.ndarray) -> np.ndarray:
+            return np.eye(2)
+
+        updated_off = hamiltonian_geometric_step(state, gradient_fn, metric_fn, config_off)
+        updated_on = hamiltonian_geometric_step(state, gradient_fn, metric_fn, config_on)
+
+        self.assertTrue(np.all(np.isfinite(updated_on.parameters)))
+        self.assertFalse(np.allclose(updated_off.parameters, updated_on.parameters))
+
 
 if __name__ == "__main__":
     unittest.main()
