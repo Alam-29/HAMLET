@@ -1,0 +1,11 @@
+{\mu,\nu,\rho,\sigma}::Indices(position=fixed).
+\partial{#}::PartialDerivative.
+F_{\mu\nu}::AntiSymmetric.
+
+ex := F_{\mu\nu} + F_{\nu\mu};
+canonicalise(ex);
+print(ex);
+
+bianchi := \partial_{\rho}{F_{\mu\nu}} + \partial_{\mu}{F_{\nu\rho}} + \partial_{\nu}{F_{\rho\mu}};
+canonicalise(bianchi);
+print(bianchi);

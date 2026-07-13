@@ -1,6 +1,6 @@
 # Mathematical Validation of Literature Review
 
-Generated: 2026-07-13T00:36:04
+Generated: 2026-07-13T21:42:14
 
 This report checks the PDF's Hamiltonian-geometric optimizer equations before using them in code. The implementation follows the consistent parts of the paper and makes unresolved assumptions explicit.
 
@@ -18,7 +18,7 @@ This report checks the PDF's Hamiltonian-geometric optimizer equations before us
 
 ## Numerical Checks
 
-Generated: 2026-07-13T00:36:04
+Generated: 2026-07-13T21:42:14
 
 Each row is a finite-difference or direct-computation check against a fixed, seeded synthetic problem (`src.paper_math_validation`), not the fixed-feature capacitor benchmark -- the capacitor benchmark's metric is constant in theta, so F_geo and grad_theta S(g) are trivially zero there and cannot exercise these formulas.
 
