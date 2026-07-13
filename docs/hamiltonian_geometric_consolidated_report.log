@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.1.10)  13 JUL 2026 23:39
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.1.10)  13 JUL 2026 23:54
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -510,196 +510,203 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `cmss' (encoding: OT1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-Package microtype Info: Loading generic protrusion settings for font family
-(microtype)             `cmtt' (encoding: OT1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
  [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
 
 ] [2{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}] [3]
-Underfull \hbox (badness 1237) in paragraph at lines 585--586
+Underfull \hbox (badness 1237) in paragraph at lines 583--584
 []\OT1/cmr/m/n/10 (+20) Hamiltonian-geometric, en-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 586--586
+Underfull \hbox (badness 10000) in paragraph at lines 584--584
 []\OT1/cmr/m/n/10 (+20) Kronecker-factored
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 587--587
+Underfull \hbox (badness 10000) in paragraph at lines 585--585
 []\OT1/cmr/m/n/10 (+20) Momentum-spectrum
  []
 
 
-Underfull \hbox (badness 1694) in paragraph at lines 589--589
+Underfull \hbox (badness 1694) in paragraph at lines 587--587
 []\OT1/cmr/m/n/10 (+20) Rank-1-factored di-ag-o-
  []
 
-[4]
-Underfull \vbox (badness 7379) has occurred while \output is active []
-
- [5]
-Underfull \hbox (badness 1194) in paragraph at lines 867--873
-\OT1/cmr/m/n/10 (+20) order ran-dom seed from \OT1/cmtt/m/n/10 hash(name)\OT1/c
-mr/m/n/10 (+20) . Python
- []
-
-[6]
-<../visualizations/mnist_optimizer_benchmark/mnist_test_loss.png, id=275, 650.4
+[4] [5]
+<../visualizations/mnist_optimizer_benchmark/mnist_test_loss.png, id=262, 650.4
 3pt x 404.3105pt>
 File: ../visualizations/mnist_optimizer_benchmark/mnist_test_loss.png Graphic f
 ile (type png)
 <use ../visualizations/mnist_optimizer_benchmark/mnist_test_loss.png>
 Package pdftex.def Info: ../visualizations/mnist_optimizer_benchmark/mnist_test
-_loss.png  used on input line 897.
+_loss.png  used on input line 889.
 (pdftex.def)             Requested size: 165.1266pt x 102.64436pt.
 <../visualizations/algoperf_style_benchmark/algoperf_style_validation_loss.png,
- id=277, 650.43pt x 419.166pt>
+ id=264, 650.43pt x 419.166pt>
 File: ../visualizations/algoperf_style_benchmark/algoperf_style_validation_loss
 .png Graphic file (type png)
 <use ../visualizations/algoperf_style_benchmark/algoperf_style_validation_loss.
 png>
 Package pdftex.def Info: ../visualizations/algoperf_style_benchmark/algoperf_st
-yle_validation_loss.png  used on input line 898.
+yle_validation_loss.png  used on input line 890.
 (pdftex.def)             Requested size: 165.1266pt x 106.4158pt.
-<../visualizations/deepobs_style_benchmark/deepobs_style_loss.png, id=278, 650.
+<../visualizations/deepobs_style_benchmark/deepobs_style_loss.png, id=265, 650.
 43pt x 419.166pt>
 File: ../visualizations/deepobs_style_benchmark/deepobs_style_loss.png Graphic 
 file (type png)
 <use ../visualizations/deepobs_style_benchmark/deepobs_style_loss.png>
 Package pdftex.def Info: ../visualizations/deepobs_style_benchmark/deepobs_styl
-e_loss.png  used on input line 899.
+e_loss.png  used on input line 891.
 (pdftex.def)             Requested size: 165.1266pt x 106.4158pt.
-<../visualizations/pinn_benchmark/optimizer_convergence.png, id=283, 650.43pt x
+<../visualizations/pinn_benchmark/optimizer_convergence.png, id=270, 650.43pt x
  433.62pt>
 File: ../visualizations/pinn_benchmark/optimizer_convergence.png Graphic file (
 type png)
 <use ../visualizations/pinn_benchmark/optimizer_convergence.png>
 Package pdftex.def Info: ../visualizations/pinn_benchmark/optimizer_convergence
-.png  used on input line 910.
+.png  used on input line 902.
 (pdftex.def)             Requested size: 247.68204pt x 165.12137pt.
-<../visualizations/phase_space/phase_space.png, id=284, 650.43pt x 542.025pt>
+<../visualizations/phase_space/phase_space.png, id=271, 650.43pt x 542.025pt>
 File: ../visualizations/phase_space/phase_space.png Graphic file (type png)
 <use ../visualizations/phase_space/phase_space.png>
 Package pdftex.def Info: ../visualizations/phase_space/phase_space.png  used on
- input line 911.
+ input line 903.
 (pdftex.def)             Requested size: 247.68204pt x 206.4017pt.
+ [6]
+Underfull \hbox (badness 10000) in paragraph at lines 940--940
+[]\OT1/cmr/bx/n/10 (+20) Modern-optimizer bench-mark: Lion,
+ []
 
-Underfull \vbox (badness 1275) has occurred while \output is active []
 
-<../visualizations/qaoa_benchmark/qaoa_approximation_ratio.png, id=289, 650.43p
+Underfull \vbox (badness 5133) has occurred while \output is active []
+
+<../visualizations/modern_optimizer_benchmark/modern_optimizer_loss.png, id=295
+, 542.025pt x 361.35pt>
+File: ../visualizations/modern_optimizer_benchmark/modern_optimizer_loss.png Gr
+aphic file (type png)
+<use ../visualizations/modern_optimizer_benchmark/modern_optimizer_loss.png>
+Package pdftex.def Info: ../visualizations/modern_optimizer_benchmark/modern_op
+timizer_loss.png  used on input line 980.
+(pdftex.def)             Requested size: 229.38483pt x 152.92384pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [7]
+<../visualizations/qaoa_benchmark/qaoa_approximation_ratio.png, id=312, 650.43p
 t x 404.3105pt>
 File: ../visualizations/qaoa_benchmark/qaoa_approximation_ratio.png Graphic fil
 e (type png)
 <use ../visualizations/qaoa_benchmark/qaoa_approximation_ratio.png>
 Package pdftex.def Info: ../visualizations/qaoa_benchmark/qaoa_approximation_ra
-tio.png  used on input line 1006.
+tio.png  used on input line 1063.
 (pdftex.def)             Requested size: 247.68204pt x 153.96037pt.
-<../visualizations/quantum_chaos_benchmark/quantum_chaos_fidelity.png, id=290, 
+<../visualizations/quantum_chaos_benchmark/quantum_chaos_fidelity.png, id=313, 
 650.43pt x 404.3105pt>
 File: ../visualizations/quantum_chaos_benchmark/quantum_chaos_fidelity.png Grap
 hic file (type png)
 <use ../visualizations/quantum_chaos_benchmark/quantum_chaos_fidelity.png>
 Package pdftex.def Info: ../visualizations/quantum_chaos_benchmark/quantum_chao
-s_fidelity.png  used on input line 1007.
+s_fidelity.png  used on input line 1064.
 (pdftex.def)             Requested size: 247.68204pt x 153.96037pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [7]
-Underfull \vbox (badness 10000) has occurred while \output is active []
 
+Underfull \vbox (badness 2189) has occurred while \output is active []
 
-Underfull \hbox (badness 2538) in paragraph at lines 1119--1123
+ [8]
+Underfull \hbox (badness 2538) in paragraph at lines 1175--1179
 []\OT1/cmr/m/n/10 (+20) This is the clean-est pos-i-tive re-sult: when the
  []
 
 
-Underfull \hbox (badness 1515) in paragraph at lines 1119--1123
+Underfull \hbox (badness 1515) in paragraph at lines 1175--1179
 \OT1/cmr/m/n/10 (+20) met-ric is the full cur-va-ture of a cou-pled, ro-tated
  []
 
-<../visualizations/geometric_evidence/condition_number_scaling.png, id=301, 650
+<../visualizations/geometric_evidence/condition_number_scaling.png, id=320, 650
 .43pt x 404.3105pt>
 File: ../visualizations/geometric_evidence/condition_number_scaling.png Graphic
  file (type png)
 <use ../visualizations/geometric_evidence/condition_number_scaling.png>
 Package pdftex.def Info: ../visualizations/geometric_evidence/condition_number_
-scaling.png  used on input line 1156.
+scaling.png  used on input line 1212.
 (pdftex.def)             Requested size: 165.1266pt x 102.64436pt.
-<../visualizations/geometric_evidence/phase_space_loss_energy.png, id=302, 650.
+<../visualizations/geometric_evidence/phase_space_loss_energy.png, id=321, 650.
 43pt x 505.89pt>
 File: ../visualizations/geometric_evidence/phase_space_loss_energy.png Graphic 
 file (type png)
 <use ../visualizations/geometric_evidence/phase_space_loss_energy.png>
 Package pdftex.def Info: ../visualizations/geometric_evidence/phase_space_loss_
-energy.png  used on input line 1157.
+energy.png  used on input line 1213.
 (pdftex.def)             Requested size: 165.1266pt x 128.43286pt.
-<../visualizations/geometric_evidence/saddle_escape.png, id=303, 650.43pt x 404
+<../visualizations/geometric_evidence/saddle_escape.png, id=322, 650.43pt x 404
 .3105pt>
 File: ../visualizations/geometric_evidence/saddle_escape.png Graphic file (type
  png)
 <use ../visualizations/geometric_evidence/saddle_escape.png>
 Package pdftex.def Info: ../visualizations/geometric_evidence/saddle_escape.png
-  used on input line 1158.
+  used on input line 1214.
 (pdftex.def)             Requested size: 165.1266pt x 102.64436pt.
-[8] [9 <../visualizations/mnist_optimizer_benchmark/mnist_test_loss.png> <../vi
-sualizations/algoperf_style_benchmark/algoperf_style_validation_loss.png> <../v
-isualizations/deepobs_style_benchmark/deepobs_style_loss.png> <../visualization
-s/pinn_benchmark/optimizer_convergence.png> <../visualizations/phase_space/phas
-e_space.png>]
-Underfull \hbox (badness 1975) in paragraph at lines 1271--1283
+
+Underfull \vbox (badness 2644) has occurred while \output is active []
+
+ [9 <../visualizations/mnist_optimizer_benchmark/mnist_test_loss.png> <../visua
+lizations/algoperf_style_benchmark/algoperf_style_validation_loss.png> <../visu
+alizations/deepobs_style_benchmark/deepobs_style_loss.png> <../visualizations/p
+inn_benchmark/optimizer_convergence.png> <../visualizations/phase_space/phase_s
+pace.png> <../visualizations/modern_optimizer_benchmark/modern_optimizer_loss.p
+ng>]
+Underfull \hbox (badness 1975) in paragraph at lines 1327--1339
 []\OT1/cmr/m/n/10 (+20) Every par-tial con-fig-u-ra-tion ex-cept plain Hessian-
 
  []
 
-<../visualizations/ablation_study/ablation_study_figure.png, id=321, 931.00764p
+[10]
+<../visualizations/ablation_study/ablation_study_figure.png, id=340, 931.00764p
 t x 747.35683pt>
 File: ../visualizations/ablation_study/ablation_study_figure.png Graphic file (
 type png)
 <use ../visualizations/ablation_study/ablation_study_figure.png>
 Package pdftex.def Info: ../visualizations/ablation_study/ablation_study_figure
-.png  used on input line 1286.
+.png  used on input line 1342.
 (pdftex.def)             Requested size: 236.86447pt x 190.13441pt.
-<../visualizations/symmetry_exploits/metric_symmetry_exploits.png, id=324, 777.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+<../visualizations/symmetry_exploits/metric_symmetry_exploits.png, id=343, 777.
 9653pt x 582.41118pt>
 File: ../visualizations/symmetry_exploits/metric_symmetry_exploits.png Graphic 
 file (type png)
 <use ../visualizations/symmetry_exploits/metric_symmetry_exploits.png>
 Package pdftex.def Info: ../visualizations/symmetry_exploits/metric_symmetry_ex
-ploits.png  used on input line 1342.
+ploits.png  used on input line 1398.
 (pdftex.def)             Requested size: 229.38483pt x 171.72093pt.
-[10]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
  [11 <../visualizations/qaoa_benchmark/qaoa_approximation_ratio.png> <../visual
-izations/quantum_chaos_benchmark/quantum_chaos_fidelity.png>] [12
+izations/quantum_chaos_benchmark/quantum_chaos_fidelity.png>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-] [13 <../visualizations/geometric_evidence/condition_number_scaling.png> <../v
-isualizations/geometric_evidence/phase_space_loss_energy.png> <../visualization
-s/geometric_evidence/saddle_escape.png> <../visualizations/ablation_study/ablat
-ion_study_figure.png> <../visualizations/symmetry_exploits/metric_symmetry_expl
-oits.png>] [14]
-(./hamiltonian_geometric_consolidated_report.aux)
+ [12]
+[13 <../visualizations/geometric_evidence/condition_number_scaling.png> <../vis
+ualizations/geometric_evidence/phase_space_loss_energy.png> <../visualizations/
+geometric_evidence/saddle_escape.png> <../visualizations/ablation_study/ablatio
+n_study_figure.png> <../visualizations/symmetry_exploits/metric_symmetry_exploi
+ts.png>] [14] (./hamiltonian_geometric_consolidated_report.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
 Package rerunfilecheck Info: File `hamiltonian_geometric_consolidated_report.ou
 t' has not changed.
-(rerunfilecheck)             Checksum: 779E0B9FF2481198162133EBE4D630AC;4956.
+(rerunfilecheck)             Checksum: 9CA7F0AF81EAF78D917E4FC9404D3B91;5269.
  ) 
 Here is how much of TeX's memory you used:
- 14438 strings out of 474222
- 230917 string characters out of 5748733
+ 14455 strings out of 474222
+ 231569 string characters out of 5748733
  1961975 words of memory out of 5000000
- 36134 multiletter control sequences out of 15000+600000
- 578701 words of font info for 217 fonts, out of 8000000 for 9000
+ 36139 multiletter control sequences out of 15000+600000
+ 578837 words of font info for 221 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  75i,13n,79p,1038b,475s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
@@ -723,14 +730,13 @@ s/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type
 c/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
 nts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/
 cmsy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.
-pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></
-usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></u
-sr/share/texmf/fonts/type1/public/cm-super/sfrm1000.pfb>
-Output written on hamiltonian_geometric_consolidated_report.pdf (14 pages, 1929
-042 bytes).
+pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.p
+fb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1000.pfb>
+Output written on hamiltonian_geometric_consolidated_report.pdf (14 pages, 2093
+118 bytes).
 PDF statistics:
- 509 PDF objects out of 1000 (max. 8388607)
- 410 compressed objects within 5 object streams
- 121 named destinations out of 1000 (max. 500000)
- 51949 words of extra memory for PDF output out of 61914 (max. 10000000)
+ 521 PDF objects out of 1000 (max. 8388607)
+ 422 compressed objects within 5 object streams
+ 124 named destinations out of 1000 (max. 500000)
+ 51450 words of extra memory for PDF output out of 51595 (max. 10000000)
 
