@@ -9,6 +9,7 @@
 \usepackage{caption}
 \usepackage{stfloats}
 \usepackage{microtype}
+\usepackage{enumitem}
 
 \hypersetup{
   colorlinks=true,
@@ -1674,19 +1675,25 @@ semidefiniteness, exact agreement with the closed-form recursion);
 \texttt{tests/test\_modern\_optimizers.py} verifies the $L_1$-kinetic sign
 bound (Lion), the decoupled-decay/$L_2$ distinction (AdamW), the
 $\operatorname{vec}(AXB)$ Kronecker identity (Shampoo), and the
-spectral-entropy maximality of orthogonalization (Muon). The benchmark
-scripts are \texttt{main/run\_mnist\_optimizer\_benchmark.py},
-\texttt{main/run\_algoperf\_style\_benchmark.py},
-\texttt{main/run\_deepobs\_style\_benchmark.py},
-\texttt{main/run\_pinn\_benchmark.py},
-\texttt{main/run\_quantum\_chaos\_benchmark.py},
-\texttt{main/run\_qaoa\_benchmark.py},
-\texttt{main/run\_modern\_optimizer\_benchmark.py},
-\texttt{main/run\_modern\_optimizer\_robustness\_study.py},
-\texttt{main/run\_hyperparameter\_sensitivity\_study.py}, and
-\texttt{main/run\_memory\_metric\_study.py}; each writes its CSV/PNG outputs
-under \texttt{visualizations/} and prints the exact numbers quoted in this
-report. All code is NumPy-only with fixed, documented random seeds.
+spectral-entropy maximality of orthogonalization (Muon). Each benchmark
+script below writes its CSV/PNG outputs under \texttt{visualizations/} and
+prints the exact numbers quoted in this report; all code is NumPy-only with
+fixed, documented random seeds.
+
+{\small
+\begin{itemize}[nosep,leftmargin=1.1em]
+\item \texttt{main/run\_mnist\_optimizer\_benchmark.py}
+\item \texttt{main/run\_algoperf\_style\_benchmark.py}
+\item \texttt{main/run\_deepobs\_style\_benchmark.py}
+\item \texttt{main/run\_pinn\_benchmark.py}
+\item \texttt{main/run\_quantum\_chaos\_benchmark.py}
+\item \texttt{main/run\_qaoa\_benchmark.py}
+\item \texttt{main/run\_modern\_optimizer\_benchmark.py}
+\item \texttt{main/run\_modern\_optimizer\_robustness\_study.py}
+\item \texttt{main/run\_hyperparameter\_sensitivity\_study.py}
+\item \texttt{main/run\_memory\_metric\_study.py}
+\end{itemize}
+}
 
 \section{Conclusion}
 
