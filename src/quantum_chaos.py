@@ -267,6 +267,8 @@ def train_quantum_optimizer(
             max_energy_backtracks=int(hyperparameters.get("max_energy_backtracks", 4)),
             energy_backtrack_factor=hyperparameters.get("energy_backtrack_factor", 0.5),
             energy_tolerance=hyperparameters.get("energy_tolerance", 0.0),
+            use_memory_metric=hyperparameters.get("use_memory_metric", False),
+            memory_metric_coupling=hyperparameters.get("memory_metric_coupling", 0.0),
         )
 
         def gradient_fn(values: np.ndarray) -> np.ndarray:
