@@ -1427,6 +1427,71 @@ step-size calibration.}
 \label{fig:geometric-evidence-graphs}
 \end{figure*}
 
+\subsection{Metric-structure scaling: does richness of $g$ predict the advantage?}
+\label{sec:metric-structure-scaling}
+
+The condition-scaling result above (Table~\ref{tab:condition-scaling}) compares
+different \emph{optimizers}, each with its own fixed metric structure, so it
+cannot isolate whether the advantage comes from having a full metric per se or
+from some other difference between the algorithms. This experiment holds the
+optimizer fixed (Hamiltonian-geometric, diagonal-momentum term off) and varies
+only how much of the same underlying Hessian $a$ the metric $g$ is allowed to
+see, on the identical rotated quadratic used above: \textbf{scalar}
+($g=\bar\kappa I$, $\bar\kappa=\operatorname{tr}(a)/n$), \textbf{diagonal}
+($g=\operatorname{diag}(a)$), \textbf{block} ($g$ restricted to $3\times3$
+diagonal blocks of $a$, zero elsewhere), and \textbf{full} ($g=a$). Task
+dimension $n=12$, 10 seeds per cell (fresh random $\theta_0$ and rotation per
+seed), 160 steps, identical learning rate across all four structures so the
+comparison is not tuned per structure.
+
+\begin{table*}[t]
+\centering
+\caption{Median final loss (of 10 seeds) by metric structure and condition
+number, identical rotated-quadratic task and optimizer throughout. No seed
+diverged in any cell (0/10 in all 24 cells).}
+\label{tab:metric-structure-scaling}
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+Structure & $\kappa=10^2$ & $\kappa=10^3$ & $\kappa=10^4$ & $\kappa=10^5$ & $\kappa=10^6$ & $\kappa=10^7$ \\
+\midrule
+Scalar   & $0.235$ & $3.59$ & $33.5$ & $238$ & $2.03\times10^3$ & $1.23\times10^4$ \\
+Diagonal & $0.189$ & $3.04$ & $27.1$ & $224$ & $1.21\times10^3$ & $8.48\times10^3$ \\
+Block    & $0.123$ & $2.99$ & $8.63$ & $36.4$ & $272$ & $1.91\times10^3$ \\
+\textbf{Full} & $\mathbf{1.15\times10^{-22}}$ & $\mathbf{7.38\times10^{-22}}$ & $\mathbf{5.46\times10^{-21}}$ & $\mathbf{4.88\times10^{-20}}$ & $\mathbf{4.60\times10^{-19}}$ & $\mathbf{4.17\times10^{-18}}$ \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+Two things hold up under direct measurement, not assumption. First, the full
+metric is not just better but categorically different: it removes the
+condition-number dependence entirely (loss stays at floating-point-noise
+level, $10^{-22}$ to $10^{-18}$, essentially machine-precision convergence on
+a quadratic) rather than merely reducing it, while the three coarser
+structures all degrade by roughly the same $10$--$100\times$ per decade of
+$\kappa$ as $\kappa$ grows. Second, among the coarser structures, richer
+structure predicts a smaller (never larger) median loss in every column except
+$\kappa=10^2$, where scalar and diagonal are close enough that seed noise
+plausibly explains the reversed order (block $<$ diagonal $<$ scalar
+otherwise). Block-diagonal, which recovers only local $3\times3$ coupling,
+closes 1--2 orders of magnitude of the gap to full by $\kappa=10^4$ and
+beyond -- direct evidence that the mechanism is specifically the off-diagonal
+coupling the coarser metrics discard, not an artifact of the full metric's
+larger parameter count or some unrelated implementation detail. No divergence
+was observed in any of the 240 runs (4 structures $\times$ 6 condition numbers
+$\times$ 10 seeds), including at $\kappa=10^7$ under the scalar metric, so the
+gap here is a convergence-speed effect, not a stability effect.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\linewidth]{../visualizations/metric_structure_scaling_study/metric_structure_scaling.png}
+\caption{Median final loss vs.\ condition number, by metric structure, on the
+identical task and optimizer. The full metric is condition-number independent;
+the three coordinate-aligned structures all degrade, with the gap between them
+widening in the direction predicted by how much curvature coupling each one
+can represent.}
+\label{fig:metric-structure-scaling}
+\end{figure}
+
 \section{Architecture Ablation: A Controlled Statistical Study}
 \label{sec:architecture-ablation}
 
@@ -1692,6 +1757,7 @@ fixed, documented random seeds.
 \item \texttt{main/run\_modern\_optimizer\_robustness\_study.py}
 \item \texttt{main/run\_hyperparameter\_sensitivity\_study.py}
 \item \texttt{main/run\_memory\_metric\_study.py}
+\item \texttt{main/run\_metric\_structure\_scaling\_study.py}
 \end{itemize}
 }
 

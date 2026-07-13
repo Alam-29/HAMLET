@@ -8,7 +8,7 @@ yet, and which outputs should be trusted cautiously.
 The ideal parallel-plate capacitance formula is
 
 ```text
-C = epsilon A / d
+C = epsilon A / d 
 ```
 
 where `epsilon` is the permittivity, `A` is plate area, and `d` is plate

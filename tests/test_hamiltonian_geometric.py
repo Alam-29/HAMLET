@@ -6,6 +6,7 @@ from src.hamiltonian_geometric import (
     HamiltonianGeometricConfig,
     HamiltonianGeometricState,
     geometric_force_finite_difference,
+    geometric_force_tensor_contraction,
     hamiltonian_geometric_step,
     initial_state,
     positive_definite_metric,
@@ -28,6 +29,31 @@ class HamiltonianGeometricCoreTests(unittest.TestCase):
 
         self.assertTrue(np.all(np.isfinite(force)))
         self.assertGreater(np.linalg.norm(force), 0.0)
+
+    def test_geometric_force_tensor_contraction_matches_finite_difference(self) -> None:
+        # The tensor-contraction form (single inverse + einsum, used by
+        # hamiltonian_geometric_step) must agree with the reference
+        # finite-difference form (2n inversions) to finite-difference
+        # precision -- it is a reformulation via -g^-1(dg)g^-1, not an
+        # approximation.
+        rng = np.random.default_rng(0)
+        theta = rng.normal(size=4)
+        momentum = rng.normal(size=4)
+        q = rng.normal(size=(4, 4))
+
+        def metric_fn(values: np.ndarray) -> np.ndarray:
+            return q.T @ q + np.diag(1.0 + values**2)
+
+        regularization = 1e-3
+        reference = geometric_force_finite_difference(theta, momentum, metric_fn, regularization)
+
+        metric = positive_definite_metric(metric_fn(theta), regularization)
+        inverse_metric = np.linalg.pinv(metric)
+        fast = geometric_force_tensor_contraction(
+            theta, momentum, metric_fn, inverse_metric, regularization
+        )
+
+        np.testing.assert_allclose(fast, reference, atol=1e-6)
 
     def test_step_updates_memory_momentum_and_parameters(self) -> None:
         config = HamiltonianGeometricConfig(

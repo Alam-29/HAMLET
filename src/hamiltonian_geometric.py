@@ -147,10 +147,11 @@ def hamiltonian_geometric_step(
     entropy = spectral_entropy(metric)
 
     if config.use_geometric_correction:
-        geometric_force = geometric_force_finite_difference(
+        geometric_force = geometric_force_tensor_contraction(
             theta,
             state.momentum,
             metric_fn,
+            inverse_metric,
             regularization=config.metric_regularization,
             step=config.finite_difference_step,
         )
@@ -246,6 +247,46 @@ def geometric_force_finite_difference(
         derivative = (inv_plus - inv_minus) / (2.0 * step)
         force[index] = 0.5 * float(momentum @ derivative @ momentum)
     return force
+
+
+def geometric_force_tensor_contraction(
+    theta: Array,
+    momentum: Array,
+    metric_fn: MetricFn,
+    inverse_metric: Array,
+    regularization: float,
+    step: float = 1e-5,
+) -> Array:
+    """Compute F_geo_i = 0.5 p^T (partial_i g^{-1}) p using the identity
+    partial_i(g^{-1}) = -g^{-1} (partial_i g) g^{-1}, instead of
+    finite-differencing g^{-1} itself at each of the n parameter directions.
+
+    geometric_force_finite_difference needs 2n calls to
+    positive_definite_metric *and* 2n expensive general matrix inversions
+    (np.linalg.pinv, an SVD) -- the quantum-control ablation
+    (docs/hamiltonian_geometric_consolidated_report.tex,
+    Table~tab:quantum-ablation) shows this makes the geometric-force variant
+    more than 10x slower than every other variant. This function instead
+    reuses the single inverse metric the caller already computed at theta,
+    and needs only n finite differences of the (regularized, but not
+    inverted) metric plus one O(n^3) tensor contraction via
+    np.einsum -- eliminating all but one of the expensive inversions.
+    Verified numerically equivalent to geometric_force_finite_difference in
+    tests/test_hamiltonian_geometric.py.
+    """
+
+    n = theta.size
+    metric_derivative = np.empty((n, n, n), dtype=float)
+    for index in range(n):
+        delta = np.zeros_like(theta)
+        delta[index] = step
+        metric_plus = positive_definite_metric(metric_fn(theta + delta), regularization)
+        metric_minus = positive_definite_metric(metric_fn(theta - delta), regularization)
+        metric_derivative[index] = (metric_plus - metric_minus) / (2.0 * step)
+    inverse_metric_derivative = -np.einsum(
+        "ab,ibc,cd->iad", inverse_metric, metric_derivative, inverse_metric
+    )
+    return 0.5 * np.einsum("iab,a,b->i", inverse_metric_derivative, momentum, momentum)
 
 
 def spectral_entropy_gradient_finite_difference(

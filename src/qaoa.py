@@ -24,6 +24,8 @@ class QAOAConfig:
     depth: int = 2
     seed: int = 19
     finite_difference_step: float = 1e-5
+    graph_family: str = "ring_random"
+    weighted: bool = False
 
     def __post_init__(self) -> None:
         if self.qubits < 2:
@@ -32,12 +34,15 @@ class QAOAConfig:
             raise ValueError("depth must be positive")
         if self.finite_difference_step <= 0.0:
             raise ValueError("finite_difference_step must be positive")
+        if self.graph_family not in ("ring_random", "erdos_renyi", "regular", "community"):
+            raise ValueError(f"unknown graph_family {self.graph_family!r}")
 
 
 @dataclass(frozen=True)
 class QAOAProblem:
     config: QAOAConfig
     edges: list[tuple[int, int]]
+    weights: np.ndarray
     cut_values: np.ndarray
     plus_state: np.ndarray
     max_cut: float
@@ -61,34 +66,102 @@ class QAOAResult:
         return self.ratio_history[-1]
 
 
-def build_problem(config: QAOAConfig) -> QAOAProblem:
+def build_graph(config: QAOAConfig) -> list[tuple[int, int]]:
+    """Return an edge list for the requested graph family.
+
+    ``ring_random``: a Hamiltonian ring plus random chords until qubits+3
+    edges (the original construction, kept as the default for backward
+    compatibility with existing benchmark numbers).
+    ``erdos_renyi``: each of the qubits*(qubits-1)/2 possible edges is
+    included independently with probability 0.4.
+    ``regular``: a random 3-regular graph (each node has exactly 3 edges),
+    built by repeated random pairing with a rejection step for parity.
+    ``community``: two dense clusters of roughly equal size, connected by a
+    handful of bridge edges -- the graph family most likely to produce
+    ill-conditioned, non-trivial curvature in the QAOA cost landscape.
+    """
+
     rng = np.random.default_rng(config.seed)
-    edges: set[tuple[int, int]] = set()
-    for index in range(config.qubits):
-        edges.add((index, (index + 1) % config.qubits))
-    while len(edges) < config.qubits + 3:
-        a, b = sorted(rng.choice(config.qubits, size=2, replace=False))
-        edges.add((int(a), int(b)))
-    edge_list = sorted(edges)
-    cut_values = maxcut_values(config.qubits, edge_list)
+    n = config.qubits
+    if config.graph_family == "ring_random":
+        edges: set[tuple[int, int]] = set()
+        for index in range(n):
+            edges.add((index, (index + 1) % n))
+        while len(edges) < n + 3:
+            a, b = sorted(rng.choice(n, size=2, replace=False))
+            edges.add((int(a), int(b)))
+        return sorted(edges)
+    if config.graph_family == "erdos_renyi":
+        edges = {
+            (i, j) for i in range(n) for j in range(i + 1, n) if rng.random() < 0.4
+        }
+        # Guarantee connectivity-ish density if the random draw was too sparse.
+        while len(edges) < n:
+            a, b = sorted(rng.choice(n, size=2, replace=False))
+            edges.add((int(a), int(b)))
+        return sorted(edges)
+    if config.graph_family == "regular":
+        degree = 3 if n > 3 else n - 1
+        for _attempt in range(200):
+            stubs = list(range(n)) * degree
+            rng.shuffle(stubs)
+            edges = set()
+            valid = True
+            for i in range(0, len(stubs) - 1, 2):
+                a, b = stubs[i], stubs[i + 1]
+                if a == b or (min(a, b), max(a, b)) in edges:
+                    valid = False
+                    break
+                edges.add((min(a, b), max(a, b)))
+            if valid:
+                return sorted(edges)
+        return sorted({(i, (i + 1) % n) for i in range(n)})
+    if config.graph_family == "community":
+        half = n // 2
+        cluster_a, cluster_b = list(range(half)), list(range(half, n))
+        edges = set()
+        for cluster in (cluster_a, cluster_b):
+            for i in cluster:
+                for j in cluster:
+                    if i < j and rng.random() < 0.7:
+                        edges.add((i, j))
+        bridges = max(1, n // 4)
+        for _ in range(bridges):
+            a = int(rng.choice(cluster_a)) if cluster_a else 0
+            b = int(rng.choice(cluster_b)) if cluster_b else n - 1
+            edges.add((min(a, b), max(a, b)))
+        return sorted(edges)
+    raise ValueError(f"unknown graph_family {config.graph_family!r}")
+
+
+def build_problem(config: QAOAConfig) -> QAOAProblem:
+    rng = np.random.default_rng(config.seed + 9973)
+    edge_list = build_graph(config)
+    weights = (
+        rng.uniform(0.5, 2.0, size=len(edge_list)) if config.weighted else np.ones(len(edge_list))
+    )
+    cut_values = maxcut_values(config.qubits, edge_list, weights)
     state = np.ones(2**config.qubits, dtype=complex) / np.sqrt(2**config.qubits)
     return QAOAProblem(
         config=config,
         edges=edge_list,
+        weights=weights,
         cut_values=cut_values,
         plus_state=state,
         max_cut=float(np.max(cut_values)),
     )
 
 
-def maxcut_values(qubits: int, edges: list[tuple[int, int]]) -> np.ndarray:
+def maxcut_values(qubits: int, edges: list[tuple[int, int]], weights: np.ndarray | None = None) -> np.ndarray:
+    if weights is None:
+        weights = np.ones(len(edges))
     values = np.zeros(2**qubits, dtype=float)
     for basis in range(2**qubits):
-        total = 0
-        for a, b in edges:
+        total = 0.0
+        for (a, b), weight in zip(edges, weights):
             bit_a = (basis >> a) & 1
             bit_b = (basis >> b) & 1
-            total += bit_a != bit_b
+            total += weight if bit_a != bit_b else 0.0
         values[basis] = total
     return values
 
