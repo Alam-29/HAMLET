@@ -82,7 +82,7 @@ def run_instrumented(name: str, theta0: np.ndarray, loss_fn, grad_fn, metric_fn,
                 loss_fn=counted_loss if with_backtrack else None,
             )
         theta = state.parameters
-        final_loss = float(counted_loss.fn(theta))
+        final_loss = float(counted_loss(theta))
     else:
         for step in range(1, steps + 1):
             grad = counted_grad(theta)
