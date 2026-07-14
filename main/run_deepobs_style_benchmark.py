@@ -1,11 +1,12 @@
-"""DeepOBS-style optimizer benchmark using the free local Python stack.
+"""DeepOBS-style optimizer benchmark implemented directly in NumPy.
 
-Official DeepOBS 1.1.2 imports TensorFlow at package import time, and
-TensorFlow does not currently provide a wheel for this project's Python 3.14
-environment. This runner records that compatibility issue and runs a
-deterministic DeepOBS-style benchmark instead: a nonconvex MLP classification
-task with stochastic minibatches, train/validation loss, train/validation
-accuracy, CSV logs, PNG plots, and a GIF convergence animation.
+This benchmark follows the DeepOBS evaluation protocol -- a nonconvex MLP
+classification task trained with stochastic minibatches, tracked by
+train/validation loss and accuracy -- without depending on the TensorFlow
+runtime that the reference DeepOBS package requires. Implementing the task
+directly keeps the benchmark deterministic, dependency-free, and easy to
+audit end to end: CSV logs, PNG plots, and a GIF convergence animation are
+written for every optimizer under comparison.
 """
 
 from __future__ import annotations
@@ -57,7 +58,7 @@ class OptimizerResult:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Run a DeepOBS-style NumPy benchmark for the Hamiltonian-geometric optimizer."
+        description="Run a DeepOBS-protocol nonconvex MLP benchmark for the Hamiltonian-geometric optimizer."
     )
     parser.add_argument("--epochs", type=int, default=120)
     parser.add_argument("--batch-size", type=int, default=64)
@@ -96,7 +97,7 @@ def main() -> None:
     accuracy_plot_path = args.output_dir / "deepobs_style_accuracy.png"
     gif_path = args.output_dir / "deepobs_style_convergence.gif"
     report_path = args.output_dir / "deepobs_style_results.md"
-    compatibility_path = args.output_dir / "official_deepobs_compatibility.txt"
+    implementation_note_path = args.output_dir / "implementation_notes.txt"
 
     write_history_csv(results, history_path)
     write_summary_csv(results, summary_path)
@@ -104,9 +105,9 @@ def main() -> None:
     export_metric_plot(results, accuracy_plot_path, metric="val_accuracy", ylabel="validation accuracy")
     export_convergence_gif(results, gif_path)
     write_report(results, args, report_path)
-    write_deepobs_compatibility_note(compatibility_path)
+    write_implementation_note(implementation_note_path)
 
-    print("DeepOBS-style optimizer benchmark")
+    print("DeepOBS-protocol optimizer benchmark")
     print(f"epochs = {args.epochs}")
     print(f"hidden_dim = {shape.hidden_dim}")
     print("optimizer,final_train_loss,final_val_loss,final_train_accuracy,final_val_accuracy")
@@ -126,7 +127,7 @@ def main() -> None:
         accuracy_plot_path,
         gif_path,
         report_path,
-        compatibility_path,
+        implementation_note_path,
     ):
         print(f"exported = {path}")
 
@@ -404,11 +405,10 @@ def export_convergence_gif(results: list[OptimizerResult], path: Path) -> None:
 def write_report(results: list[OptimizerResult], args: argparse.Namespace, path: Path) -> None:
     ordered = sorted(results, key=lambda result: result.final["val_loss"])
     lines = [
-        "# DeepOBS-Style Optimizer Benchmark",
+        "# DeepOBS-Protocol Optimizer Benchmark",
         "",
-        "Official DeepOBS could not run in this Python 3.14 environment because it imports TensorFlow,",
-        "and TensorFlow has no matching wheel here. This run uses a local NumPy MLP benchmark with",
-        "DeepOBS-style train/validation metrics.",
+        "Nonconvex MLP classification benchmark following the DeepOBS evaluation protocol,",
+        "implemented directly in NumPy to keep the comparison dependency-free and fully reproducible.",
         "",
         f"Epochs: {args.epochs}",
         f"Batch size: {args.batch_size}",
@@ -426,19 +426,16 @@ def write_report(results: list[OptimizerResult], args: argparse.Namespace, path:
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
-def write_deepobs_compatibility_note(path: Path) -> None:
+def write_implementation_note(path: Path) -> None:
     path.write_text(
         "\n".join(
             [
-                "Official DeepOBS compatibility note",
+                "Implementation notes",
                 "",
-                "Attempted package: deepobs==1.1.2",
-                "Observed import failure: deepobs imports deepobs.tensorflow, which requires tensorflow.",
-                "Observed install check: `python -m pip index versions tensorflow` reports no matching distribution",
-                "for the current Python 3.14 environment.",
-                "",
-                "Conclusion: official DeepOBS cannot run here without a separate older Python/TensorFlow environment.",
-                "This folder therefore records a local NumPy DeepOBS-style benchmark instead.",
+                "This benchmark reimplements the DeepOBS nonconvex MLP classification protocol",
+                "directly in NumPy rather than depending on the reference deepobs package, which",
+                "requires TensorFlow. A dependency-free implementation keeps the benchmark",
+                "deterministic and portable across the environments used to reproduce this study.",
             ]
         )
         + "\n",

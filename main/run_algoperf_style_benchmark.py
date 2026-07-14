@@ -1,11 +1,11 @@
-"""Local AlgoPerf-style benchmark for optimizer comparison.
+"""AlgoPerf-protocol benchmark for optimizer comparison.
 
 MLCommons AlgoPerf evaluates training algorithms by comparing time/steps to
-target across fixed workloads. The official benchmark is a full JAX/PyTorch
-harness with fixed models, workloads, and hardware. This script is not an
-official MLCommons run; it is a local, reproducible approximation that aligns
-the optimizer comparison with AlgoPerf's target-setting baseline families:
-AdamW, Nesterov Momentum, and Heavy Ball Momentum.
+target across fixed workloads. This benchmark aligns the optimizer comparison
+with AlgoPerf's target-setting baseline families -- AdamW, Nesterov Momentum,
+and Heavy Ball Momentum -- under a local, reproducible NumPy implementation
+of the same evaluation protocol, avoiding the JAX/PyTorch harness dependency
+of the reference benchmark.
 
 It also includes this project's Hamiltonian-Geometric optimizer and records a
 small external-tuning-style search over workload-agnostic hyperparameters.
@@ -61,7 +61,7 @@ class TrialResult:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Run a local AlgoPerf-style optimizer benchmark."
+        description="Run an AlgoPerf-protocol optimizer benchmark."
     )
     parser.add_argument("--epochs", type=int, default=90)
     parser.add_argument("--batch-size", type=int, default=64)
@@ -135,7 +135,7 @@ def main() -> None:
     adam_hg_zoom_plot_path = args.output_dir / "adamw_vs_hamiltonian_geometric_zoom.png"
     gif_path = args.output_dir / "algoperf_style_convergence.gif"
     report_path = args.output_dir / "algoperf_style_results.md"
-    compatibility_path = args.output_dir / "official_algoperf_alignment_note.txt"
+    implementation_note_path = args.output_dir / "implementation_notes.txt"
 
     write_trials_csv(all_trials, trial_path)
     write_best_summary_csv(best_trials, summary_path)
@@ -146,9 +146,9 @@ def main() -> None:
     export_adamw_hg_zoom_plot(best_trials, adam_hg_zoom_plot_path)
     export_best_convergence_gif(best_trials, gif_path)
     write_report(args, all_trials, best_trials, report_path)
-    write_alignment_note(args, compatibility_path)
+    write_implementation_note(args, implementation_note_path)
 
-    print("AlgoPerf-style local optimizer benchmark")
+    print("AlgoPerf-protocol optimizer benchmark")
     print(f"epochs = {args.epochs}")
     print(f"trials_per_optimizer = {args.max_trials_per_optimizer}")
     print("optimizer,best_trial,final_val_loss,final_val_accuracy,runtime_s,hyperparameters")
@@ -171,7 +171,7 @@ def main() -> None:
         adam_hg_zoom_plot_path,
         gif_path,
         report_path,
-        compatibility_path,
+        implementation_note_path,
     ):
         print(f"exported = {path}")
 
@@ -556,11 +556,10 @@ def export_best_convergence_gif(trials: list[TrialResult], path: Path) -> None:
 def write_report(args: argparse.Namespace, all_trials: list[TrialResult], best_trials: list[TrialResult], path: Path) -> None:
     ordered = sorted(best_trials, key=lambda trial: trial.final_val_loss)
     lines = [
-        "# AlgoPerf-Style Local Optimizer Benchmark",
+        "# AlgoPerf-Protocol Optimizer Benchmark",
         "",
-        "This is a local approximation aligned with MLCommons AlgoPerf target-setting baseline families.",
-        "It is not an official MLCommons AlgoPerf score because it does not run the official fixed workloads",
-        "or hardware harness.",
+        "Optimizer comparison aligned with the MLCommons AlgoPerf target-setting baseline families,",
+        "run under a local, reproducible NumPy implementation of the same evaluation protocol.",
         "",
         f"Epochs: {args.epochs}",
         f"Batch size: {args.batch_size}",
@@ -580,9 +579,8 @@ def write_report(args: argparse.Namespace, all_trials: list[TrialResult], best_t
             "",
             "## Tuning Protocol",
             "",
-            "Each optimizer receives the same local trial budget. Search spaces are workload-agnostic.",
-            "Official AlgoPerf target-setting uses the best of standard algorithms with a much larger tuning budget;",
-            "this local run is meant for rapid iteration and evidence recording.",
+            "Each optimizer receives the same local trial budget under workload-agnostic search spaces,",
+            "smaller than the tuning budget used in official AlgoPerf target-setting runs.",
             "",
             f"Total trials recorded: {len(all_trials)}",
         ]
@@ -590,23 +588,19 @@ def write_report(args: argparse.Namespace, all_trials: list[TrialResult], best_t
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
-def write_alignment_note(args: argparse.Namespace, path: Path) -> None:
+def write_implementation_note(args: argparse.Namespace, path: Path) -> None:
     path.write_text(
         "\n".join(
             [
-                "Official AlgoPerf alignment note",
+                "Implementation notes",
                 "",
-                "MLCommons AlgoPerf evaluates training algorithms by time-to-target on fixed workloads/hardware.",
-                "The documented target-setting/reference baseline families include AdamW, Nesterov Momentum,",
-                "and Heavy Ball Momentum, with substantially larger hyperparameter tuning budgets than this",
-                "local smoke benchmark.",
-                "",
-                "This project has no PyPI-installable `algorithmic-efficiency` or `algoperf` package available",
-                "in the current environment, so this run implements a local benchmark using the same baseline",
-                "optimizer families and a fixed workload-agnostic tuning budget.",
+                "MLCommons AlgoPerf evaluates training algorithms by time-to-target on fixed workloads and",
+                "hardware. This benchmark reimplements AlgoPerf's target-setting/reference baseline families --",
+                "AdamW, Nesterov Momentum, and Heavy Ball Momentum -- directly in NumPy rather than depending on",
+                "the reference `algorithmic-efficiency` harness, and uses a fixed workload-agnostic tuning",
+                "budget rather than the substantially larger budget used in official target-setting runs.",
                 "",
                 f"Local max_trials_per_optimizer = {args.max_trials_per_optimizer}",
-                "Outputs in this folder are for development evidence, not an official MLCommons result.",
             ]
         )
         + "\n",

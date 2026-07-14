@@ -2,3 +2,4 @@ numpy==2.4.4
 matplotlib==3.11.0
 torch==2.13.0
 pyscf==2.13.1
+huggingface_hub==1.23.0

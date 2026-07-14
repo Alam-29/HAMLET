@@ -1,0 +1,266 @@
+\documentclass[aspectratio=169,10pt]{beamer}
+
+\usetheme{default}
+\usefonttheme{professionalfonts}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{microtype}
+
+\definecolor{HGInk}{HTML}{172033}
+\definecolor{HGMuted}{HTML}{556070}
+\definecolor{HGBlue}{HTML}{2563EB}
+\definecolor{HGTeal}{HTML}{0F766E}
+\definecolor{HGGreen}{HTML}{15803D}
+\definecolor{HGOrange}{HTML}{C2410C}
+\definecolor{HGPurple}{HTML}{7C3AED}
+\definecolor{HGRed}{HTML}{B91C1C}
+\definecolor{HGBG}{HTML}{F8FAFC}
+\definecolor{HGLine}{HTML}{CBD5E1}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{%
+  \hfill{\color{HGMuted}\scriptsize\insertframenumber/\inserttotalframenumber\hspace{1em}}\vspace{0.5em}
+}
+\setbeamercolor{background canvas}{bg=HGBG}
+\setbeamercolor{normal text}{fg=HGInk}
+\setbeamercolor{frametitle}{fg=HGInk}
+\setbeamerfont{frametitle}{series=\bfseries,size=\Large}
+\setbeamersize{text margin left=0.55cm,text margin right=0.55cm}
+
+\newcommand{\tagbox}[3]{%
+  \begin{tikzpicture}
+    \node[rounded corners=5pt, fill=#1, text=white, align=center,
+      minimum width=#2, minimum height=0.85cm, font=\bfseries] {#3};
+  \end{tikzpicture}%
+}
+
+\newcommand{\whitecard}[2]{%
+  \begin{tikzpicture}
+    \node[rounded corners=5pt, fill=white, draw=HGLine, line width=0.5pt,
+      text=HGInk, align=center, inner sep=8pt, minimum height=#1] {#2};
+  \end{tikzpicture}%
+}
+
+\newcommand{\claim}[2][HGInk]{%
+  \begin{center}
+  \begin{tikzpicture}
+    \node[rounded corners=5pt, fill=#1, text=white, align=center,
+      inner sep=8pt, text width=0.88\linewidth, font=\bfseries\large] {#2};
+  \end{tikzpicture}
+  \end{center}
+}
+
+\title{Hamiltonian--Geometric Optimization}
+\subtitle{Optimization as motion on a curved landscape}
+\author{Sparsho Chakraborty et al.}
+\date{}
+
+\begin{document}
+
+\begin{frame}[plain]
+  \vspace{0.4cm}
+  {\Huge\bfseries Hamiltonian--Geometric Optimization\par}
+  \vspace{0.25cm}
+  {\Large\color{HGMuted}Optimization as motion on a curved landscape\par}
+  \vspace{1.1cm}
+  \begin{center}
+  \tagbox{HGBlue}{2.15cm}{Loss\\energy}\hspace{0.15cm}
+  \tagbox{HGTeal}{2.15cm}{Metric\\geometry}\hspace{0.15cm}
+  \tagbox{HGPurple}{2.15cm}{Momentum\\state}\hspace{0.15cm}
+  \tagbox{HGOrange}{2.15cm}{Damping\\training}\hspace{0.15cm}
+  \tagbox{HGGreen}{2.15cm}{Evidence\\plots}
+  \end{center}
+  \vspace{0.8cm}
+  \claim{Not a magic optimizer: a geometry-first framework for structured learning problems.}
+\end{frame}
+
+\begin{frame}{Why Build This?}
+  \centering
+  \includegraphics[width=0.48\linewidth,height=0.66\textheight,keepaspectratio]{../visualizations/geometric_evidence/condition_number_scaling.png}
+  \hfill
+  \includegraphics[width=0.48\linewidth,height=0.66\textheight,keepaspectratio]{../visualizations/geometric_evidence/rotation_invariance.png}
+  \claim[HGBlue]{Core bet: use geometry instead of pretending the landscape is flat.}
+\end{frame}
+
+\begin{frame}{Core Idea}
+  \vspace{0.4cm}
+  \begin{center}
+  \tagbox{HGBlue}{2.2cm}{$\theta$\\position}\hspace{0.25cm}
+  \tagbox{HGOrange}{2.2cm}{$L(\theta)$\\potential}\hspace{0.25cm}
+  \tagbox{HGTeal}{2.2cm}{$g(\theta)$\\metric}\hspace{0.25cm}
+  \tagbox{HGPurple}{2.2cm}{$p$\\momentum}\hspace{0.25cm}
+  \tagbox{HGGreen}{2.2cm}{$\gamma$\\damping}
+  \end{center}
+  \vspace{0.8cm}
+  \begin{center}
+  \whitecard{1.1cm}{\Large\bfseries $H(\theta,p)=\frac{1}{2}p^\mathsf{T}g^{-1}(\theta)p+L(\theta)$}
+  \end{center}
+  \vspace{0.5cm}
+  \claim{Hamiltonian motion + dissipation = optimizer trajectory.}
+\end{frame}
+
+\begin{frame}{Derived vs Proposed}
+  \centering
+  \begin{columns}[T,onlytextwidth]
+    \column{0.32\linewidth}
+    \tagbox{HGGreen}{3.8cm}{STANDARD}
+    \vspace{0.25cm}
+    \whitecard{3.2cm}{Hamilton's equations\\Legendre transform\\Rayleigh damping\\Natural gradient}
+    \column{0.32\linewidth}
+    \tagbox{HGBlue}{3.8cm}{OUR SYNTHESIS}
+    \vspace{0.25cm}
+    \whitecard{3.2cm}{loss metric\\memory force\\spectral term\\energy safeguard}
+    \column{0.32\linewidth}
+    \tagbox{HGRed}{3.8cm}{HONEST CLAIM}
+    \vspace{0.25cm}
+    \whitecard{3.2cm}{If no exact reference exists,\\call it proposed here.}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Optimizer Family Tree}
+  \vspace{0.8cm}
+  \begin{center}
+  \tagbox{HGMuted}{2.2cm}{GD\\flat}\hspace{0.15cm}
+  \tagbox{HGPurple}{2.2cm}{Momentum\\inertia}\hspace{0.15cm}
+  \tagbox{HGBlue}{2.2cm}{Adam\\diagonal}\hspace{0.15cm}
+  \tagbox{HGTeal}{2.2cm}{Natural\\full metric}\hspace{0.15cm}
+  \tagbox{HGGreen}{2.2cm}{HG\\metric + $p$}
+  \end{center}
+  \vspace{1.2cm}
+  \claim{Correspondence, not historical authorship.}
+\end{frame}
+
+\begin{frame}{Motion Matters}
+  \centering
+  \includegraphics[width=0.82\linewidth,height=0.72\textheight,keepaspectratio]{../visualizations/phase_space/phase_space.png}
+  \claim[HGPurple]{Optimizer behavior is a trajectory in phase space, not only a final loss.}
+\end{frame}
+
+\begin{frame}{Physics-Informed Learning}
+  \centering
+  \includegraphics[width=0.49\linewidth,height=0.68\textheight,keepaspectratio]{../visualizations/pinn_benchmark/optimizer_convergence.png}
+  \hfill
+  \includegraphics[width=0.49\linewidth,height=0.68\textheight,keepaspectratio]{../visualizations/phase_space/phase_space.png}
+  \claim[HGTeal]{Strongest current story: structured physics loss + metric-aware motion.}
+\end{frame}
+
+\begin{frame}{Training Dynamics}
+  \centering
+  \includegraphics[width=0.49\linewidth,height=0.68\textheight,keepaspectratio]{../visualizations/algoperf_style_benchmark/algoperf_style_validation_loss.png}
+  \hfill
+  \includegraphics[width=0.49\linewidth,height=0.68\textheight,keepaspectratio]{../visualizations/deepobs_style_benchmark/deepobs_style_loss.png}
+  \claim[HGBlue]{Convergence behavior is easier to explain visually than through tables.}
+\end{frame}
+
+\begin{frame}{Quantum Optimization Evidence}
+  \centering
+  \includegraphics[width=0.49\linewidth,height=0.68\textheight,keepaspectratio]{../visualizations/qaoa_benchmark/qaoa_approximation_ratio.png}
+  \hfill
+  \includegraphics[width=0.49\linewidth,height=0.68\textheight,keepaspectratio]{../visualizations/quantum_chaos_benchmark/quantum_chaos_fidelity.png}
+  \claim[HGPurple]{This is the bridge to spin chains and tensor networks.}
+\end{frame}
+
+\begin{frame}{Modern Optimizers}
+  \centering
+  \includegraphics[width=0.49\linewidth,height=0.68\textheight,keepaspectratio]{../visualizations/modern_optimizer_benchmark/modern_optimizer_loss.png}
+  \hfill
+  \includegraphics[width=0.49\linewidth,height=0.68\textheight,keepaspectratio]{../visualizations/modern_optimizer_benchmark/modern_optimizer_seed_sweep.png}
+  \claim[HGOrange]{Honest result: Adam, HG, and Muon are close; seed variance matters.}
+\end{frame}
+
+\begin{frame}{Scaling And Cost}
+  \centering
+  \includegraphics[width=0.49\linewidth,height=0.68\textheight,keepaspectratio]{../visualizations/modern_optimizer_benchmark/modern_optimizer_scaling_sweep.png}
+  \hfill
+  \includegraphics[width=0.49\linewidth,height=0.68\textheight,keepaspectratio]{../visualizations/modern_optimizer_benchmark/modern_optimizer_pareto.png}
+  \claim[HGRed]{Do not oversell: geometry helps when structure justifies the cost.}
+\end{frame}
+
+\begin{frame}{What We Have Done}
+  \centering
+  \includegraphics[width=0.49\linewidth,height=0.68\textheight,keepaspectratio]{../visualizations/ablation_study/ablation_study_figure.png}
+  \hfill
+  \includegraphics[width=0.49\linewidth,height=0.68\textheight,keepaspectratio]{../visualizations/quantum_ablation_study/quantum_ablation_fidelity.png}
+  \claim[HGGreen]{Current status: working prototype and evidence, not final theory.}
+\end{frame}
+
+\begin{frame}{Next: Tensor Networks}
+  \vspace{0.6cm}
+  \begin{center}
+  \tagbox{HGBlue}{1.9cm}{MPS\\state}\hspace{0.08cm}
+  \tagbox{HGTeal}{1.9cm}{local\\envs}\hspace{0.08cm}
+  \tagbox{HGPurple}{1.9cm}{block\\metric}\hspace{0.08cm}
+  \tagbox{HGOrange}{1.9cm}{HG\\step}\hspace{0.08cm}
+  \tagbox{HGGreen}{1.9cm}{gauge\\check}
+  \end{center}
+  \vspace{0.9cm}
+  \whitecard{1.0cm}{\Large\bfseries Gauge freedom \quad Bond dimension \quad Entanglement spectrum \quad Contraction curvature}
+  \vspace{0.55cm}
+  \claim[HGTeal]{First integration target: MPS/MPO variational optimization.}
+\end{frame}
+
+\begin{frame}{Next: Spin Chains}
+  \vspace{0.5cm}
+  \begin{center}
+  \tagbox{HGPurple}{1.8cm}{Ising}\hspace{0.14cm}
+  \tagbox{HGBlue}{1.8cm}{XXZ}\hspace{0.14cm}
+  \tagbox{HGOrange}{1.8cm}{$J_1$--$J_2$}\hspace{0.14cm}
+  \tagbox{HGGreen}{1.8cm}{VQE}\hspace{0.14cm}
+  \tagbox{HGTeal}{1.8cm}{TDVP}
+  \end{center}
+  \vspace{0.9cm}
+  \whitecard{1.2cm}{\Large\bfseries Measure: energy, fidelity, symmetry stability, entanglement growth, runtime.}
+  \vspace{0.6cm}
+  \claim[HGPurple]{First experiment: transverse-field Ising chain with MPS baseline.}
+\end{frame}
+
+\begin{frame}{Higher-Order Targets}
+  \centering
+  \begin{columns}[T,onlytextwidth]
+    \column{0.32\linewidth}
+    \tagbox{HGBlue}{3.5cm}{PDE learning}\vspace{0.25cm}
+    \tagbox{HGPurple}{3.5cm}{Quantum circuits}
+    \column{0.32\linewidth}
+    \tagbox{HGTeal}{3.5cm}{Neural ODEs}\vspace{0.25cm}
+    \tagbox{HGGreen}{3.5cm}{Implicit layers}
+    \column{0.32\linewidth}
+    \tagbox{HGOrange}{3.5cm}{Meta-learning}\vspace{0.25cm}
+    \tagbox{HGRed}{3.5cm}{Inverse problems}
+  \end{columns}
+  \vspace{0.6cm}
+  \claim{Rule: if curvature, constraints, or symmetries matter, try the geometric optimizer.}
+\end{frame}
+
+\begin{frame}{Roadmap}
+  \vspace{0.8cm}
+  \begin{center}
+  \tagbox{HGGreen}{2.1cm}{clean\\API}\hspace{0.15cm}
+  \tagbox{HGPurple}{2.1cm}{spin-chain\\benchmark}\hspace{0.15cm}
+  \tagbox{HGTeal}{2.1cm}{tensor\\backend}\hspace{0.15cm}
+  \tagbox{HGOrange}{2.1cm}{runtime\\normalization}\hspace{0.15cm}
+  \tagbox{HGBlue}{2.1cm}{publish\\carefully}
+  \end{center}
+  \vspace{1.1cm}
+  \claim{North star: structured scientific and quantum optimization.}
+\end{frame}
+
+\begin{frame}{Attribution Rule}
+  \vspace{0.7cm}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.48\linewidth}
+    \tagbox{HGGreen}{5.5cm}{Derived from\\standard mechanics}
+    \vspace{0.5cm}
+    \whitecard{1.2cm}{\Large equations}
+    \column{0.48\linewidth}
+    \tagbox{HGBlue}{5.5cm}{Proposed here\\as optimizer package}
+    \vspace{0.5cm}
+    \whitecard{1.2cm}{\Large design + evidence}
+  \end{columns}
+  \vspace{0.8cm}
+  \claim[HGRed]{If no exact prior reference exists, say it plainly.}
+\end{frame}
+
+\end{document}

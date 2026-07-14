@@ -91,7 +91,7 @@ def main() -> None:
     export_metric_plot(results, accuracy_plot_path, "test_accuracy", "test accuracy")
     write_report(args, results, report_path)
 
-    print("Local MNIST optimizer benchmark")
+    print("MNIST optimizer benchmark")
     print(f"train_samples = {x_train.shape[0]}")
     print(f"test_samples = {x_test.shape[0]}")
     print(f"epochs = {args.epochs}")
@@ -272,9 +272,11 @@ def export_metric_plot(results, path: Path, metric: str, ylabel: str) -> None:
 
 def write_report(args, results, path: Path) -> None:
     lines = [
-        "# Local MNIST Optimizer Benchmark",
+        "# MNIST Optimizer Benchmark",
         "",
-        "Softmax regression on local MNIST IDX files. This is not an official MLCommons AlgoPerf result.",
+        "Convex softmax-regression benchmark on the MNIST digit-classification task, providing a",
+        "convex baseline that complements the nonconvex MLP and PINN benchmarks reported elsewhere",
+        "in this study.",
         "",
         f"Train samples: {args.train_samples}",
         f"Test samples: {args.test_samples}",

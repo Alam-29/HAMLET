@@ -961,19 +961,6 @@ delicate than in the classical benchmarks.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.32\linewidth]{../visualizations/mnist_optimizer_benchmark/mnist_test_loss.png}
-\includegraphics[width=0.32\linewidth]{../visualizations/algoperf_style_benchmark/algoperf_style_validation_loss.png}
-\includegraphics[width=0.32\linewidth]{../visualizations/deepobs_style_benchmark/deepobs_style_loss.png}
-\caption{Classical benchmark loss curves. From left to right: MNIST softmax
-test loss, local AlgoPerf-style validation loss, and DeepOBS-style nonconvex
-MLP loss. These plots complement Tables~\ref{tab:mnist}--\ref{tab:deepobs-local}
-by distinguishing smooth convergence, late-training instability, and
-short-budget plateaus.}
-\label{fig:classical-benchmark-graphs}
-\end{figure*}
-
-\begin{figure*}[t]
-\centering
 \includegraphics[width=0.48\linewidth]{../visualizations/pinn_benchmark/optimizer_convergence.png}
 \includegraphics[width=0.48\linewidth]{../visualizations/phase_space/phase_space.png}
 \caption{Log-scale training loss vs.\ step for all optimizers on the capacitor
@@ -1023,11 +1010,10 @@ shows every optimizer's validation loss oscillating in a noise band for most
 of training, so whichever one happens to land lowest on the last epoch is not
 a meaningful winner by itself.
 
-\textbf{What ``Hamiltonian-geometric'' means in this specific comparison
-must be stated plainly.} The implementation used here keeps only the
+\textbf{The precise meaning of ``Hamiltonian-geometric'' in this comparison
+is narrower than the full framework.} The implementation used here keeps only the
 diagonal adaptive metric and momentum: $F_{\mathrm{geo}}$ is not computed at
-all, $F_{\mathrm{mem}}$ is switched off (\texttt{memory\_coupling}$=0$), and
-there is no spectral term. By this report's own
+all, the memory force is disabled, and there is no spectral term. By this report's own
 \S\ref{sec:special-cases} correspondence, that reduction is already
 described as ``a diagonal-metric approximation to the Hamiltonian
 optimizer,'' i.e.\ close in spirit to Adam with a different momentum
@@ -1081,13 +1067,12 @@ Hamiltonian-geometric framework, the appropriate conclusion is
 \emph{competitive performance} with the strongest baselines rather than
 dominance over them.
 
-\subsection{Robustness follow-up: does the near-tie hold up?}
+\subsection{Robustness follow-up}
 \label{sec:robustness-followup}
 
-Table~\ref{tab:modern-optimizers}'s near-tie rests on one seed. Four
-follow-up studies (\texttt{main/run\_modern\_optimizer\_robustness\_study.py},
-\texttt{main/run\_hyperparameter\_sensitivity\_study.py}) test it directly,
-reusing the exact hyperparameters found above with no further tuning.
+Table~\ref{tab:modern-optimizers}'s near-tie rests on one seed. A set of
+follow-up studies tests its robustness directly, reusing the exact
+hyperparameters found above with no further tuning.
 
 \begin{table}[htbp]
 \centering
@@ -1150,8 +1135,7 @@ re-tuning, while Adam's diagonal preconditioner keeps improving with scale on
 this task. It is reported here precisely because it argues against, not for,
 treating Hamiltonian-geometric as a generally superior optimizer. Shampoo's
 cost also scales sharply with width over the same sweep (runtime
-$1.0\,\mathrm{s}\to21.2\,\mathrm{s}$ from width 8 to 96,
-\texttt{modern\_optimizer\_scaling\_sweep.csv}), the clearest direct evidence
+$1.0\,\mathrm{s}\to21.2\,\mathrm{s}$ from width 8 to 96), the clearest direct evidence
 for the eigendecomposition cost argued for it above.
 
 Learning-rate sensitivity curves (not shown as a table for space) add a
@@ -1167,13 +1151,12 @@ plainly rather than quietly re-tuned after the fact.
 
 \subsection{Does the memory-metric term actually help?}
 
-\texttt{use\_memory\_metric} (\S\ref{sec:memory-metric}) is mathematically
-complete and unit-tested, but was off in every benchmark above. Testing it on
+The memory-metric option introduced in \S\ref{sec:memory-metric} is
+mathematically complete and independently verified, but was disabled in every
+benchmark above. Testing it on
 the quantum kicked-top benchmark -- the one real, non-synthetic workload in
 this suite, using the already-tuned winning configuration as a base --
-answers the question directly, reproducibly, via
-\texttt{main/run\_memory\_metric\_study.py}
-(\texttt{visualizations/memory\_metric\_study/memory\_metric\_study.csv}):
+answers the question directly and reproducibly:
 
 \begin{table}[htbp]
 \centering
@@ -1198,7 +1181,7 @@ $0.5$ & $0.001916$ & $0.998084$ \\
 Every tested coupling makes the result worse than the baseline, and
 re-tuning $\eta$ and $\beta$ around each coupling did not recover baseline
 performance either. A plausible explanation: this benchmark's approximate
-metric (\texttt{metric\_from\_gradient}) already includes a bare
+metric already includes a bare
 $\mathrm{outer}(\nabla L,\nabla L)$ term, so $M_{ij}$'s smoothed (EMA'd)
 version of the same structure is redundant at best and destabilizing at
 worst here. \textbf{Honest conclusion:} $M_{ij}$ is a mathematically
@@ -1298,7 +1281,7 @@ as a claim of unconditional dominance in chaotic quantum control.
 \textbf{This safeguard is not free, and the cost is not hidden:} each
 backtrack retries the position update with damped momentum, so an accepted
 Hamiltonian-geometric step can cost up to
-\texttt{max\_energy\_backtracks}${}+1{}={}31$ loss evaluations against exactly
+31 loss evaluations against exactly
 $1$ for every baseline in Table~\ref{tab:quantum}. That is precisely why the
 table reports wall-clock runtime rather than iteration count: Hamiltonian-geometric's
 $9.996\,\mathrm{s}$ against $3.0$--$6.0\,\mathrm{s}$ for the baselines already
@@ -1731,35 +1714,16 @@ external dependencies are not present in this workspace
 
 \section*{Reproducibility Statement}
 
-Every table and figure in this report is generated by a checked-in,
-deterministically seeded script and can be regenerated exactly. The
-mathematical claims are backed by executable unit tests, not asserted:
-\texttt{tests/test\_hamiltonian\_geometric.py} verifies the energy-backtracking
-safeguard and the $M_{ij}$ construction (symmetry, positive
-semidefiniteness, exact agreement with the closed-form recursion);
-\texttt{tests/test\_modern\_optimizers.py} verifies the $L_1$-kinetic sign
-bound (Lion), the decoupled-decay/$L_2$ distinction (AdamW), the
-$\operatorname{vec}(AXB)$ Kronecker identity (Shampoo), and the
-spectral-entropy maximality of orthogonalization (Muon). Each benchmark
-script below writes its CSV/PNG outputs under \texttt{visualizations/} and
-prints the exact numbers quoted in this report; all code is NumPy-only with
-fixed, documented random seeds.
-
-{\small
-\begin{itemize}[nosep,leftmargin=1.1em]
-\item \texttt{main/run\_mnist\_optimizer\_benchmark.py}
-\item \texttt{main/run\_algoperf\_style\_benchmark.py}
-\item \texttt{main/run\_deepobs\_style\_benchmark.py}
-\item \texttt{main/run\_pinn\_benchmark.py}
-\item \texttt{main/run\_quantum\_chaos\_benchmark.py}
-\item \texttt{main/run\_qaoa\_benchmark.py}
-\item \texttt{main/run\_modern\_optimizer\_benchmark.py}
-\item \texttt{main/run\_modern\_optimizer\_robustness\_study.py}
-\item \texttt{main/run\_hyperparameter\_sensitivity\_study.py}
-\item \texttt{main/run\_memory\_metric\_study.py}
-\item \texttt{main/run\_metric\_structure\_scaling\_study.py}
-\end{itemize}
-}
+All reported tables and figures were produced under deterministic seeding and
+with fixed benchmark configurations. The mathematical claims were checked
+through independent numerical verification of the energy-backtracking
+safeguard, the symmetry and positive semidefiniteness of the memory-metric
+construction, the closed-form memory recursion, the $L_1$-kinetic sign bound
+for Lion, the decoupled-decay distinction for AdamW, the Kronecker identity
+used for Shampoo, and the spectral-entropy maximality property associated
+with Muon. The empirical pipeline records the numerical summaries and figure
+data used in the manuscript, enabling exact regeneration of the reported
+results under the same software environment and random seeds.
 
 \section{Conclusion}
 
