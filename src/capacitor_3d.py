@@ -181,7 +181,7 @@ def export_3d_potential_png(solution: Capacitor3DSolution, path: str, dpi: int =
         f"C (ideal, no fringing) = {ideal * 1e12:.4f} pF\n"
         f"fringe ratio = {fringe_ratio:.3f}",
         transform=ax.transAxes, fontsize=8.5,
-        bbox={"boxstyle": "round,pad=0.35", "facecolor": "white", "edgecolor": "#888888", "alpha": 0.9},
+        bbox={"boxstyle": "round, pad=0.35", "facecolor": "white", "edgecolor": "#888888", "alpha": 0.9},
     )
 
     fig.tight_layout()

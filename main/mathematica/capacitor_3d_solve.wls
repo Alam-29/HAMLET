@@ -1,4 +1,4 @@
-(* Real 3D finite-difference solve of Laplace's equation for a finite
+ mmmmmm(* Real 3D finite-difference solve of Laplace's equation for a finite
    rectangular parallel-plate capacitor, run through the Wolfram Engine.
    This is the 3D counterpart to the project's 2D finite-difference
    cross-section solver in src/laplace2d.py (which assumes an infinitely
