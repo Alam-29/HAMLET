@@ -179,9 +179,13 @@ hf jobs uv run --flavor a10g-small --timeout 2h hf_jobs/hf_industry_llm_benchmar
   --dataset Salesforce/wikitext `
   --dataset-config wikitext-2-raw-v1 `
   --tokenizer gpt2 `
+  --device cuda `
   --max-steps 1000 `
   --upload-repo YOUR_USERNAME/hg-optimizer-llm-results
 ```
+
+Use `--device auto` to fall back to CPU if CUDA is unavailable, `--device cpu`
+to force CPU, or `--device cuda:0` to choose a specific visible GPU.
 
 ## Where Results Go
 

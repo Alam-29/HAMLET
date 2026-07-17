@@ -31,6 +31,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from main.run_llm_benchmark import HamiltonianGeometricTorch, Lion
+from main.device_utils import add_torch_device_argument, resolve_torch_device
 
 
 @dataclass(frozen=True)
@@ -158,6 +159,7 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         default=PROJECT_ROOT / "visualizations" / "industry_llm_benchmark",
     )
+    add_torch_device_argument(parser)
     return parser.parse_args()
 
 
@@ -166,7 +168,10 @@ def main() -> None:
     args.output_dir.mkdir(parents=True, exist_ok=True)
     args.cache_dir.mkdir(parents=True, exist_ok=True)
     set_seed(args.seed)
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    try:
+        device = resolve_torch_device(args.device, torch)
+    except ValueError as error:
+        raise SystemExit(str(error)) from error
 
     train_tokens, val_tokens, vocab_size = load_tokenized_wikitext(args)
     config = GPT2Config(

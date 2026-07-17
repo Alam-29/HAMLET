@@ -263,6 +263,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--n-head", type=int, default=4)
     parser.add_argument("--n-embd", type=int, default=256)
     parser.add_argument("--seed", type=int, default=2026)
+    parser.add_argument(
+        "--device",
+        default="auto",
+        help="Torch device: auto, cpu, cuda, or cuda:N. Default auto uses CUDA when available.",
+    )
     parser.add_argument("--output-dir", type=Path, default=Path("hf_llm_benchmark_results"))
     parser.add_argument("--upload-repo", default="", help="Optional HF dataset repo id, e.g. username/hg-llm-results.")
     return parser.parse_args()
@@ -274,7 +279,7 @@ def main() -> None:
         raise ValueError("--learning-rate and --tune-learning-rates are mutually exclusive")
     args.output_dir.mkdir(parents=True, exist_ok=True)
     set_seed(args.seed)
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = resolve_device(args.device)
     train_tokens, val_tokens, vocab_size = load_tokenized_dataset(args)
     config = GPT2Config(
         vocab_size=vocab_size,
@@ -319,6 +324,30 @@ def main() -> None:
         print(f"{result.optimizer},{lr_text},{final['train_loss']:.6e},{final['val_loss']:.6e},{final['val_perplexity']:.6e},{result.runtime_s:.6e}")
     if args.upload_repo:
         upload_outputs(args.upload_repo, args.output_dir)
+
+
+def resolve_device(requested: str) -> torch.device:
+    requested = requested.strip().lower()
+    if requested == "auto":
+        return torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    if requested == "cpu":
+        return torch.device("cpu")
+    if requested == "cuda" or requested.startswith("cuda:"):
+        if not torch.cuda.is_available():
+            raise ValueError(f"requested --device {requested!r}, but PyTorch cannot access CUDA")
+        if ":" in requested:
+            _prefix, index_text = requested.split(":", 1)
+            try:
+                index = int(index_text)
+            except ValueError as error:
+                raise ValueError(f"invalid CUDA device {requested!r}; use cuda or cuda:N") from error
+            device_count = torch.cuda.device_count()
+            if index < 0 or index >= device_count:
+                raise ValueError(
+                    f"requested --device {requested!r}, but only {device_count} CUDA device(s) are visible"
+                )
+        return torch.device(requested)
+    raise ValueError(f"unsupported --device {requested!r}; use auto, cpu, cuda, or cuda:N")
 
 
 def set_seed(seed: int) -> None:

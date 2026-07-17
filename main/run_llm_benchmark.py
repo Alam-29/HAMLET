@@ -40,6 +40,8 @@ from transformers.optimization import Adafactor
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
+from main.device_utils import add_torch_device_argument, resolve_torch_device
+
 TINY_SHAKESPEARE_URL = (
     "https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt"
 )
@@ -208,6 +210,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--output-dir", type=Path, default=PROJECT_ROOT / "visualizations" / "llm_benchmark"
     )
+    add_torch_device_argument(parser)
     return parser.parse_args()
 
 
@@ -215,7 +218,10 @@ def main() -> None:
     args = parse_args()
     args.output_dir.mkdir(parents=True, exist_ok=True)
     set_seed(args.seed)
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    try:
+        device = resolve_torch_device(args.device, torch)
+    except ValueError as error:
+        raise SystemExit(str(error)) from error
 
     text, corpus_name = load_corpus(args.corpus_path)
     chars = sorted(set(text))

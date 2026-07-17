@@ -140,6 +140,19 @@ budget:
 python .\main\run_algoperf_style_benchmark.py
 ```
 
+The small GPT-2 benchmark runners use PyTorch and can run on CUDA. By default
+they use `--device auto`, which selects CUDA when PyTorch can see a GPU and
+falls back to CPU otherwise. To require CUDA and fail fast if the installed
+PyTorch build cannot access it:
+
+```powershell
+python .\main\run_llm_benchmark.py --device cuda
+python .\main\run_industry_llm_benchmark.py --device cuda
+```
+
+You can also target a specific GPU, for example `--device cuda:0`, or force a
+CPU run with `--device cpu`. The NumPy-only benchmarks remain CPU benchmarks.
+
 To benchmark the optimizer on a chaotic quantum-control workload, run the
 quantum kicked-top state-transfer comparison. This compares SGD, AdamW,
 Nesterov Momentum, Heavy Ball Momentum, entropy descent, and the
