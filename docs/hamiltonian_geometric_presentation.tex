@@ -1,266 +1,411 @@
-\documentclass[aspectratio=169,10pt]{beamer}
+\documentclass[aspectratio=169,11pt]{beamer}
 
-\usetheme{default}
+\usetheme{Madrid}
+\usecolortheme{seahorse}
 \usefonttheme{professionalfonts}
-\usepackage{amsmath,amssymb}
-\usepackage{graphicx}
-\usepackage{tikz}
-\usepackage{booktabs}
-\usepackage{xcolor}
-\usepackage{microtype}
 
-\definecolor{HGInk}{HTML}{172033}
-\definecolor{HGMuted}{HTML}{556070}
-\definecolor{HGBlue}{HTML}{2563EB}
-\definecolor{HGTeal}{HTML}{0F766E}
-\definecolor{HGGreen}{HTML}{15803D}
-\definecolor{HGOrange}{HTML}{C2410C}
-\definecolor{HGPurple}{HTML}{7C3AED}
-\definecolor{HGRed}{HTML}{B91C1C}
-\definecolor{HGBG}{HTML}{F8FAFC}
-\definecolor{HGLine}{HTML}{CBD5E1}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{comment}
+
+% The deck is compiled from docs/, while its media bundle lives in ppt_assets/.
+\graphicspath{{../ppt_assets/}}
+
+\definecolor{hgpurple}{RGB}{106,61,154}
+\definecolor{softblue}{RGB}{63,107,160}
+\definecolor{softgreen}{RGB}{44,160,137}
+\definecolor{softorange}{RGB}{220,139,42}
 
 \setbeamertemplate{navigation symbols}{}
-\setbeamertemplate{footline}{%
-  \hfill{\color{HGMuted}\scriptsize\insertframenumber/\inserttotalframenumber\hspace{1em}}\vspace{0.5em}
-}
-\setbeamercolor{background canvas}{bg=HGBG}
-\setbeamercolor{normal text}{fg=HGInk}
-\setbeamercolor{frametitle}{fg=HGInk}
-\setbeamerfont{frametitle}{series=\bfseries,size=\Large}
-\setbeamersize{text margin left=0.55cm,text margin right=0.55cm}
+\setbeamertemplate{caption}[numbered]
+\setbeamercolor{title}{fg=hgpurple}
+\setbeamercolor{frametitle}{fg=hgpurple}
+\setbeamercolor{structure}{fg=hgpurple}
 
-\newcommand{\tagbox}[3]{%
-  \begin{tikzpicture}
-    \node[rounded corners=5pt, fill=#1, text=white, align=center,
-      minimum width=#2, minimum height=0.85cm, font=\bfseries] {#3};
-  \end{tikzpicture}%
+\newcommand{\safeimage}[2][]{%
+  \includegraphics[#1]{../ppt_assets/#2}%
 }
 
-\newcommand{\whitecard}[2]{%
-  \begin{tikzpicture}
-    \node[rounded corners=5pt, fill=white, draw=HGLine, line width=0.5pt,
-      text=HGInk, align=center, inner sep=8pt, minimum height=#1] {#2};
-  \end{tikzpicture}%
+\newcommand{\figslide}[3]{
+  \begin{frame}{#1}
+    \centering
+    \safeimage[width=#2\linewidth,height=0.74\textheight,keepaspectratio]{#3}
+  \end{frame}
 }
 
-\newcommand{\claim}[2][HGInk]{%
-  \begin{center}
-  \begin{tikzpicture}
-    \node[rounded corners=5pt, fill=#1, text=white, align=center,
-      inner sep=8pt, text width=0.88\linewidth, font=\bfseries\large] {#2};
-  \end{tikzpicture}
-  \end{center}
+\newcommand{\twocolfigs}[3]{
+  \begin{frame}{#1}
+    \begin{columns}[T,totalwidth=\linewidth]
+      \begin{column}{0.49\linewidth}
+        \centering
+        \safeimage[width=\linewidth,height=0.66\textheight,keepaspectratio]{#2}
+      \end{column}
+      \begin{column}{0.49\linewidth}
+        \centering
+        \safeimage[width=\linewidth,height=0.66\textheight,keepaspectratio]{#3}
+      \end{column}
+    \end{columns}
+  \end{frame}
 }
 
-\title{Hamiltonian--Geometric Optimization}
-\subtitle{Optimization as motion on a curved landscape}
-\author{Sparsho Chakraborty et al.}
-\date{}
+\title[Hamiltonian-Geometric Framework]{Hamiltonian-Geometric Optimization Framework for Machine Learning}
+\subtitle{Mathematical Framing, Validation, and Benchmark Evidence}
+\author[Chakraborty et al.]{Sparsho Chakraborty \and Mohammad Alamgir \and Adreet Sarkar \and Nishant M}
+\institute{Capacitor Fringes Project}
+\date{\today}
 
 \begin{document}
 
-\begin{frame}[plain]
-  \vspace{0.4cm}
-  {\Huge\bfseries Hamiltonian--Geometric Optimization\par}
-  \vspace{0.25cm}
-  {\Large\color{HGMuted}Optimization as motion on a curved landscape\par}
-  \vspace{1.1cm}
-  \begin{center}
-  \tagbox{HGBlue}{2.15cm}{Loss\\energy}\hspace{0.15cm}
-  \tagbox{HGTeal}{2.15cm}{Metric\\geometry}\hspace{0.15cm}
-  \tagbox{HGPurple}{2.15cm}{Momentum\\state}\hspace{0.15cm}
-  \tagbox{HGOrange}{2.15cm}{Damping\\training}\hspace{0.15cm}
-  \tagbox{HGGreen}{2.15cm}{Evidence\\plots}
-  \end{center}
-  \vspace{0.8cm}
-  \claim{Not a magic optimizer: a geometry-first framework for structured learning problems.}
+\begin{frame}
+  \titlepage
 \end{frame}
 
-\begin{frame}{Why Build This?}
+\begin{frame}{Image Path Check}
   \centering
-  \includegraphics[width=0.48\linewidth,height=0.66\textheight,keepaspectratio]{../visualizations/geometric_evidence/condition_number_scaling.png}
-  \hfill
-  \includegraphics[width=0.48\linewidth,height=0.66\textheight,keepaspectratio]{../visualizations/geometric_evidence/rotation_invariance.png}
-  \claim[HGBlue]{Core bet: use geometry instead of pretending the landscape is flat.}
+  \safeimage[width=0.72\linewidth,height=0.62\textheight,keepaspectratio]{test_result_media/modern_optimizer_benchmark/modern_optimizer_loss.png}
 \end{frame}
 
-\begin{frame}{Core Idea}
-  \vspace{0.4cm}
-  \begin{center}
-  \tagbox{HGBlue}{2.2cm}{$\theta$\\position}\hspace{0.25cm}
-  \tagbox{HGOrange}{2.2cm}{$L(\theta)$\\potential}\hspace{0.25cm}
-  \tagbox{HGTeal}{2.2cm}{$g(\theta)$\\metric}\hspace{0.25cm}
-  \tagbox{HGPurple}{2.2cm}{$p$\\momentum}\hspace{0.25cm}
-  \tagbox{HGGreen}{2.2cm}{$\gamma$\\damping}
-  \end{center}
-  \vspace{0.8cm}
-  \begin{center}
-  \whitecard{1.1cm}{\Large\bfseries $H(\theta,p)=\frac{1}{2}p^\mathsf{T}g^{-1}(\theta)p+L(\theta)$}
-  \end{center}
-  \vspace{0.5cm}
-  \claim{Hamiltonian motion + dissipation = optimizer trajectory.}
+\begin{frame}{Deck Map}
+  \begin{itemize}
+    \item Mathematical framing from the consolidated report: Hamiltonian flow, metric structure, memory, and spectral entropy.
+    \item Analytical checks that validate the implemented equations.
+    \item Classical, modern-optimizer, LLM-style, PINN, geometric, and quantum benchmark evidence.
+    \item Bounded interpretation: competitive behavior, strongest when full-metric geometry is exploitable.
+  \end{itemize}
 \end{frame}
 
-\begin{frame}{Derived vs Proposed}
+\begin{frame}{Core Question}
+  \begin{block}{Goal}
+    To test whether a Hamiltonian-geometric update can act as a useful optimizer family across
+    simulation physics, classical ML, LLM-style training, and quantum-control objectives.
+  \end{block}
+  \begin{itemize}
+    \item The report develops the theory, verifies the equations, then stress-tests the optimizer empirically.
+
+  \end{itemize}
+\end{frame}
+
+\section{Reference-PDF Framing}
+
+\begin{frame}{Reference-PDF Thesis}
+  \begin{block}{Central claim}
+    Model parameters are treated as generalized coordinates, the loss as potential energy,
+    and optimizer state as momentum evolving on a metric parameter manifold.
+  \end{block}
+  \begin{itemize}
+    \item A single update family contains flat-gradient methods, momentum, diagonal adaptive methods,
+      natural-gradient-style updates, entropy descent, and the full Hamiltonian-geometric optimizer.
+    \item Modern optimizers are interpreted by metric structure, kinetic term, or potential splitting.
+    \item The empirical claim is deliberately bounded: the method is not uniformly superior, but is
+      strongest when full-metric structure is available.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Hamiltonian Formulation}
+  \small
+  \begin{align*}
+    H(\theta,p) &= \frac{1}{2}p_i g^{ij}(\theta)p_j + L(\theta),\\
+    \dot{\theta}^{i} &= \frac{\partial H}{\partial p_i}
+      = g^{ij}(\theta)p_j,\\
+    \dot{p}_i &= -\frac{\partial H}{\partial \theta^i}
+      = -\partial_i L
+      - \frac{1}{2}p_j p_k\,\partial_i g^{jk}(\theta).
+  \end{align*}
+  \begin{itemize}
+    \item The second term in $\dot p_i$ is the geometric force induced by a coordinate-dependent metric.
+    \item Dissipation is added so the dynamics optimize rather than conserve energy.
+    \item The same structure supports memory and spectral-entropy corrections.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Generalized Update Rule}
+  \small
+  \begin{align*}
+    p_{t+1} &= \beta p_t - \eta\left[\nabla_\theta L
+      + F_{\mathrm{geo}} + F_{\mathrm{mem}}
+      + \alpha\nabla_\theta S(g)\right],\\
+    \theta_{t+1} &= \theta_t + \eta g^{-1}(\theta_t)p_{t+1}.
+  \end{align*}
+  \begin{itemize}
+    \item $F_{\mathrm{geo}}$ captures metric variation.
+    \item $F_{\mathrm{mem}}$ lifts exponential gradient memory into a rank-2 metric construction.
+    \item $\nabla_\theta S(g)$ encourages a controlled spectral distribution for the metric.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Standard Optimizers as Special Cases}
+  \scriptsize
+  \begin{tabular}{@{}p{0.25\linewidth}p{0.37\linewidth}p{0.30\linewidth}@{}}
+    \toprule
+    Optimizer family & Hamiltonian specialization & Removed or approximated \\
+    \midrule
+    Gradient descent & Flat metric, overdamped limit & Momentum relaxes instantly; $F_{\mathrm{geo}}=0$ \\
+    Heavy-ball momentum & Flat metric with finite momentum & No curvature, memory, or spectral force \\
+    Nesterov-style momentum & Flat damped flow with lookahead gradient & Lookahead discretization \\
+    RMSProp / Adam & Diagonal adaptive metric approximation & Ignores $F_{\mathrm{geo}}$ from metric variation \\
+    Natural gradient & Full information metric & Usually no Hamiltonian momentum or memory force \\
+    Entropy descent & Full/preconditioned metric step & Keeps $g^{-1}$ but drops momentum and memory \\
+    Hamiltonian-geometric & Full metric with optional forces & Retains momentum, metric, memory, entropy, curvature \\
+    \bottomrule
+  \end{tabular}
+\end{frame}
+
+\begin{frame}{Modern Optimizer Metric Hierarchy}
+  \scriptsize
+  \begin{tabular}{@{}p{0.38\linewidth}p{0.54\linewidth}@{}}
+    \toprule
+    Metric structure & Optimizer(s) \\
+    \midrule
+    Full $n\times n$ regularized Hessian & Hamiltonian-geometric, entropy descent, natural gradient \\
+    Kronecker-factored block & Shampoo, K-FAC \\
+    Momentum-spectrum whitened & Muon \\
+    Per-coordinate diagonal & Adam, RMSProp, AdamW with split decay \\
+    Rank-1-factored diagonal & AdaFactor \\
+    Per-layer scalar & LARS, LAMB \\
+    Single global scalar & SGD, heavy-ball, Nesterov \\
+    \bottomrule
+  \end{tabular}
+  \vspace{0.8em}
+
+\end{frame}
+
+\begin{frame}{Analytical Validation}
+  \scriptsize
+  \begin{tabular}{@{}p{0.43\linewidth}rrl@{}}
+    \toprule
+    Check & Max error & Tolerance & Result \\
+    \midrule
+    Legendre transform & $2.960\times10^{-11}$ & $10^{-6}$ & PASS \\
+    Geometric force & $4.598\times10^{-11}$ & $10^{-5}$ & PASS \\
+    Flat-metric reduction & $0.000$ & $10^{-9}$ & PASS \\
+    Memory recursion & $8.882\times10^{-16}$ & $10^{-9}$ & PASS \\
+    Hessian regularization & $0.000$ & $10^{-9}$ & PASS \\
+    Rayleigh dissipation, curved metric & $1.640\times10^{-9}$ & $10^{-6}$ & PASS \\
+    Spectral entropy gradient & $1.144\times10^{-10}$ & $10^{-5}$ & PASS \\
+    \bottomrule
+  \end{tabular}
+  \vspace{0.8em}
+  \begin{itemize}
+    \item These checks anchor the deck's empirical plots to executable equation-level validation.
+  \end{itemize}
+\end{frame}
+
+\section{Physical System}
+
+\twocolfigs
+  {Capacitor Field Prototype}
+  {test_result_media/3d_field/field_3d.png}
+  {test_result_media/3d_field/potential_3d.png}
+
+\twocolfigs
+  {Fringing Field and Capacitance Check}
+  {test_result_media/fringing_field_lines.png}
+  {test_result_media/3d_field/capacitance_comparison.png}
+
+\figslide
+  {Potential Field}
+  {0.92}
+  {test_result_media/potential_field.png}
+
+\section{Classical ML Benchmarks}
+
+\twocolfigs
+  {MNIST Optimizer Benchmark}
+  {test_result_media/mnist_optimizer_benchmark/mnist_test_loss.png}
+  {test_result_media/mnist_optimizer_benchmark/mnist_test_accuracy.png}
+
+\twocolfigs
+  {MNIST Validation Benchmark}
+  {test_result_media/mnist_benchmark/mnist_validation_loss.png}
+  {test_result_media/mnist_benchmark/mnist_validation_accuracy.png}
+
+\twocolfigs
+  {CIFAR-10 Benchmark}
+  {test_result_media/cifar10_benchmark/cifar10_validation_loss.png}
+  {test_result_media/cifar10_benchmark/cifar10_validation_accuracy.png}
+
+\twocolfigs
+  {DeepOBS-Style Benchmark}
+  {test_result_media/deepobs_style_benchmark/deepobs_style_loss.png}
+  {test_result_media/deepobs_style_benchmark/deepobs_style_accuracy.png}
+
+\begin{frame}{Classical Benchmark Snapshot}
+  \scriptsize
+  \begin{tabular}{@{}p{0.28\linewidth}p{0.20\linewidth}p{0.18\linewidth}p{0.25\linewidth}@{}}
+    \toprule
+    Workload & Hamiltonian-geometric result & Nearest comparator & Reading \\
+    \midrule
+    MNIST softmax & Test loss $0.2938$, test acc. $0.9160$ & Nesterov test loss $0.2962$ & Best reported test loss and accuracy \\
+    AlgoPerf-style MLP & Val. loss $0.0347$, val. acc. $0.9867$ & AdamW val. loss $0.0430$ & Strong short-budget run \\
+    DeepOBS-style MLP & Val. loss $0.0203$, val. acc. $0.9933$ & Adam val. loss $0.0449$ & Clear best validation loss \\
+    Capacitor PINN & Final loss $17.13218$ & Entropy descent $17.31064$ & Best final and plate loss \\
+    \bottomrule
+  \end{tabular}
+  \vspace{0.8em}
+  \begin{itemize}
+    \item These are small-scale benchmark results; should be treated as evidence, not a scaling proof.
+  \end{itemize}
+\end{frame}
+
+\section{AlgoPerf-Style Runs}
+
+\twocolfigs
+  {AlgoPerf-Style Validation}
+  {test_result_media/algoperf_style_hg_nonzero_150epochs/algoperf_style_validation_loss.png}
+  {test_result_media/algoperf_style_hg_nonzero_150epochs/algoperf_style_validation_accuracy.png}
+
+\twocolfigs
+  {AdamW vs Hamiltonian-Geometric}
+  {test_result_media/algoperf_style_hg_nonzero_150epochs/adamw_vs_hamiltonian_geometric.png}
+  {test_result_media/algoperf_style_hg_nonzero_150epochs/adamw_vs_hamiltonian_geometric_zoom.png}
+
+\figslide
+  {Official AlgoPerf-Style MNIST: 1000-Step Curves}
+  {0.92}
+  {test_result_media/official_algoperf_runs/mnist_official_1000step_validation_loss_curves.png}
+
+\twocolfigs
+  {Official AlgoPerf-Style Summary}
+  {test_result_media/official_algoperf_runs/mnist_official_1000step_adamw_vs_hg.png}
+  {test_result_media/official_algoperf_runs/mnist_official_1000step_best_summary.png}
+
+\section{Modern Optimizers}
+
+\figslide
+  {Modern Optimizer Loss Comparison}
+  {0.92}
+  {test_result_media/modern_optimizer_benchmark/modern_optimizer_loss.png}
+
+\twocolfigs
+  {Robustness Sweeps}
+  {test_result_media/modern_optimizer_benchmark/modern_optimizer_seed_sweep.png}
+  {test_result_media/modern_optimizer_benchmark/modern_optimizer_scaling_sweep.png}
+
+\figslide
+  {Compute-Accuracy Pareto View}
+  {0.82}
+  {test_result_media/modern_optimizer_benchmark/modern_optimizer_pareto.png}
+
+\begin{frame}{Modern Optimizer Interpretation}
+  \small
+  \begin{itemize}
+    \item In the spiral-MLP benchmark, Adam, Hamiltonian-geometric, and Muon occupy the leading group.
+    \item The Hamiltonian-geometric configuration used here is a diagonal-metric reduction of the framework.
+    \item The robustness sweep shows the near-tie survives across 10 seeds, but the width sweep is mixed:
+      Adam improves more consistently as width increases.
+    \item This is a competitive evidence, not decisive dominance over Adam or Muon.
+  \end{itemize}
+\end{frame}
+
+\section{LLM Optimizer Benchmarks}
+
+\twocolfigs
+  {Tiny GPT-Style LLM Benchmark}
+  {test_result_media/llm_benchmark_fresh_400steps/llm_validation_loss.png}
+  {test_result_media/llm_benchmark_fresh_400steps/llm_validation_perplexity.png}
+
+\twocolfigs
+  {Industry-Style WikiText-2 Benchmark}
+  {test_result_media/industry_llm_benchmark_wikitext2_200steps/industry_llm_validation_loss.png}
+  {test_result_media/industry_llm_benchmark_wikitext2_200steps/industry_llm_validation_perplexity.png}
+
+\section{PINN and Geometric Evidence}
+
+\twocolfigs
+  {PINN and Normal Modes}
+  {test_result_media/pinn_benchmark/optimizer_convergence.png}
+  {test_result_media/pinn_benchmark/normal_mode_spectrum.png}
+
+\twocolfigs
+  {Geometric Evidence I}
+  {test_result_media/geometric_evidence/condition_number_scaling.png}
+  {test_result_media/geometric_evidence/phase_space_loss_energy.png}
+
+\twocolfigs
+  {Geometric Evidence II}
+  {test_result_media/geometric_evidence/rotation_invariance.png}
+  {test_result_media/geometric_evidence/saddle_escape.png}
+
+\figslide
+  {Metric Symmetry Exploits}
+  {0.90}
+  {test_result_media/symmetry_exploits/metric_symmetry_exploits.png}
+
+\begin{frame}{Architecture Ablation Reading}
+  \small
+  \begin{itemize}
+    \item The report separates two metric choices: an unrelated toy metric and a true Hessian metric.
+    \item Under the toy metric, correction terms have little reliable average effect.
+    \item Under the Hessian metric, the spectral term is statistically significant, and stability depends on the full architecture.
+    \item The strongest interpretation is mechanistic: curvature, memory, and spectral terms matter most when the metric is tied to the loss geometry.
+  \end{itemize}
+\end{frame}
+
+\section{Phase Space and Quantum Workloads}
+
+\figslide
+  {Hamiltonian-Geometric Phase Space}
+  {0.90}
+  {test_result_media/phase_space/phase_space.png}
+
+\twocolfigs
+  {QAOA Benchmark}
+  {test_result_media/qaoa_benchmark/qaoa_approximation_ratio.png}
+  {test_result_media/qaoa_benchmark/qaoa_loss.png}
+
+\twocolfigs
+  {Chaotic Quantum Control}
+  {test_result_media/quantum_chaos_benchmark/quantum_chaos_fidelity.png}
+  {test_result_media/quantum_chaos_benchmark/quantum_chaos_loss.png}
+
+\figslide
+  {Quantum Control Trajectories}
+  {0.90}
+  {test_result_media/quantum_chaos_benchmark/quantum_chaos_controls.png}
+
+\begin{frame}{Quantum Evidence Reading}
+  \small
+  \begin{itemize}
+    \item QAOA MaxCut: Hamiltonian-geometric ties heavy-ball on approximation ratio while entropy descent lags slightly.
+    \item Chaotic kicked-top control: the energy-backtracking safeguard is important for stable Hamiltonian-style dynamics.
+    \item The quantum evidence is useful because it probes phase-space and control behavior, not only scalar ML loss.
+
+  \end{itemize}
+\end{frame}
+
+\section{Animations}
+
+\section{Takeaway}
+
+\begin{frame}{Limitations from the Reference PDF}
+  \small
+  \begin{itemize}
+    \item Scale: all benchmark systems are small; the full $n\times n$ metric is mechanism evidence, not a production-scale replacement for Adam-family optimizers.
+    \item Statistics: several results are single-seed point estimates; the strongest variance check is the modern-optimizer 10-seed sweep.
+    \item Tuning: learning rates come from modest grids, not exhaustive optimization.
+    \item Modern-optimizer comparison: the Hamiltonian-geometric run there is a diagonal reduction, not the full curvature-memory-entropy architecture.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Summary}
+  \begin{itemize}
+    \item The formulation is mathematically coherent once the spectral-force sign convention and memory-metric construction are explicit.
+    \item The empirical evidence is strongest where exploitable full-metric geometry is present.
+    \item Modern optimizer comparisons place the method in the leading group, but do not separate it decisively from Adam or Muon.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
   \centering
-  \begin{columns}[T,onlytextwidth]
-    \column{0.32\linewidth}
-    \tagbox{HGGreen}{3.8cm}{STANDARD}
-    \vspace{0.25cm}
-    \whitecard{3.2cm}{Hamilton's equations\\Legendre transform\\Rayleigh damping\\Natural gradient}
-    \column{0.32\linewidth}
-    \tagbox{HGBlue}{3.8cm}{OUR SYNTHESIS}
-    \vspace{0.25cm}
-    \whitecard{3.2cm}{loss metric\\memory force\\spectral term\\energy safeguard}
-    \column{0.32\linewidth}
-    \tagbox{HGRed}{3.8cm}{HONEST CLAIM}
-    \vspace{0.25cm}
-    \whitecard{3.2cm}{If no exact reference exists,\\call it proposed here.}
-  \end{columns}
-\end{frame}
+  \Huge Thank You
 
-\begin{frame}{Optimizer Family Tree}
-  \vspace{0.8cm}
-  \begin{center}
-  \tagbox{HGMuted}{2.2cm}{GD\\flat}\hspace{0.15cm}
-  \tagbox{HGPurple}{2.2cm}{Momentum\\inertia}\hspace{0.15cm}
-  \tagbox{HGBlue}{2.2cm}{Adam\\diagonal}\hspace{0.15cm}
-  \tagbox{HGTeal}{2.2cm}{Natural\\full metric}\hspace{0.15cm}
-  \tagbox{HGGreen}{2.2cm}{HG\\metric + $p$}
-  \end{center}
-  \vspace{1.2cm}
-  \claim{Correspondence, not historical authorship.}
-\end{frame}
-
-\begin{frame}{Motion Matters}
-  \centering
-  \includegraphics[width=0.82\linewidth,height=0.72\textheight,keepaspectratio]{../visualizations/phase_space/phase_space.png}
-  \claim[HGPurple]{Optimizer behavior is a trajectory in phase space, not only a final loss.}
-\end{frame}
-
-\begin{frame}{Physics-Informed Learning}
-  \centering
-  \includegraphics[width=0.49\linewidth,height=0.68\textheight,keepaspectratio]{../visualizations/pinn_benchmark/optimizer_convergence.png}
-  \hfill
-  \includegraphics[width=0.49\linewidth,height=0.68\textheight,keepaspectratio]{../visualizations/phase_space/phase_space.png}
-  \claim[HGTeal]{Strongest current story: structured physics loss + metric-aware motion.}
-\end{frame}
-
-\begin{frame}{Training Dynamics}
-  \centering
-  \includegraphics[width=0.49\linewidth,height=0.68\textheight,keepaspectratio]{../visualizations/algoperf_style_benchmark/algoperf_style_validation_loss.png}
-  \hfill
-  \includegraphics[width=0.49\linewidth,height=0.68\textheight,keepaspectratio]{../visualizations/deepobs_style_benchmark/deepobs_style_loss.png}
-  \claim[HGBlue]{Convergence behavior is easier to explain visually than through tables.}
-\end{frame}
-
-\begin{frame}{Quantum Optimization Evidence}
-  \centering
-  \includegraphics[width=0.49\linewidth,height=0.68\textheight,keepaspectratio]{../visualizations/qaoa_benchmark/qaoa_approximation_ratio.png}
-  \hfill
-  \includegraphics[width=0.49\linewidth,height=0.68\textheight,keepaspectratio]{../visualizations/quantum_chaos_benchmark/quantum_chaos_fidelity.png}
-  \claim[HGPurple]{This is the bridge to spin chains and tensor networks.}
-\end{frame}
-
-\begin{frame}{Modern Optimizers}
-  \centering
-  \includegraphics[width=0.49\linewidth,height=0.68\textheight,keepaspectratio]{../visualizations/modern_optimizer_benchmark/modern_optimizer_loss.png}
-  \hfill
-  \includegraphics[width=0.49\linewidth,height=0.68\textheight,keepaspectratio]{../visualizations/modern_optimizer_benchmark/modern_optimizer_seed_sweep.png}
-  \claim[HGOrange]{Honest result: Adam, HG, and Muon are close; seed variance matters.}
-\end{frame}
-
-\begin{frame}{Scaling And Cost}
-  \centering
-  \includegraphics[width=0.49\linewidth,height=0.68\textheight,keepaspectratio]{../visualizations/modern_optimizer_benchmark/modern_optimizer_scaling_sweep.png}
-  \hfill
-  \includegraphics[width=0.49\linewidth,height=0.68\textheight,keepaspectratio]{../visualizations/modern_optimizer_benchmark/modern_optimizer_pareto.png}
-  \claim[HGRed]{Do not oversell: geometry helps when structure justifies the cost.}
-\end{frame}
-
-\begin{frame}{What We Have Done}
-  \centering
-  \includegraphics[width=0.49\linewidth,height=0.68\textheight,keepaspectratio]{../visualizations/ablation_study/ablation_study_figure.png}
-  \hfill
-  \includegraphics[width=0.49\linewidth,height=0.68\textheight,keepaspectratio]{../visualizations/quantum_ablation_study/quantum_ablation_fidelity.png}
-  \claim[HGGreen]{Current status: working prototype and evidence, not final theory.}
-\end{frame}
-
-\begin{frame}{Next: Tensor Networks}
-  \vspace{0.6cm}
-  \begin{center}
-  \tagbox{HGBlue}{1.9cm}{MPS\\state}\hspace{0.08cm}
-  \tagbox{HGTeal}{1.9cm}{local\\envs}\hspace{0.08cm}
-  \tagbox{HGPurple}{1.9cm}{block\\metric}\hspace{0.08cm}
-  \tagbox{HGOrange}{1.9cm}{HG\\step}\hspace{0.08cm}
-  \tagbox{HGGreen}{1.9cm}{gauge\\check}
-  \end{center}
-  \vspace{0.9cm}
-  \whitecard{1.0cm}{\Large\bfseries Gauge freedom \quad Bond dimension \quad Entanglement spectrum \quad Contraction curvature}
-  \vspace{0.55cm}
-  \claim[HGTeal]{First integration target: MPS/MPO variational optimization.}
-\end{frame}
-
-\begin{frame}{Next: Spin Chains}
-  \vspace{0.5cm}
-  \begin{center}
-  \tagbox{HGPurple}{1.8cm}{Ising}\hspace{0.14cm}
-  \tagbox{HGBlue}{1.8cm}{XXZ}\hspace{0.14cm}
-  \tagbox{HGOrange}{1.8cm}{$J_1$--$J_2$}\hspace{0.14cm}
-  \tagbox{HGGreen}{1.8cm}{VQE}\hspace{0.14cm}
-  \tagbox{HGTeal}{1.8cm}{TDVP}
-  \end{center}
-  \vspace{0.9cm}
-  \whitecard{1.2cm}{\Large\bfseries Measure: energy, fidelity, symmetry stability, entanglement growth, runtime.}
-  \vspace{0.6cm}
-  \claim[HGPurple]{First experiment: transverse-field Ising chain with MPS baseline.}
-\end{frame}
-
-\begin{frame}{Higher-Order Targets}
-  \centering
-  \begin{columns}[T,onlytextwidth]
-    \column{0.32\linewidth}
-    \tagbox{HGBlue}{3.5cm}{PDE learning}\vspace{0.25cm}
-    \tagbox{HGPurple}{3.5cm}{Quantum circuits}
-    \column{0.32\linewidth}
-    \tagbox{HGTeal}{3.5cm}{Neural ODEs}\vspace{0.25cm}
-    \tagbox{HGGreen}{3.5cm}{Implicit layers}
-    \column{0.32\linewidth}
-    \tagbox{HGOrange}{3.5cm}{Meta-learning}\vspace{0.25cm}
-    \tagbox{HGRed}{3.5cm}{Inverse problems}
-  \end{columns}
-  \vspace{0.6cm}
-  \claim{Rule: if curvature, constraints, or symmetries matter, try the geometric optimizer.}
-\end{frame}
-
-\begin{frame}{Roadmap}
-  \vspace{0.8cm}
-  \begin{center}
-  \tagbox{HGGreen}{2.1cm}{clean\\API}\hspace{0.15cm}
-  \tagbox{HGPurple}{2.1cm}{spin-chain\\benchmark}\hspace{0.15cm}
-  \tagbox{HGTeal}{2.1cm}{tensor\\backend}\hspace{0.15cm}
-  \tagbox{HGOrange}{2.1cm}{runtime\\normalization}\hspace{0.15cm}
-  \tagbox{HGBlue}{2.1cm}{publish\\carefully}
-  \end{center}
-  \vspace{1.1cm}
-  \claim{North star: structured scientific and quantum optimization.}
-\end{frame}
-
-\begin{frame}{Attribution Rule}
-  \vspace{0.7cm}
-  \begin{columns}[T,onlytextwidth]
-    \column{0.48\linewidth}
-    \tagbox{HGGreen}{5.5cm}{Derived from\\standard mechanics}
-    \vspace{0.5cm}
-    \whitecard{1.2cm}{\Large equations}
-    \column{0.48\linewidth}
-    \tagbox{HGBlue}{5.5cm}{Proposed here\\as optimizer package}
-    \vspace{0.5cm}
-    \whitecard{1.2cm}{\Large design + evidence}
-  \end{columns}
-  \vspace{0.8cm}
-  \claim[HGRed]{If no exact prior reference exists, say it plainly.}
+  \vspace{1em}
+  \large Hamiltonian-Geometric Optimization Framework
 \end{frame}
 
 \end{document}
