@@ -14,8 +14,10 @@ from dataclasses import dataclass
 import math
 from pathlib import Path
 import random
+import statistics
 import sys
 import time
+from typing import Sequence
 
 import matplotlib
 
@@ -139,7 +141,10 @@ def _orthogonalize(update: torch.Tensor, steps: int = 5) -> torch.Tensor:
     return matrix.reshape(original_shape)
 
 
-def parse_args() -> argparse.Namespace:
+OPTIMIZER_NAMES = ("adamw", "adafactor", "lion", "muon_lite", "hamiltonian_geometric")
+
+
+def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Benchmark LLM optimizers on WikiText-2 with GPT-2 tokenization.")
     parser.add_argument("--dataset", default="Salesforce/wikitext")
     parser.add_argument("--dataset-config", default="wikitext-2-raw-v1")
@@ -153,6 +158,19 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--n-head", type=int, default=4)
     parser.add_argument("--n-embd", type=int, default=128)
     parser.add_argument("--seed", type=int, default=2026)
+    parser.add_argument(
+        "--seeds",
+        type=int,
+        nargs="+",
+        help="Run all optimizers for multiple seeds and write an aggregate report.",
+    )
+    parser.add_argument("--hg-lr", type=float, default=3e-4)
+    parser.add_argument("--hg-beta", type=float, default=0.9)
+    parser.add_argument("--hg-metric-decay", type=float, default=0.99)
+    parser.add_argument("--hg-metric-epsilon", type=float, default=1e-8)
+    parser.add_argument("--hg-memory-decay", type=float, default=0.9)
+    parser.add_argument("--hg-memory-coupling", type=float, default=0.01)
+    parser.add_argument("--hg-weight-decay", type=float, default=0.01)
     parser.add_argument("--cache-dir", type=Path, default=PROJECT_ROOT / "data" / "downloads" / "huggingface")
     parser.add_argument(
         "--output-dir",
@@ -160,14 +178,13 @@ def parse_args() -> argparse.Namespace:
         default=PROJECT_ROOT / "visualizations" / "industry_llm_benchmark",
     )
     add_torch_device_argument(parser)
-    return parser.parse_args()
+    return parser.parse_args(argv)
 
 
 def main() -> None:
     args = parse_args()
     args.output_dir.mkdir(parents=True, exist_ok=True)
     args.cache_dir.mkdir(parents=True, exist_ok=True)
-    set_seed(args.seed)
     try:
         device = resolve_torch_device(args.device, torch)
     except ValueError as error:
@@ -184,7 +201,6 @@ def main() -> None:
         bos_token_id=None,
         eos_token_id=None,
     )
-    initial_state = GPT2LMHeadModel(config).state_dict()
     param_count = sum(p.numel() for p in GPT2LMHeadModel(config).parameters())
 
     print("Industry-style LLM optimizer benchmark")
@@ -192,15 +208,43 @@ def main() -> None:
     print(f"tokenizer = {args.tokenizer}, vocab_size = {vocab_size}")
     print(f"device = {device}, parameters = {param_count:,}")
 
+    seeds = args.seeds or [args.seed]
+    seeded_results: list[tuple[int, list[RunResult]]] = []
+    for seed in seeds:
+        output_dir = args.output_dir if len(seeds) == 1 else args.output_dir / f"seed_{seed}"
+        output_dir.mkdir(parents=True, exist_ok=True)
+        results = run_seed(seed, config, train_tokens, val_tokens, args, device)
+        seeded_results.append((seed, results))
+        write_outputs(results, args, device, param_count, vocab_size, output_dir, seed)
+        print_results(results)
+    if len(seeded_results) > 1:
+        write_aggregate_outputs(seeded_results, args.output_dir)
+
+
+def run_seed(
+    seed: int,
+    config: GPT2Config,
+    train_tokens: torch.Tensor,
+    val_tokens: torch.Tensor,
+    args: argparse.Namespace,
+    device: torch.device,
+) -> list[RunResult]:
+    set_seed(seed)
+    initial_state = GPT2LMHeadModel(config).state_dict()
     results = []
-    for name in ("adamw", "adafactor", "lion", "muon_lite", "hamiltonian_geometric"):
+    for name in OPTIMIZER_NAMES:
+        # Reset model/dropout randomness and use a separate deterministic batch
+        # generator so every optimizer sees the same samples for this seed.
+        set_seed(seed)
         model = GPT2LMHeadModel(config).to(device)
         model.load_state_dict(initial_state)
         start = time.perf_counter()
-        history = train_one(name, model, train_tokens, val_tokens, args, device)
+        history = train_one(name, model, train_tokens, val_tokens, args, device, seed)
         results.append(RunResult(name, time.perf_counter() - start, history))
+    return results
 
-    write_outputs(results, args, device, param_count, vocab_size)
+
+def print_results(results: list[RunResult]) -> None:
     print("optimizer,final_train_loss,final_val_loss,final_val_perplexity,runtime_s")
     for result in sorted(results, key=lambda item: item.final["val_loss"]):
         final = result.final
@@ -228,15 +272,21 @@ def load_tokenized_wikitext(args: argparse.Namespace) -> tuple[torch.Tensor, tor
     return encode("train"), encode("validation"), int(tokenizer.vocab_size)
 
 
-def get_batch(data: torch.Tensor, block_size: int, batch_size: int, device: torch.device) -> tuple[torch.Tensor, torch.Tensor]:
+def get_batch(
+    data: torch.Tensor,
+    block_size: int,
+    batch_size: int,
+    device: torch.device,
+    generator: torch.Generator | None = None,
+) -> tuple[torch.Tensor, torch.Tensor]:
     max_start = len(data) - block_size - 1
-    starts = torch.randint(0, max_start, (batch_size,))
+    starts = torch.randint(0, max_start, (batch_size,), generator=generator)
     x = torch.stack([data[s : s + block_size] for s in starts])
     y = torch.stack([data[s + 1 : s + block_size + 1] for s in starts])
     return x.to(device), y.to(device)
 
 
-def make_optimizer(name: str, model: nn.Module) -> torch.optim.Optimizer:
+def make_optimizer(name: str, model: nn.Module, args: argparse.Namespace) -> torch.optim.Optimizer:
     if name == "adamw":
         return torch.optim.AdamW(model.parameters(), lr=3e-4, betas=(0.9, 0.95), weight_decay=0.01)
     if name == "adafactor":
@@ -246,7 +296,16 @@ def make_optimizer(name: str, model: nn.Module) -> torch.optim.Optimizer:
     if name == "muon_lite":
         return MuonLite(model.parameters(), lr=2e-4, adam_lr=3e-4, weight_decay=0.01)
     if name == "hamiltonian_geometric":
-        return HamiltonianGeometricTorch(model.parameters(), lr=3e-4, metric_decay=0.99, memory_coupling=0.01)
+        return HamiltonianGeometricTorch(
+            model.parameters(),
+            lr=args.hg_lr,
+            beta=args.hg_beta,
+            metric_decay=args.hg_metric_decay,
+            metric_epsilon=args.hg_metric_epsilon,
+            memory_decay=args.hg_memory_decay,
+            memory_coupling=args.hg_memory_coupling,
+            weight_decay=args.hg_weight_decay,
+        )
     raise ValueError(f"unknown optimizer {name!r}")
 
 
@@ -257,14 +316,16 @@ def train_one(
     val_tokens: torch.Tensor,
     args: argparse.Namespace,
     device: torch.device,
+    seed: int,
 ) -> list[dict[str, float]]:
-    optimizer = make_optimizer(optimizer_name, model)
+    optimizer = make_optimizer(optimizer_name, model, args)
+    train_generator = torch.Generator().manual_seed(seed)
     history = []
     running_loss = 0.0
     running_count = 0
     for step in range(1, args.max_steps + 1):
         model.train()
-        inputs, targets = get_batch(train_tokens, args.block_size, args.batch_size, device)
+        inputs, targets = get_batch(train_tokens, args.block_size, args.batch_size, device, train_generator)
         optimizer.zero_grad(set_to_none=True)
         loss = model(input_ids=inputs, labels=targets).loss
         loss.backward()
@@ -276,7 +337,7 @@ def train_one(
             train_loss = running_loss / running_count
             running_loss = 0.0
             running_count = 0
-            val_loss = evaluate(model, val_tokens, args, device)
+            val_loss = evaluate(model, val_tokens, args, device, seed)
             history.append(
                 {
                     "step": float(step),
@@ -290,11 +351,18 @@ def train_one(
 
 
 @torch.no_grad()
-def evaluate(model: nn.Module, val_tokens: torch.Tensor, args: argparse.Namespace, device: torch.device) -> float:
+def evaluate(
+    model: nn.Module,
+    val_tokens: torch.Tensor,
+    args: argparse.Namespace,
+    device: torch.device,
+    seed: int,
+) -> float:
     model.eval()
     losses = []
+    eval_generator = torch.Generator().manual_seed(seed + 1)
     for _ in range(args.eval_batches):
-        inputs, targets = get_batch(val_tokens, args.block_size, args.batch_size, device)
+        inputs, targets = get_batch(val_tokens, args.block_size, args.batch_size, device, eval_generator)
         losses.append(float(model(input_ids=inputs, labels=targets).loss.item()))
     return sum(losses) / len(losses)
 
@@ -305,12 +373,14 @@ def write_outputs(
     device: torch.device,
     param_count: int,
     vocab_size: int,
+    output_dir: Path,
+    seed: int,
 ) -> None:
-    history_path = args.output_dir / "industry_llm_training_history.csv"
-    summary_path = args.output_dir / "industry_llm_summary.csv"
-    loss_plot_path = args.output_dir / "industry_llm_validation_loss.png"
-    perplexity_plot_path = args.output_dir / "industry_llm_validation_perplexity.png"
-    report_path = args.output_dir / "industry_llm_results.md"
+    history_path = output_dir / "industry_llm_training_history.csv"
+    summary_path = output_dir / "industry_llm_summary.csv"
+    loss_plot_path = output_dir / "industry_llm_validation_loss.png"
+    perplexity_plot_path = output_dir / "industry_llm_validation_perplexity.png"
+    report_path = output_dir / "industry_llm_results.md"
 
     with history_path.open("w", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
@@ -342,6 +412,8 @@ def write_outputs(
         f"Model parameters: `{param_count:,}`",
         f"Layers: `{args.n_layer}`, heads: `{args.n_head}`, embedding dim: `{args.n_embd}`, context length: `{args.block_size}`",
         f"Training steps: `{args.max_steps}`, batch size: `{args.batch_size}`",
+        f"Seed: `{seed}` (identical training and evaluation samples for every optimizer)",
+        f"Hamiltonian-geometric settings: lr=`{args.hg_lr}`, beta=`{args.hg_beta}`, metric decay=`{args.hg_metric_decay}`, memory decay=`{args.hg_memory_decay}`, memory coupling=`{args.hg_memory_coupling}`, weight decay=`{args.hg_weight_decay}`",
         "",
         "| optimizer | final val loss | final val perplexity | runtime s |",
         "|---|---:|---:|---:|",
@@ -353,6 +425,50 @@ def write_outputs(
 
     for path in (history_path, summary_path, loss_plot_path, perplexity_plot_path, report_path):
         print(f"exported = {path}")
+
+
+def write_aggregate_outputs(seeded_results: list[tuple[int, list[RunResult]]], output_dir: Path) -> None:
+    csv_path = output_dir / "industry_llm_seed_aggregate.csv"
+    report_path = output_dir / "industry_llm_seed_aggregate.md"
+    rows = []
+    for optimizer in OPTIMIZER_NAMES:
+        matches = [next(result for result in results if result.optimizer == optimizer) for _, results in seeded_results]
+        losses = [result.final["val_loss"] for result in matches]
+        perplexities = [result.final["val_perplexity"] for result in matches]
+        runtimes = [result.runtime_s for result in matches]
+        rows.append(
+            {
+                "optimizer": optimizer,
+                "seeds": len(matches),
+                "mean_val_loss": statistics.fmean(losses),
+                "std_val_loss": statistics.stdev(losses),
+                "mean_val_perplexity": statistics.fmean(perplexities),
+                "std_val_perplexity": statistics.stdev(perplexities),
+                "mean_runtime_s": statistics.fmean(runtimes),
+            }
+        )
+    rows.sort(key=lambda row: row["mean_val_loss"])
+    fields = list(rows[0])
+    with csv_path.open("w", newline="", encoding="utf-8") as file:
+        writer = csv.DictWriter(file, fieldnames=fields)
+        writer.writeheader()
+        writer.writerows(rows)
+    lines = [
+        "# Industry LLM Multi-Seed Aggregate",
+        "",
+        f"Seeds: `{', '.join(str(seed) for seed, _ in seeded_results)}`",
+        "",
+        "| optimizer | mean val loss | std | mean perplexity | std | mean runtime s |",
+        "|---|---:|---:|---:|---:|---:|",
+    ]
+    for row in rows:
+        lines.append(
+            f"| {row['optimizer']} | {row['mean_val_loss']:.4f} | {row['std_val_loss']:.4f} | "
+            f"{row['mean_val_perplexity']:.2f} | {row['std_val_perplexity']:.2f} | {row['mean_runtime_s']:.2f} |"
+        )
+    report_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    print(f"exported = {csv_path}")
+    print(f"exported = {report_path}")
 
 
 def export_plot(results: list[RunResult], path: Path, metric: str, ylabel: str) -> None:
