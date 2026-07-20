@@ -1,0 +1,237 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=2.4cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{hyperref}
+
+\definecolor{hgpurple}{RGB}{106,61,154}
+
+\titleformat{\section}{\Large\bfseries\color{hgpurple}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\large\bfseries\color{hgpurple}}{}{0em}{}
+\hypersetup{colorlinks=true, linkcolor=hgpurple, urlcolor=hgpurple}
+
+\title{\color{hgpurple}\textbf{Hamiltonian-Geometric Optimization}\\[2pt]
+  \large Speaker Script and Anticipated Q\&A (12-Slide Deck)}
+\author{Sparsho Chakraborty et al. --- Capacitor Fringes Project}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\noindent This document accompanies \texttt{hamiltonian\_geometric\_short\_presentation.tex}.
+Part~\ref{sec:script} is a read-aloud script, one block per slide (each roughly 30--45 seconds,
+so the full talk runs about 7--9 minutes). Part~\ref{sec:qa} is a set of hard, likely audience
+questions with grounded answers, meant to be read \emph{after} the talk, in preparation for
+questions --- not to be presented.
+
+\section{Speaker Script}
+\label{sec:script}
+
+\subsection*{Slide 1 --- Title}
+``Today I'm presenting the Hamiltonian-geometric optimization framework --- a way of designing
+optimizers by treating training itself as a physical system. This is a short walkthrough: the
+math, how we validated it, and what the benchmarks actually show.''
+
+\subsection*{Slide 2 --- Core Question}
+``The question we're testing is simple to state: can one Hamiltonian-geometric update rule work
+across very different settings --- classical ML, LLM-style training, physics-informed networks,
+and quantum control? We treat the model's parameters as coordinates, the loss as potential
+energy, and the optimizer's momentum as a physical momentum moving on a curved metric manifold.
+And I want to be upfront about the claim: it's bounded. We are not claiming this beats Adam
+everywhere --- only that it's strongest when the problem actually has exploitable curvature.''
+
+\subsection*{Slide 3 --- Methodology Flowchart}
+``This is the whole pipeline in one picture, so you don't have to hold every equation in your
+head at once. We start from the parameters and the loss, build a metric from the regularized
+Hessian, plug that into a Hamiltonian, and get the equations of motion out of it. Three
+correction forces --- geometric, memory, and spectral-entropy --- feed into one generalized
+update rule, which also collapses back down to familiar optimizers like SGD or Adam as special
+cases. Everything below this box is validated first, analytically, before we ever look at a
+benchmark curve.''
+
+\subsection*{Slide 4 --- Hamiltonian Formulation}
+``Here's the actual Hamiltonian: kinetic term is momentum contracted through the inverse metric,
+potential term is the loss. Differentiating gives the equations of motion, and the interesting
+part is the second term in the momentum equation --- that's the geometric force, and it only
+exists because the metric depends on where you are in parameter space. We add dissipation on
+top, because plain Hamiltonian mechanics conserves energy, and we want the loss to actually go
+down, not oscillate forever.''
+
+\subsection*{Slide 5 --- One Update Rule, Many Optimizers}
+``The point of this slide is that we didn't invent a totally separate optimizer family. SGD and
+heavy-ball fall out when the metric is flat. Adam and RMSProp fall out when you keep only the
+diagonal of the metric. Natural gradient is the full metric without the momentum and memory
+terms. Our Hamiltonian-geometric optimizer is what you get when you keep everything. And modern
+optimizers like Shampoo, K-FAC, or Muon all sit somewhere on that same spectrum, from a full
+matrix down to a single scalar.''
+
+\subsection*{Slide 6 --- Analytical Validation}
+``This slide answers the question people always ask: how do you know these equations are
+actually correct? Every equation here traces back to a specific reference: my own
+literature-review PDF, which is the design document for this optimizer's architecture. We didn't
+just implement it and hope --- we wrote a separate numerical validation module,
+\texttt{paper\_math\_validation.py}, that checks each equation with finite differences on a
+fixed, seeded toy problem where the metric genuinely curves with the parameters. Three kinds of
+checks: `literal' means we tested an equation exactly as the PDF prints it. `Completed' means
+the PDF states something but never actually derives it --- like the gradient of the spectral
+entropy --- so we derived a specific closed form ourselves and checked it against a numerical
+gradient. `Counterexample' is the honest one: the PDF's condition for the Hessian regularization
+doesn't actually guarantee a positive-definite metric, we show that failure on purpose, and then
+confirm our shipped code fix repairs it, over hundreds of random trials. All seven checks pass to
+numerical precision.''
+
+\subsection*{Slide 7 --- Benchmark Evidence Snapshot}
+``Four results at once here, on purpose, so you can see the workload variety in one glance:
+MNIST accuracy, an AlgoPerf-style validation loss curve, DeepOBS-style validation accuracy, and
+an industry-style LLM run on WikiText-2. Across these, the Hamiltonian-geometric optimizer posts
+the best or near-best validation loss and accuracy. But these are small-scale runs --- I'd call
+this evidence of correct mechanism, not a scaling proof. The next slide puts exact numbers on all
+of this.''
+
+\subsection*{Slide 8 --- Benchmark Results Table (Classical, PINN \& LLM)}
+``So here are the actual numbers behind those curves. On MNIST, AlgoPerf-style, DeepOBS-style,
+and the capacitor PINN, Hamiltonian-geometric reports the best validation or test loss of
+everything we compared against. The LLM row is the one I want to be honest about: on WikiText-2,
+AdaFactor actually edges us out slightly on validation loss --- 6.765 versus our 6.778. But we
+still clearly beat AdamW and Lion, and we finish fastest of the five in wall-clock time.
+Muon-lite diverges entirely here, which is a reminder that these are untuned, single-seed runs,
+not a scaling claim.''
+
+\subsection*{Slide 9 --- Modern Optimizer Comparison}
+``Now the harder comparison: against modern optimizers people actually use today. Left panel is
+compute cost versus accuracy --- Adam, our method, and Muon lead the pack. Middle panel is a
+10-seed sweep, and the near-tie holds up under that noise. Right panel is where it gets more
+honest: as we scale model width, Adam scales a bit more consistently than we do. So: competitive,
+genuinely, but not a decisive win. And to be transparent, the version benchmarked here is a
+diagonal-metric reduction, not the full curvature-memory-entropy architecture.''
+
+\subsection*{Slide 10 --- Benchmark Results Table (Modern Optimizers)}
+``And the numbers behind that comparison. Ranked by best-epoch validation loss on the spiral
+MLP: Adam, Hamiltonian-geometric, and Muon are within four ten-thousandths of each other ---
+that's noise, not a real ordering. AdamW and Lion trail by a clearer margin, and Shampoo is both
+slower per epoch and slightly worse here. The honest read is a narrow leading group of three, not
+a win for any one of them.''
+
+\subsection*{Slide 11 --- Limitations}
+``Four honest caveats. Scale: everything here is small; a full n-by-n metric is a mechanism
+demonstration, not something we're claiming replaces Adam in production. Statistics: most results
+are single-seed; the 10-seed sweep is the only place we have real variance data. Tuning: learning
+rates come from modest grids, not exhaustive search. And comparability: the modern-optimizer
+benchmark uses a reduced, diagonal version of our method, so that comparison specifically isn't
+testing the full framework.''
+
+\subsection*{Slide 12 --- Summary and Thank You}
+``Three takeaways. The formulation holds together once you're explicit about the spectral-force
+sign and the memory-metric construction. The empirical evidence is strongest exactly where the
+theory predicts it should be --- where there's real, exploitable curvature. And against modern
+optimizers, we're in the leading group, not decisively ahead of Adam or Muon. Happy to take
+questions, especially on the validation methodology or where we'd want to push this next.''
+
+\clearpage
+\section{Anticipated Questions and Answers}
+\label{sec:qa}
+
+\noindent The questions below are ordered roughly hardest-and-most-important first. Each answer
+is grounded in a specific number or result already in the codebase (the numeric validation module
+and the consolidated report), so they can be defended on the spot rather than improvised.
+
+\begin{enumerate}[leftmargin=1.4em, itemsep=0.9em]
+
+\item \textbf{How do you actually know these equations are correct, rather than just plausible-looking physics?}\\
+We don't validate against the benchmark tasks themselves --- we validate the equations directly,
+symbol by symbol, in \texttt{src/paper\_math\_validation.py}. Each of the seven checks compares a
+closed-form expression from the reference PDF against an independent finite-difference
+computation on a fixed, seeded synthetic problem, to machine precision (errors of $10^{-9}$ to
+$10^{-16}$). Critically, this toy problem was built specifically so the metric $g(\theta)$
+depends on $\theta$; the project's own capacitor benchmark has a metric that is \emph{constant}
+in $\theta$, which would make $F_{\mathrm{geo}}$ and $\nabla_\theta S(g)$ trivially zero and
+prove nothing.
+
+\item \textbf{Is the improvement over Adam statistically significant, or just noise?}\\
+Borderline, and we say so explicitly. On the 10-seed modern-optimizer sweep, a paired $t$-test
+(licensed because every optimizer trains on the same paired $\theta_0$/dataset draw per seed)
+gives HG vs.\ Adam: $t(9){=}{-2.234}$, $p{=}0.052$ --- borderline, HG lower on 7 of 10 seeds. HG
+vs.\ Muon: $t{=}{-0.838}$, $p{=}0.424$ (not significant). HG vs.\ AdamW: $t{=}{-1.457}$,
+$p{=}0.179$ (not significant). $n=10$ is underpowered to settle this either way; the honest claim
+is a weak directional signal against Adam specifically, and no signal against Muon or AdamW.
+
+\item \textbf{The memory force is supposed to help, so why does it hurt on the quantum benchmark?}\\
+On the unsafeguarded kicked-top ablation, turning on the memory force alone moves final loss from
+$0.0491$ (the $\beta{=}0.7$ default) to $0.0631$ --- worse. The explicit geometric force is worse
+still ($0.0491\to0.1949$) and over $10\times$ slower, because both differentiate a metric that is
+itself built from finite differences. Only the spectral-entropy force helps on this task
+($0.0491\to0.0184$). The honest reading: momentum tuning dominates on this benchmark, and the
+three correction terms have a \emph{mixed}, task-dependent effect, not a uniformly positive one.
+Separately, on the PINN ablation, the picture flips: under a toy (parameter-independent) metric
+only the memory term is significant ($p{=}7.4\times10^{-4}$, a small $\sim$12\% effect), but under
+the true Hessian metric the spectral term becomes highly significant
+($p{=}3.2\times10^{-8}$) while memory and geometric forces are not. The takeaway we lead with is
+that these terms matter most --- and differently --- depending on whether the metric is actually
+tied to real loss curvature.
+
+\item \textbf{On WikiText-2, AdaFactor beat you. Doesn't that undercut the "works across domains" claim?}\\
+Yes, on that specific metric, and we report it rather than hide it: AdaFactor's validation loss
+is $6.765$ against our $6.778$. But it's one 200-step, single-seed, untuned run --- not a scaling
+claim. In the same run we clearly beat AdamW ($6.843$) and Lion ($7.032$), and finish fastest in
+wall-clock time; Muon-lite diverges outright (loss $9.31$), which itself shows how sensitive these
+small, untuned comparisons are. The claim we defend is "competitive across domains," not "best in
+every domain."
+
+\item \textbf{Isn't "lambda > 0 guarantees positive-definiteness" obviously true? Why call that a bug?}\\
+It's a real counterexample, not pedantry: for the indefinite Hessian
+$\mathrm{diag}(-5, 0.1, 3)$ and the PDF's literal $\lambda{=}10^{-3}$, the regularized matrix
+$H+\lambda I$ still has a negative eigenvalue, because $\lambda$ is far smaller than the most
+negative eigenvalue's magnitude. A fixed constant can never work for every Hessian; the
+regularization has to depend on the matrix's own spectrum. The project's shipped fix,
+\texttt{src.pinn.\_positive\_definite\_metric}, does exactly that, and we verify it produces a
+strictly positive-definite metric on that counterexample and across 200 random indefinite trials.
+
+\item \textbf{You add a dissipation term, but Hamiltonian systems conserve energy. Isn't that a contradiction?}\\
+It's intentional, not a contradiction we've glossed over: pure Hamiltonian flow conserves $H$
+exactly, which is useless for optimization --- we need the loss to decrease. The Rayleigh
+dissipation term is deliberately added on top of the conservative dynamics, making the overall
+system a damped (port-Hamiltonian-style) system rather than an energy-conserving one. The
+"Hamiltonian" in the name describes where the structure (metric, momentum, curvature) comes from,
+not a claim that the implemented dynamics conserve energy.
+
+\item \textbf{The modern-optimizer comparison uses a diagonal reduction of your method --- isn't that just comparing Adam to Adam?}\\
+Largely, yes, and the report says this outright: by our own special-case correspondence, that
+diagonal reduction is already "a diagonal-metric approximation to the Hamiltonian optimizer,"
+i.e.\ close in spirit to Adam with a different momentum discretization. The near-tie there is
+expected, not evidence of the framework's distinctive machinery beating Adam. The full machinery
+--- $F_{\mathrm{geo}}$, $F_{\mathrm{mem}}$, the spectral term together --- is only exercised on
+the PINN (exact Hessian metric) and quantum-control benchmarks.
+
+\item \textbf{Could this scale to a billion-parameter model?}\\
+Not as implemented, and we don't claim it could. A full $n\times n$ metric costs $O(n^2)$ memory
+and roughly cubic cost to invert or factor, which is infeasible past small networks --- exactly
+why Shampoo and K-FAC exist, using Kronecker-factored approximations to cut that cost (e.g.\
+$O((mn)^3)\to O(m^3+n^3)$ for a layer shaped $m\times n$). Getting a cheap structured
+approximation of our full metric, the way Shampoo/K-FAC do, is future work, not something we've
+benchmarked.
+
+\item \textbf{How is this actually different from just using natural gradient, K-FAC, or Shampoo?}\\
+Those methods are different points on the \emph{same} metric-structure hierarchy we use to
+classify optimizers --- specific approximations to the same underlying Hamiltonian object (full
+metric $\to$ Kronecker-factored $\to$ diagonal $\to$ scalar). What none of them include is our
+other two ingredients: the non-Markovian memory force built from an exponentially-weighted
+gradient history, and the spectral-entropy regularization on the metric's own eigenvalue
+distribution. The claim is that curvature alone (natural gradient/K-FAC/Shampoo) is one piece;
+momentum-as-phase-space-dynamics and the two correction forces are what's distinctive here.
+
+\item \textbf{What result would actually change your mind about this framework?}\\
+Two things would: if, under a genuine full-metric setting (the exact-Hessian PINN or
+quantum-control benchmarks) with many more seeds, the additive correction terms showed no
+significant, reproducible effect at all --- rather than the mixed, sign-flipping effect we
+currently see --- that would undercut the core mechanistic claim. And if no cheap structured
+approximation to the full metric could be found, that would cap the framework's practical
+relevance at small-scale, mechanism-level demonstrations rather than anything deployable.
+
+\end{enumerate}
+
+\end{document}
