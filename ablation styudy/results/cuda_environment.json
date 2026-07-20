@@ -1,0 +1,7 @@
+{
+  "torch_version": "2.13.0+cu126",
+  "cuda_available": true,
+  "torch_cuda_version": "12.6",
+  "device": "NVIDIA GeForce GTX 1050",
+  "probe": 256.0
+}
