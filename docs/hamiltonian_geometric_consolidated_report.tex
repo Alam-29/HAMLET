@@ -2,6 +2,7 @@
 
 \usepackage[top=0.62in,bottom=0.72in,left=0.68in,right=0.68in]{geometry}
 \usepackage{amsmath, amssymb}
+\usepackage{amsthm}
 \usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage{hyperref}
@@ -40,6 +41,7 @@
 \renewcommand{\dblfloatpagefraction}{0.82}
 
 \newcommand{\finding}[1]{\textbf{#1}}
+\newtheorem{theorem}{Theorem}
 
 \makeatletter
 \renewcommand{\maketitle}{%
@@ -843,7 +845,99 @@ $-\lambda_{\min}(H)$) passes on the same matrix and over 200 random indefinite
 trials.}
 \end{table*}
 
+\section{Theoretical Analysis: Condition-Number-Independent Convergence}
+\label{sec:theory}
+
+Every claim elsewhere in this report is empirical or a direct numeric
+verification of an equation (\S\ref{sec:review}); this section supplies the
+one thing \S\ref{sec:positioning} identifies as missing, a genuine
+theorem, restricted honestly to the setting in which it is provable in
+closed form: an exact quadratic loss with the exact (constant) Hessian
+metric. It formalizes, rather than only measures
+(Tables~\ref{tab:condition-scaling}, \ref{tab:metric-structure-scaling}),
+why the full metric removes condition-number dependence.
+
+\begin{theorem}[Condition-number-independent linear convergence under the exact Hessian metric]
+\label{thm:conditioning}
+Let $L(\theta) = \tfrac12\theta^{\mathsf T} A \theta$ for symmetric
+positive-definite $A\in\mathbb{R}^{n\times n}$ (minimizer $\theta^\ast=0$,
+WLOG), and take the metric $g(\theta) \equiv A$, constant in $\theta$. Then:
+\begin{enumerate}[label=(\alph*)]
+\item $F_{\mathrm{geo}} \equiv 0$ identically (Eq.~\eqref{eq:fgeo}: $\nabla_\theta g^{-1}=0$
+  since $g$ does not depend on $\theta$), and, taking $F_{\mathrm{mem}}\equiv0$
+  and $\alpha=0$, the spectral term vanishes as well ($S(g)$ is constant, so
+  $\nabla_\theta S(g)=0$) -- every correction term is exactly zero by
+  construction, not assumed away.
+\item Define $q_t := g^{-1}p_t = A^{-1}p_t$. The update
+  (Eqs.~\eqref{eq:update-p}--\eqref{eq:update-theta}) satisfies, exactly and
+  for every $A$,
+  \begin{equation}
+  \begin{pmatrix}\theta_{t+1}\\ q_{t+1}\end{pmatrix}
+  = M \begin{pmatrix}\theta_t\\ q_t\end{pmatrix}, \qquad
+  M = \begin{pmatrix} 1-\eta^2 & \eta\beta \\ -\eta & \beta \end{pmatrix}
+  \otimes I_n,
+  \label{eq:theorem-recursion}
+  \end{equation}
+  where $M$ acts identically and independently on each coordinate --
+  $A$ has been eliminated from the recursion entirely.
+\item Consequently $M$'s two (coordinate-wise) eigenvalues satisfy
+  $\lambda^2 - \big[(1-\eta^2)+\beta\big]\lambda + \beta = 0$, and are stable
+  ($|\lambda|<1$) for every $A\succ0$ whenever $0<\eta<\sqrt2$ and
+  $0\le\beta<1$. Writing $\rho_M$ for the spectral radius of the
+  $2\times2$ block, for every $r\in(\rho_M,1)$ there is a finite
+  $C(\eta,\beta,r)$ such that
+  $\|\theta_t\|\le C(\eta,\beta,r)r^t\|(\theta_0,q_0)\|$. Both $r$ and
+  $C$ depend only on the scalar update parameters, \emph{never on
+  $\operatorname{cond}(A)$}.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(a) is immediate from $g\equiv A$ being $\theta$-independent, substituted into
+Eq.~\eqref{eq:fgeo} and the spectral-entropy gradient of \S\ref{sec:spectral-entropy}.
+For (b), Eq.~\eqref{eq:update-p} with (a) reads $p_{t+1}=\beta p_t - \eta A\theta_t$;
+left-multiplying by $A^{-1}$ gives $q_{t+1}=\beta q_t - \eta\theta_t$. Substituting
+into Eq.~\eqref{eq:update-theta}, $\theta_{t+1}=\theta_t+\eta q_{t+1}
+=\theta_t+\eta(\beta q_t-\eta\theta_t)=(1-\eta^2)\theta_t+\eta\beta q_t$, which
+is Eq.~\eqref{eq:theorem-recursion}; note $A$ appears nowhere in either line.
+For (c), the characteristic polynomial of the $2\times2$ block follows
+directly from its trace $(1-\eta^2)+\beta$ and determinant
+$(1-\eta^2)\beta-(\eta\beta)(-\eta)=\beta\big[(1-\eta^2)+\eta^2\big]=\beta$.
+The Schur--Cohn stability conditions for $\lambda^2-T\lambda+D$ are $|D|<1$
+and $|T|<1+D$: $|D|=|\beta|<1$ holds for $0\le\beta<1$; and
+$|T|<1+D \Leftrightarrow -1-2\beta < 1-\eta^2-\beta < 1$, whose right
+inequality reduces to $\eta^2>0$ (always true for $\eta\ne0$) and whose left
+inequality reduces to $\beta > \eta^2/2-1$, true for every $\beta\ge0$
+whenever $\eta<\sqrt2$. Both hold under the stated condition, giving
+$\rho_M=\max(|\lambda_1|,|\lambda_2|)<1$, independent of $A$.
+The standard matrix-power bound states that for every $r>\rho_M$ there is
+a finite $C_r$ with $\|M^t\|\le C_r r^t$; choosing any $r<1$ yields the
+claimed estimate. Using $r>\rho_M$ rather than $r=\rho_M$ also covers the
+repeated-eigenvalue case, where the $2\times2$ block may be defective and
+$\|M^t\|$ can contain a polynomial prefactor.
+\end{proof}
+
+Two scope notes, stated as sharply as the theorem itself. First, this result
+covers only the base momentum dynamics with every correction term exactly
+zero; it is not a claim about $F_{\mathrm{geo}}$, $F_{\mathrm{mem}}$, or the
+spectral term's effect when they are active on a non-quadratic loss --
+those effects remain the empirical, sign-mixed findings of
+\S\ref{sec:architecture-ablation} and \S\ref{sec:extended-ablation}, not a
+theorem. Second, the theorem requires the metric to be \emph{exactly} the
+constant Hessian $A$; \S\ref{sec:experimental-validation}'s benchmarks use a
+\emph{regularized}, generally $\theta$-dependent Hessian metric, for which
+$F_{\mathrm{geo}}\ne0$ and the guarantee above does not directly apply.
+Near an isolated, non-degenerate local minimum $\theta^\ast$ of a general
+smooth loss, where $g(\theta)\to H(\theta^\ast)$ and $F_{\mathrm{geo}}\to0$
+as $\theta\to\theta^\ast$, Theorem~\ref{thm:conditioning} predicts the same
+asymptotic, conditioning-independent local rate -- consistent with, and a
+candidate explanation for, the empirical local convergence seen in
+Table~\ref{tab:condition-scaling} -- but a rigorous statement of that local
+result (with an explicit neighborhood radius) is left as future work, not
+claimed here.
+
 \section{Computational Form}
+\label{sec:computational-form}
 
 The computational update follows
 Eqs.~\eqref{eq:update-p}--\eqref{eq:update-theta} directly, with:
@@ -1004,6 +1098,76 @@ reducing the comparison to scalar loss alone.}
 \label{fig:convergence}
 \label{fig:phase-space}
 \end{figure*}
+
+\subsection{Multi-seed replication of the classical and LLM tables}
+\label{sec:classical-multiseed}
+
+Tables~\ref{tab:mnist}--\ref{tab:pinn} above, and the WikiText-2 LLM run
+(\S\ref{sec:experimental-validation}), are single-seed point estimates -- a
+limitation stated plainly elsewhere in this report
+(\S\ref{sec:limitations}, item 2). This subsection closes that gap directly
+for the three cheapest classical benchmarks and the LLM run, using each
+workload's own checked-in script re-run across multiple seeds (not a
+reimplementation), with a paired $t$-test against each seed's best
+non-Hamiltonian-geometric optimizer -- the same statistical protocol as
+\S\ref{sec:robustness-followup}.
+
+\begin{table*}[t]
+\centering\small
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+Workload & $n$ & HG mean $\pm$ SD & Best-other mean $\pm$ SD & $d_z$ & Holm $p$ \\
+\midrule
+MNIST (test loss) & 10 & $0.336\pm0.027$ & $0.338\pm0.028$ & $-0.13$ & $1.000$ \\
+AlgoPerf-style (val.\ loss) & 10 & $0.0485\pm0.028$ & $0.0549\pm0.026$ & $-0.66$ & $0.201$ \\
+DeepOBS-style (val.\ loss) & 10 & $0.0580\pm0.039$ & $0.0551\pm0.025$ & $0.13$ & $1.000$ \\
+WikiText-2 LLM (val.\ loss) & 3 & $7.368\pm0.015$ & $7.237\pm0.006$ & $11.12$ & $\mathbf{0.011}$ \\
+\bottomrule
+\end{tabular}
+\caption{Multi-seed replication against each seed's lowest-loss non-HG
+comparator (lower is better). $d_z$ is the standardized paired difference
+(HG minus comparator); $p$-values use paired $t$-tests with Holm correction
+across the four workloads. This per-seed oracle comparator favors the
+baseline family; LLM best-other is AdaFactor in every seed.}
+\label{tab:classical-multiseed}
+\end{table*}
+
+The picture changes materially once seed variance is accounted for, and not
+in Hamiltonian-geometric's favor. On MNIST, the single-seed win
+(Table~\ref{tab:mnist}) does not replicate as a reliable effect: HG wins
+7 of 10 seeds, but the paired difference is not significant (Holm
+$p=1.000$).
+AlgoPerf-style is a borderline, directionally favorable case (HG wins 8/10,
+unadjusted $p=0.067$, Holm $p=0.201$), similar in character to
+\S\ref{sec:robustness-followup}'s
+Adam comparison. \textbf{DeepOBS-style is the most consequential reversal
+in this report}: Table~\ref{tab:deepobs-local}'s single-seed result showed
+Hamiltonian-geometric winning by more than a factor of two ($0.0203$ vs.\
+Adam's $0.0449$); across 10 seeds, HG wins only 5 of 10 -- a coin flip -- and
+the paired difference is not significant (Holm $p=1.000$). That single-seed table
+entry should therefore not be read as a reliable advantage on this workload;
+it was, on the evidence here, a favorable draw of the seed. The WikiText-2
+LLM result is the opposite kind of correction: the single-seed table already
+showed HG trailing AdaFactor slightly; the 3-seed replication shows this is
+not noise -- AdaFactor beats Hamiltonian-geometric in all 3 seeds, and the
+paired $t$-test remains significant after correction ($t=19.26$,
+unadjusted $p=0.0027$, Holm $p=0.0107$) despite the small
+sample, because the gap ($\approx0.13$ in validation loss) is large relative
+to the run-to-run spread ($\mathrm{SD}\approx0.015$). Reported plainly: on
+this LLM workload, the earlier ``2nd-best, fastest wall-clock'' framing
+understated how consistent AdaFactor's advantage actually is.
+
+A multi-seed check of the capacitor PINN table was attempted with the same
+protocol but is not included here: each Hamiltonian-geometric PINN run
+computes $F_{\mathrm{geo}}$ by finite differences over a 64-dimensional
+metric at every one of 600 steps (\S\ref{sec:computational-form}), and a
+single seed did not complete evaluation within this report's available
+compute budget -- consistent with \S\ref{sec:quantum-benchmark}'s own
+critical-ablation observation that explicit finite-difference metric
+differentiation is over an order of magnitude slower than the other
+correction terms. A multi-seed
+PINN check is therefore left as a concrete, costed item of future work
+rather than attempted with a reduced, non-comparable configuration.
 
 \subsection{Phase-space visualization of the optimizer trajectory}
 \label{sec:phase-space}
@@ -1507,6 +1671,64 @@ can represent.}
 \label{fig:metric-structure-scaling}
 \end{figure}
 
+\subsection{Compute-normalized comparison: does the advantage survive being measured in wall-clock time and function evaluations, not steps?}
+\label{sec:runtime-normalized}
+
+Every table elsewhere in this report scores optimizers after a fixed
+\emph{step} count, which is fair only if every optimizer's step costs the
+same compute. It does not: Hamiltonian-geometric's energy-backtracking
+safeguard (\S\ref{sec:quantum-benchmark}) can spend several extra loss
+evaluations per accepted step. This experiment instruments every optimizer
+with call counters and a wall-clock timer on the same ill-conditioned
+($\kappa=10^5$) rotated quadratic as Table~\ref{tab:metric-structure-scaling},
+10 seeds, and reports final loss against three budgets side by side: steps,
+wall-clock time, and total loss-plus-gradient evaluations.
+
+\begin{table}[t]
+\centering\scriptsize
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Optimizer & Median loss & Median (s) & Median fn-evals \\
+\midrule
+SGD & $246.3$ & $0.0018$ & $161$ \\
+Heavy-ball & $71.16$ & $0.0022$ & $161$ \\
+Adam & $91.17$ & $0.0053$ & $161$ \\
+Entropy descent & $2576$ & $0.0027$ & $161$ \\
+\textbf{HG, no backtrack} & $\mathbf{5.06\times10^{-20}}$ & $0.0855$ & $161$ \\
+\textbf{HG, with backtrack} & $\mathbf{2.56\times10^{-31}}$ & $0.0895$ & $512$ \\
+\bottomrule
+\end{tabular}
+\caption{Compute-normalized comparison, 10 seeds, rotated quadratic
+($\kappa=10^5$). ``HG'' rows use the full architecture with the exact
+Hessian metric.}
+\label{tab:runtime-normalized}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\linewidth]{../ppt_assets/test_result_media/runtime_normalized_comparison/runtime_normalized_comparison.png}
+\caption{Final loss against step count, wall-clock time, and total
+function-evaluation budget, side by side, so a step-count-only ranking is
+not silently presented as a compute-normalized one.}
+\label{fig:runtime-normalized}
+\end{figure}
+
+The advantage survives every budget on this task: Hamiltonian-geometric is
+roughly $20$ orders of magnitude lower in final loss than every baseline
+whether compared by step, by wall-clock time ($\approx90\,\mathrm{ms}$
+against $2$--$5\,\mathrm{ms}$), or by function-evaluation count. The
+backtracking safeguard's real cost is disclosed directly rather than hidden:
+enabling it costs $512$ function evaluations against $161$ for the
+no-backtrack variant (a $3.2\times$ overhead) for an already-converged
+problem that does not need it here -- consistent with
+\S\ref{sec:quantum-benchmark}'s point that the safeguard is a compute
+trade-off, useful specifically on landscapes (like the chaotic quantum
+task) where accepting a raw step can blow up the trajectory, not a free
+improvement. This closes one instance of the compute-normalized-evaluation
+gap in \S\ref{sec:positioning} for the mechanism-evidence rotated-quadratic
+task; it is not a substitute for the same instrumentation on the neural or
+LLM benchmarks, which remains future work.
+
 \section{Architecture Ablation: A Controlled Statistical Study}
 \label{sec:architecture-ablation}
 
@@ -1924,18 +2146,23 @@ here about a full-matrix metric should be read as evidence about the
 The scaling sweep in \S\ref{sec:robustness-followup} is the one direct test
 of this concern, and it is unfavorable: Hamiltonian-geometric's advantage at
 the tuned width does not persist as width grows.
-\item \textbf{Seed coverage is uneven across benchmarks.} The multi-seed
-check (10 seeds, \S\ref{sec:robustness-followup}), the quantum robustness
-check (5 seeds, \S\ref{sec:quantum-benchmark}), and the extended ablation
-package (\S\ref{sec:extended-ablation}: 40/10/10 paired seeds) are the
-places variance across random seeds is reported; the four classical tables
-(Tables~\ref{tab:mnist}--\ref{tab:pinn}) and the quantum ablation
-(Table~\ref{tab:quantum-ablation}) remain single-seed point estimates. Even
-where multi-seed data exists, $n=10$ is underpowered to resolve the near-tie
-with Adam and Muon decisively (\S\ref{sec:robustness-followup}), and several
-Holm-corrected comparisons in \S\ref{sec:extended-ablation} sit in a
-borderline $0.05$--$0.15$ range rather than being decisively resolved either
-way.
+\item \textbf{Seed coverage is uneven across benchmarks, and where it exists
+it is not uniformly favorable.} The multi-seed check (10 seeds,
+\S\ref{sec:robustness-followup}), the quantum robustness check (5 seeds,
+\S\ref{sec:quantum-benchmark}), the classical/LLM multi-seed replication
+(\S\ref{sec:classical-multiseed}: 10/10/10/3 paired seeds), and the extended
+ablation package (\S\ref{sec:extended-ablation}: 40/10/10 paired seeds) are
+the places variance across random seeds is reported; the capacitor PINN
+table and the quantum ablation (Table~\ref{tab:quantum-ablation}) remain
+single-seed point estimates. Where multi-seed data now exists, it does not
+uniformly favor Hamiltonian-geometric: \S\ref{sec:classical-multiseed} finds
+the single-seed DeepOBS-style win does not replicate (HG wins 5/10 seeds,
+$p=0.689$) and the WikiText-2 LLM loss to AdaFactor is consistent and
+significant across seeds ($p=0.0027$), not a near-tie. $n=10$ remains
+underpowered to resolve the near-tie with Adam and Muon decisively
+(\S\ref{sec:robustness-followup}), and several Holm-corrected comparisons in
+\S\ref{sec:extended-ablation} sit in a borderline $0.05$--$0.15$ range
+rather than being decisively resolved either way.
 \item \textbf{Hyperparameter tuning is a small grid search, not a proof of
 optimality.} Every optimizer's learning rate in every benchmark was found by
 sweeping a modest number of values on that same benchmark; the
@@ -2083,16 +2310,14 @@ the framework's boundary of usefulness is defined as much by where an
 independent, higher-powered check disagrees with a favorable result as by
 where it agrees.
 
-\section*{Positioning for a Stronger Venue}
+\section*{Scope and Requirements for Broader Validation}
 \label{sec:positioning}
 
-This report is best read as a careful study of \emph{when}
-Hamiltonian-geometric optimization helps, not as a claim of a universally
-superior optimizer -- and, in its current form, it falls short of the bar
-for a top-tier (Q1) optimization or machine-learning venue. Stating this
-precisely is itself part of the report's own stress-testing standard
-(\S\ref{sec:extended-ablation}, and the conclusions above). The concrete
-gaps, and what closing them would require, are:
+This report is a study of \emph{when} Hamiltonian-geometric optimization
+helps, not a claim of a universally superior optimizer. The following scope
+boundaries identify what the present evidence establishes and which broader
+claims require additional experiments; they prevent the local and
+mechanism-focused results from being extrapolated beyond their support.
 
 \begin{enumerate}
 \item \textbf{Official benchmark execution.} \S\ref{sec:experimental-validation}'s
@@ -2102,20 +2327,26 @@ would run the official AlgoPerf harness (or drop the AlgoPerf name from
 headline claims) and include established DeepOBS problems beyond a single
 spiral MLP.
 \item \textbf{Multi-seed neural and LLM experiments with paired tests.}
-Coverage is uneven (Limitation 2): $\ge10$ seeds with confidence intervals
-and paired tests for small tasks, and $3$--$5$ seeds for LLM-scale training,
-are not yet uniformly present outside \S\ref{sec:robustness-followup} and
-\S\ref{sec:extended-ablation}.
+\S\ref{sec:classical-multiseed} now covers MNIST, AlgoPerf-style, and
+DeepOBS-style (10 seeds) and the WikiText-2 LLM run (3 seeds) with paired
+tests, alongside \S\ref{sec:robustness-followup} and
+\S\ref{sec:extended-ablation}; the capacitor PINN table remains a
+single-seed point estimate because a multi-seed replication did not
+complete within available compute (\S\ref{sec:classical-multiseed}), and no
+larger-scale LLM run (more steps, a bigger model, more seeds) has been
+attempted.
 \item \textbf{Equal, seed-averaged tuning budgets.} Every optimizer's
 learning rate was swept comparably but not identically or exhaustively
 (Limitation 3); a stronger revision would fix a shared validation-trial
 budget and tune every optimizer, including baselines, over comparable
 learning-rate, momentum, decay, and regularization spaces.
-\item \textbf{Compute-normalized evaluation.} This report reports final
-loss/accuracy and wall-clock runtime, but not systematically: time-to-target,
-gradient-evaluation counts, and peak memory (reported only for
-\S\ref{sec:ext-gpu}'s CUDA study) across every benchmark, and energy
-consumption nowhere.
+\item \textbf{Compute-normalized evaluation.} \S\ref{sec:runtime-normalized}
+now reports step-, wall-clock-, and function-evaluation-normalized
+comparisons together, but only for the mechanism-evidence rotated-quadratic
+task; the neural and LLM benchmarks still report final loss/accuracy and
+wall-clock runtime without systematic time-to-target or gradient-evaluation
+instrumentation, peak memory is reported only for \S\ref{sec:ext-gpu}'s CUDA
+study, and energy consumption is reported nowhere.
 \item \textbf{Stronger workloads.} No ImageNet-scale vision benchmark,
 official DeepOBS problem beyond one MLP, longer-horizon transformer
 pretraining, multiple WikiText/OpenWebText-scale runs, or multiple
@@ -2123,27 +2354,21 @@ independent quantum systems and dimensions are included (Limitation 7);
 \S\ref{sec:ext-quantum}'s single kicked-top configuration and
 \S\ref{sec:experimental-validation}'s single 200-step WikiText-2 run are
 illustrative, not comprehensive.
-\item \textbf{An explicit theoretical result.} Every claim in this report is
-empirical or a direct symbolic/numeric verification of an equation
-(\S\ref{sec:review}); none is a convergence proof, a discretization-stability
-bound for the damped Hamiltonian update, a formal statement of when the
-metric provably improves conditioning, or an error bound for the diagonal or
-low-rank reductions used in \S\ref{sec:modern-benchmark} and
-\S\ref{sec:ext-gpu}. A theorem of any of these kinds -- even restricted to a
-convex or quadratic setting -- would be the single highest-value addition for
-a top optimization venue.
+\item \textbf{Theory beyond the exact quadratic regime.}
+Theorem~\ref{thm:conditioning} proves condition-number-independent linear
+convergence for an exact constant Hessian metric. It does not provide a
+discretization-stability bound for varying metrics, a neighborhood theorem
+for general nonconvex losses, or an approximation-error bound for the
+diagonal and low-rank reductions used in \S\ref{sec:modern-benchmark} and
+\S\ref{sec:ext-gpu}; those are the precise theoretical extensions needed to
+support broader claims.
 \end{enumerate}
 
-Given these gaps, the manuscript in its current form should be read as
-promising but requiring major revision before a strong Q1 submission; the
-reframed central claim above (Conclusion) is deliberately the claim the
-\emph{current} evidence supports, not the claim a completed revision along
-the lines above might eventually support. The extended ablation's negative
-findings (\S\ref{sec:extended-ablation}) do not, by themselves, make the
-work unpublishable -- honestly identifying the operating regime in which
-Hamiltonian-geometric optimization helps, and the regime in which its
-additional corrections hurt, is closer to this report's actual scientific
-contribution than a claim of outright superiority would have been.
+These boundaries define the manuscript's contribution: an exact quadratic
+conditioning result, a common structural derivation, and controlled evidence
+that identifies both favorable metric regimes and counterexamples in which
+additional corrections hurt. Broader benchmark dominance is neither claimed
+nor required for those narrower conclusions.
 
 \begin{thebibliography}{99}
 

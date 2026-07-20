@@ -251,7 +251,36 @@
   \end{itemize}
 \end{frame}
 
-% ---------- 9. Modern optimizer comparison (3 graphs, one slide) ----------
+% ---------- 9. Multi-seed reality check ----------
+\begin{frame}{Multi-Seed Reality Check --- Do the Single-Seed Wins Hold Up?}
+  \scriptsize
+  \begin{tabular}{@{}p{0.28\linewidth}rrrr@{}}
+    \toprule
+    Workload & $n$ & HG mean$\pm$SD & Best-other mean$\pm$SD & Paired $p$ \\
+    \midrule
+    MNIST (test loss) & 10 & $0.336\pm0.027$ & $0.338\pm0.028$ & $0.688$ \\
+    AlgoPerf-style (val.\ loss) & 10 & $0.0485\pm0.028$ & $0.0549\pm0.026$ & $0.067$ \\
+    DeepOBS-style (val.\ loss) & 10 & $0.0580\pm0.039$ & $0.0551\pm0.025$ & $0.689$ \\
+    WikiText-2 LLM (val.\ loss) & 3 & $7.368\pm0.015$ & $7.237\pm0.006$ & $\mathbf{0.003}$ \\
+    \bottomrule
+  \end{tabular}
+  \vspace{0.7em}
+  \begin{itemize}
+    \item \textbf{DeepOBS-style is the most consequential reversal here}: the single-seed table
+      showed a $2\times$ win; across 10 seeds HG wins only 5/10 --- a coin flip, $p=0.689$.
+      That single-seed entry was a favorable draw of the seed, not a reliable advantage.
+    \item MNIST: HG wins 7/10 seeds but not significantly ($p=0.688$). AlgoPerf-style: borderline
+      favorable (8/10, $p=0.067$).
+    \item \textbf{WikiText-2 LLM: the opposite correction.} AdaFactor beats HG in all 3 seeds, and
+      the gap is significant ($p=0.003$) despite only 3 seeds --- the earlier ``2nd best'' framing
+      understated how consistent AdaFactor's edge actually is.
+    \item PINN multi-seed was attempted but not completed: its finite-difference metric makes a
+      single seed far more expensive than the other three combined --- an honest, costed gap,
+      not a result.
+  \end{itemize}
+\end{frame}
+
+% ---------- 10. Modern optimizer comparison (3 graphs, one slide) ----------
 \trifigsnote
   {Modern Optimizer Comparison}
   {test_result_media/modern_optimizer_benchmark/modern_optimizer_pareto.png}
@@ -261,7 +290,7 @@
    sweep (center) holds the near-tie, but the width-scaling sweep (right) favors Adam --- competitive
    evidence, not decisive dominance.}
 
-% ---------- 10. Modern optimizer benchmark table ----------
+% ---------- 11. Modern optimizer benchmark table ----------
 \begin{frame}{Benchmark Results --- Modern Optimizers (Spiral MLP)}
   \small
   \begin{tabular}{@{}lrrr@{}}
@@ -285,7 +314,7 @@
   \end{itemize}
 \end{frame}
 
-% ---------- 11. Extended ablation study: evidence (3 graphs, one slide) ----------
+% ---------- 12. Extended ablation study: evidence (3 graphs, one slide) ----------
 \begin{frame}{Extended Ablation Study --- Design \& Evidence}
   \centering
   \begin{columns}[T,totalwidth=\linewidth]
@@ -309,7 +338,7 @@
   right).}
 \end{frame}
 
-% ---------- 12. Extended ablation study: key numbers ----------
+% ---------- 13. Extended ablation study: key numbers ----------
 \begin{frame}{Extended Ablation Study --- Key Numbers}
   \scriptsize
   \begin{tabular}{@{}p{0.27\linewidth}p{0.16\linewidth}rr@{}}
@@ -339,22 +368,22 @@
   \end{itemize}
 \end{frame}
 
-% ---------- 13. Limitations ----------
+% ---------- 14. Limitations ----------
 \begin{frame}{Limitations}
   \begin{itemize}
     \item \textbf{Scale}: all systems are small; full $n\times n$ metric is mechanism evidence,
       not a production-scale replacement for Adam-family optimizers.
-    \item \textbf{Statistics}: the earlier classical/LLM benchmarks are mostly single-seed;
-      multi-seed variance now comes from the modern-optimizer sweep (10 seeds) \emph{and} the
-      extended ablation (40/10/10 seeds) --- and the latter is where the negative quantum and
-      GPU-scaling results appear.
+    \item \textbf{Statistics}: multi-seed variance now covers the modern-optimizer sweep (10
+      seeds), the classical/LLM reality check (10/10/10/3 seeds), and the extended ablation
+      (40/10/10 seeds) --- and it is not uniformly favorable: the DeepOBS single-seed win does
+      not replicate, and the LLM loss to AdaFactor is significant, not a near-tie.
     \item \textbf{Tuning}: learning rates from modest grids, not exhaustive search.
     \item \textbf{Comparability}: the modern-optimizer and CUDA-ablation runs both use a diagonal
       reduction, not the full curvature-memory-entropy architecture.
   \end{itemize}
 \end{frame}
 
-% ---------- 14. Summary / Thank you ----------
+% ---------- 15. Summary / Thank you ----------
 \begin{frame}{Summary}
   \begin{itemize}
     \item Formulation is mathematically coherent once the spectral-force sign convention and
@@ -365,6 +394,8 @@
     \item The rigorous extended ablation confirms this precisely: the spectral term earns its
       keep only under a genuine Hessian metric, while quantum and GPU-scale results caution
       against over-claiming.
+    \item The multi-seed reality check cuts both ways too --- it takes away a single-seed win
+      (DeepOBS) as much as it takes away worry about a near-tie (LLM loss to AdaFactor is real).
   \end{itemize}
   \vfill
   \centering

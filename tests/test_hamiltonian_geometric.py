@@ -16,6 +16,36 @@ from src.hamiltonian_geometric import (
 
 
 class HamiltonianGeometricCoreTests(unittest.TestCase):
+    def test_exact_hessian_quadratic_recurrence_is_condition_number_independent(self) -> None:
+        """Executable check of Theorem 1's exact-Hessian recurrence."""
+
+        eta, beta = 0.4, 0.7
+        theta0 = np.array([0.8, -0.3, 0.5])
+        q0 = np.array([-0.2, 0.4, 0.1])
+        trajectories = []
+        for condition_number in (1.0, 1e3, 1e8):
+            eigenvalues = np.geomspace(1.0, condition_number, theta0.size)
+            raw = np.random.default_rng(17).normal(size=(theta0.size, theta0.size))
+            rotation, _ = np.linalg.qr(raw)
+            hessian = rotation @ np.diag(eigenvalues) @ rotation.T
+            theta = theta0.copy()
+            momentum = hessian @ q0
+            trajectory = [theta.copy()]
+            for _ in range(25):
+                momentum = beta * momentum - eta * (hessian @ theta)
+                theta = theta + eta * np.linalg.solve(hessian, momentum)
+                trajectory.append(theta.copy())
+            trajectories.append(np.asarray(trajectory))
+
+        for trajectory in trajectories[1:]:
+            # Solving an explicitly 1e8-conditioned system introduces a few
+            # ulps of numerical error even though the algebraic recurrence is
+            # identical; the tolerance reflects that finite-precision solve.
+            np.testing.assert_allclose(trajectory, trajectories[0], atol=1e-7, rtol=1e-7)
+
+        block = np.array([[1.0 - eta**2, eta * beta], [-eta, beta]])
+        self.assertLess(float(np.max(np.abs(np.linalg.eigvals(block)))), 1.0)
+
     def test_geometric_force_is_nonzero_for_theta_dependent_metric(self) -> None:
         theta = np.array([0.35, -0.25])
         momentum = np.array([0.7, -0.4])

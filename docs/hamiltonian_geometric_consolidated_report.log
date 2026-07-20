@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.21)  21 JUL 2026 02:57
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.21)  21 JUL 2026 04:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -129,6 +129,18 @@ LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
 ))
+(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/amscls\amsthm.sty
+Package: amsthm 2020/05/29 v2.20.6
+\thm@style=\toks24
+\thm@bodyfont=\toks25
+\thm@headfont=\toks26
+\thm@notefont=\toks27
+\thm@headpunct=\toks28
+\thm@preskip=\skip54
+\thm@postskip=\skip55
+\thm@headsep=\skip56
+\dth@everypar=\toks29
+)
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/booktabs\booktabs.sty
 Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
 \heavyrulewidth=\dimen166
@@ -292,7 +304,7 @@ Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 84.
 )
-\Hy@SectionHShift=\skip54
+\Hy@SectionHShift=\skip57
 )
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/xcolor\xcolor.sty
 Package: xcolor 2024/09/29 v3.02 LaTeX color extensions (UK)
@@ -340,12 +352,12 @@ ings
 )
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/microtype\microtype.sty
 Package: microtype 2026/03/01 v3.2d Micro-typographical refinements (RS)
-\MT@toks=\toks24
+\MT@toks=\toks30
 \MT@tempbox=\box55
 \MT@count=\count318
 LaTeX Info: Redefining \noprotrusionifhmode on input line 1084.
 LaTeX Info: Redefining \leftprotrusion on input line 1085.
-\MT@prot@toks=\toks25
+\MT@prot@toks=\toks31
 LaTeX Info: Redefining \rightprotrusion on input line 1104.
 LaTeX Info: Redefining \textls on input line 1449.
 \MT@outer@kern=\dimen193
@@ -359,7 +371,7 @@ File: microtype-pdftex.def 2026/03/01 v3.2d Definitions specific to pdftex (RS)
 
 LaTeX Info: Redefining \lsstyle on input line 944.
 LaTeX Info: Redefining \lslig on input line 944.
-\MT@outer@space=\skip55
+\MT@outer@space=\skip58
 )
 Package microtype Info: Loading configuration file microtype.cfg.
 
@@ -370,40 +382,41 @@ LaTeX Info: Redefining \microtypesetup on input line 3065.
 )
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/enumitem\enumitem.sty
 Package: enumitem 2025/02/06 v3.11 Customized lists
-\labelindent=\skip56
+\labelindent=\skip59
 \enit@outerparindent=\dimen194
-\enit@toks=\toks26
+\enit@toks=\toks32
 \enit@inbox=\box56
 \enit@count@id=\count320
 \enitdp@description=\count321
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 19.
+Package hyperref Info: Option `colorlinks' set `true' on input line 20.
+\c@theorem=\count322
 
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdftex
 .def
 File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count322
+\l__color_backend_stack_int=\count323
 ) (hamiltonian_geometric_consolidated_report.aux)
 \openout1 = `hamiltonian_geometric_consolidated_report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 79.
-LaTeX Font Info:    ... okay on input line 79.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 79.
-LaTeX Font Info:    ... okay on input line 79.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 79.
-LaTeX Font Info:    ... okay on input line 79.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 79.
-LaTeX Font Info:    ... okay on input line 79.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 79.
-LaTeX Font Info:    ... okay on input line 79.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 79.
-LaTeX Font Info:    ... okay on input line 79.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 79.
-LaTeX Font Info:    ... okay on input line 79.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 79.
-LaTeX Font Info:    ... okay on input line 79.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 79.
-LaTeX Font Info:    ... okay on input line 79.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -441,17 +454,17 @@ LaTeX Font Info:    ... okay on input line 79.
 
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count323
+\scratchcounter=\count324
 \scratchdimen=\dimen195
 \scratchbox=\box57
-\nofMPsegments=\count324
-\nofMParguments=\count325
-\everyMPshowfont=\toks27
-\MPscratchCnt=\count326
+\nofMPsegments=\count325
+\nofMParguments=\count326
+\everyMPshowfont=\toks33
+\MPscratchCnt=\count327
 \MPscratchDim=\dimen196
-\MPnumerator=\count327
-\makeMPintoPDFobject=\count328
-\everyMPtoPDFconversion=\toks28
+\MPnumerator=\count328
+\makeMPintoPDFobject=\count329
+\everyMPtoPDFconversion=\toks34
 )
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-base
 .sty
@@ -462,7 +475,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/00miktex\epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-Package hyperref Info: Link coloring ON on input line 79.
+Package hyperref Info: Link coloring ON on input line 81.
  (hamiltonian_geometric_consolidated_report.out)
 (hamiltonian_geometric_consolidated_report.out)
 \@outlinefile=\write3
@@ -470,13 +483,13 @@ Package hyperref Info: Link coloring ON on input line 79.
 
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Info: Redefining \microtypecontext on input line 79.
-Package microtype Info: Applying patch `item' on input line 79.
-Package microtype Info: Applying patch `toc' on input line 79.
-Package microtype Info: Applying patch `eqnum' on input line 79.
-Package microtype Info: Applying patch `footnote' on input line 79.
-Package microtype Info: Applying patch `verbatim' on input line 79.
-LaTeX Info: Redefining \microtypesetup on input line 79.
+LaTeX Info: Redefining \microtypecontext on input line 81.
+Package microtype Info: Applying patch `item' on input line 81.
+Package microtype Info: Applying patch `toc' on input line 81.
+Package microtype Info: Applying patch `eqnum' on input line 81.
+Package microtype Info: Applying patch `footnote' on input line 81.
+Package microtype Info: Applying patch `verbatim' on input line 81.
+LaTeX Info: Redefining \microtypesetup on input line 81.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -489,7 +502,7 @@ Package microtype Info: No adjustment of character kerning.
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
 (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msa on input line 113
+LaTeX Font Info:    Trying to load font information for U+msa on input line 115
 .
 
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
@@ -498,7 +511,7 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/microtype\mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 113
+LaTeX Font Info:    Trying to load font information for U+msb on input line 115
 .
 
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
@@ -513,13 +526,13 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 ]
-Underfull \hbox (badness 6252) in paragraph at lines 220--224
+Underfull \hbox (badness 6252) in paragraph at lines 222--226
 []\OT1/cmr/m/n/10 The frame-work treats model pa-ram-e-ters $\OML/cmm/m/it/10 ^
 ^R \OT1/cmr/m/n/10 =
  []
 
 
-Underfull \hbox (badness 2229) in paragraph at lines 236--236
+Underfull \hbox (badness 2229) in paragraph at lines 238--238
 []\OT1/cmr/bx/n/10 Hamilton's equa-tions and the ge-o-met-ric
  []
 
@@ -528,14 +541,14 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 [2] [3] [4]
-Underfull \hbox (badness 1163) in paragraph at lines 628--646
+Underfull \hbox (badness 1163) in paragraph at lines 630--648
 \OT1/cmr/m/n/10 i.e. ex-actly $\OML/cmm/m/it/10 ^^R[] \OT1/cmr/m/n/10 = \OML/cm
 m/m/it/10 ^^R[] \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 ^^Q g[]\OMS/cmsy/m/n/10 r
 []\OML/cmm/m/it/10 L$ \OT1/cmr/m/n/10 (the flat-metric,
  []
 
 
-Underfull \hbox (badness 1478) in paragraph at lines 681--695
+Underfull \hbox (badness 1478) in paragraph at lines 683--697
 \OT1/cmr/m/it/10 Learn-ing Rates with Sub-lin-ear Mem-ory Cost\OT1/cmr/m/n/10 ,
  ICML
  []
@@ -544,409 +557,449 @@ Underfull \hbox (badness 1478) in paragraph at lines 681--695
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [6]
-Underfull \hbox (badness 10000) in paragraph at lines 869--883
+Underfull \hbox (badness 10000) in paragraph at lines 848--848
+[]\OT1/cmr/bx/n/12 Theoretical Anal-y-sis: Condition-
+ []
+
+[7]
+Underfull \hbox (badness 10000) in paragraph at lines 955--969
 []\OT1/cmr/m/n/10 The finite-plate ca-pac-i-tor fringing-field prob-lem
  []
 
 
-Underfull \hbox (badness 1107) in paragraph at lines 869--883
+Underfull \hbox (badness 1107) in paragraph at lines 955--969
 \OT1/cmr/m/n/10 and an exact-statevector QAOA Max-Cut [[]] angle-
  []
 
 
-Underfull \hbox (badness 2181) in paragraph at lines 976--979
+Underfull \hbox (badness 2181) in paragraph at lines 1062--1065
 []\OT1/cmr/bx/n/10 Reproducibility. \OT1/cmr/m/n/10 Optimizer-specific mini-bat
 ch
  []
 
 
-Underfull \hbox (badness 1521) in paragraph at lines 976--979
+Underfull \hbox (badness 1521) in paragraph at lines 1062--1065
 \OT1/cmr/m/n/10 each method is eval-u-ated un-der a sta-ble data-
  []
 
 
-Underfull \hbox (badness 1210) in paragraph at lines 979--987
+Underfull \hbox (badness 1210) in paragraph at lines 1065--1073
 []\OT1/cmr/bx/n/10 Learning-rate cal-i-bra-tion. \OT1/cmr/m/n/10 The Hamiltonia
 n-
  []
 
-<../ppt_assets/test_result_media/pinn_benchmark/optimizer_convergence.png, id=3
-62, 650.43pt x 433.62pt>
+<../ppt_assets/test_result_media/pinn_benchmark/optimizer_convergence.png, id=4
+13, 650.43pt x 433.62pt>
 File: ../ppt_assets/test_result_media/pinn_benchmark/optimizer_convergence.png 
 Graphic file (type png)
 <use ../ppt_assets/test_result_media/pinn_benchmark/optimizer_convergence.png>
 Package pdftex.def Info: ../ppt_assets/test_result_media/pinn_benchmark/optimiz
-er_convergence.png  used on input line 996.
+er_convergence.png  used on input line 1082.
 (pdftex.def)             Requested size: 247.68204pt x 165.12137pt.
-<../ppt_assets/test_result_media/phase_space/phase_space.png, id=364, 650.43pt 
+<../ppt_assets/test_result_media/phase_space/phase_space.png, id=415, 650.43pt 
 x 542.025pt>
 File: ../ppt_assets/test_result_media/phase_space/phase_space.png Graphic file 
 (type png)
 <use ../ppt_assets/test_result_media/phase_space/phase_space.png>
 Package pdftex.def Info: ../ppt_assets/test_result_media/phase_space/phase_spac
-e.png  used on input line 997.
+e.png  used on input line 1083.
 (pdftex.def)             Requested size: 247.68204pt x 206.4017pt.
-[7]
-Underfull \hbox (badness 10000) in paragraph at lines 1046--1061
+[8]
+Underfull \hbox (badness 10000) in paragraph at lines 1202--1217
 []\OT1/cmr/bx/n/10 The pre-cise mean-ing of ``Hamiltonian-
  []
 
-
-Underfull \vbox (badness 5133) has occurred while \output is active []
-
 <../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimizer_lo
-ss.png, id=398, 542.025pt x 361.35pt>
+ss.png, id=451, 542.025pt x 361.35pt>
 File: ../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimiz
 er_loss.png Graphic file (type png)
 <use ../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimize
 r_loss.png>
 Package pdftex.def Info: ../ppt_assets/test_result_media/modern_optimizer_bench
-mark/modern_optimizer_loss.png  used on input line 1083.
+mark/modern_optimizer_loss.png  used on input line 1239.
 (pdftex.def)             Requested size: 229.38483pt x 152.92384pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [8]
+ [9]
 <../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimizer_se
-ed_sweep.png, id=414, 578.16pt x 361.35pt>
+ed_sweep.png, id=464, 578.16pt x 361.35pt>
 File: ../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimiz
 er_seed_sweep.png Graphic file (type png)
 <use ../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimize
 r_seed_sweep.png>
 Package pdftex.def Info: ../ppt_assets/test_result_media/modern_optimizer_bench
-mark/modern_optimizer_seed_sweep.png  used on input line 1145.
+mark/modern_optimizer_seed_sweep.png  used on input line 1301.
 (pdftex.def)             Requested size: 165.1266pt x 103.20085pt.
 <../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimizer_sc
-aling_sweep.png, id=415, 542.025pt x 361.35pt>
+aling_sweep.png, id=465, 542.025pt x 361.35pt>
 File: ../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimiz
 er_scaling_sweep.png Graphic file (type png)
 <use ../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimize
 r_scaling_sweep.png>
 Package pdftex.def Info: ../ppt_assets/test_result_media/modern_optimizer_bench
-mark/modern_optimizer_scaling_sweep.png  used on input line 1146.
+mark/modern_optimizer_scaling_sweep.png  used on input line 1302.
 (pdftex.def)             Requested size: 165.1266pt x 110.08202pt.
 <../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimizer_pa
-reto.png, id=416, 505.89pt x 397.485pt>
+reto.png, id=466, 505.89pt x 397.485pt>
 File: ../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimiz
 er_pareto.png Graphic file (type png)
 <use ../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimize
 r_pareto.png>
 Package pdftex.def Info: ../ppt_assets/test_result_media/modern_optimizer_bench
-mark/modern_optimizer_pareto.png  used on input line 1147.
+mark/modern_optimizer_pareto.png  used on input line 1303.
 (pdftex.def)             Requested size: 165.1266pt x 129.74515pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [9]
+
+Underfull \hbox (badness 10000) in paragraph at lines 1382--1382
+[]\OT1/cmr/bx/n/12 Chaotic Quantum-Control Bench-
+ []
+
+
+Underfull \vbox (badness 1275) has occurred while \output is active []
+
+ [10]
 <../ppt_assets/test_result_media/qaoa_benchmark/qaoa_approximation_ratio.png, i
-d=429, 650.43pt x 404.3105pt>
+d=480, 650.43pt x 404.3105pt>
 File: ../ppt_assets/test_result_media/qaoa_benchmark/qaoa_approximation_ratio.p
 ng Graphic file (type png)
 <use ../ppt_assets/test_result_media/qaoa_benchmark/qaoa_approximation_ratio.pn
 g>
 Package pdftex.def Info: ../ppt_assets/test_result_media/qaoa_benchmark/qaoa_ap
-proximation_ratio.png  used on input line 1284.
+proximation_ratio.png  used on input line 1440.
 (pdftex.def)             Requested size: 247.68204pt x 153.96037pt.
 <../ppt_assets/test_result_media/quantum_chaos_benchmark/quantum_chaos_fidelity
-.png, id=430, 650.43pt x 404.3105pt>
+.png, id=481, 650.43pt x 404.3105pt>
 File: ../ppt_assets/test_result_media/quantum_chaos_benchmark/quantum_chaos_fid
 elity.png Graphic file (type png)
 <use ../ppt_assets/test_result_media/quantum_chaos_benchmark/quantum_chaos_fide
 lity.png>
 Package pdftex.def Info: ../ppt_assets/test_result_media/quantum_chaos_benchmar
-k/quantum_chaos_fidelity.png  used on input line 1285.
+k/quantum_chaos_fidelity.png  used on input line 1441.
 (pdftex.def)             Requested size: 247.68204pt x 153.96037pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [10 <../ppt_assets/test_result_media/pinn_benchmark/optimizer_convergence.png>
+ [11 <../ppt_assets/test_result_media/pinn_benchmark/optimizer_convergence.png>
  <../ppt_assets/test_result_media/phase_space/phase_space.png> <../ppt_assets/t
-est_result_media/modern_optimizer_benchmark/modern_optimizer_loss.png>]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [11 <../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimiz
-er_seed_sweep.png> <../ppt_assets/test_result_media/modern_optimizer_benchmark/
-modern_optimizer_scaling_sweep.png> <../ppt_assets/test_result_media/modern_opt
-imizer_benchmark/modern_optimizer_pareto.png>]
+est_result_media/modern_optimizer_benchmark/modern_optimizer_loss.png>] [12 <..
+/ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimizer_seed_
+sweep.png> <../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_o
+ptimizer_scaling_sweep.png> <../ppt_assets/test_result_media/modern_optimizer_b
+enchmark/modern_optimizer_pareto.png>]
 <../ppt_assets/test_result_media/geometric_evidence/condition_number_scaling.pn
-g, id=450, 650.43pt x 404.3105pt>
+g, id=502, 650.43pt x 404.3105pt>
 File: ../ppt_assets/test_result_media/geometric_evidence/condition_number_scali
 ng.png Graphic file (type png)
 <use ../ppt_assets/test_result_media/geometric_evidence/condition_number_scalin
 g.png>
 Package pdftex.def Info: ../ppt_assets/test_result_media/geometric_evidence/con
-dition_number_scaling.png  used on input line 1433.
+dition_number_scaling.png  used on input line 1589.
 (pdftex.def)             Requested size: 165.1266pt x 102.64436pt.
 <../ppt_assets/test_result_media/geometric_evidence/phase_space_loss_energy.png
-, id=451, 650.43pt x 505.89pt>
+, id=503, 650.43pt x 505.89pt>
 File: ../ppt_assets/test_result_media/geometric_evidence/phase_space_loss_energ
 y.png Graphic file (type png)
 <use ../ppt_assets/test_result_media/geometric_evidence/phase_space_loss_energy
 .png>
 Package pdftex.def Info: ../ppt_assets/test_result_media/geometric_evidence/pha
-se_space_loss_energy.png  used on input line 1434.
+se_space_loss_energy.png  used on input line 1590.
 (pdftex.def)             Requested size: 165.1266pt x 128.43286pt.
-<../ppt_assets/test_result_media/geometric_evidence/saddle_escape.png, id=452, 
+<../ppt_assets/test_result_media/geometric_evidence/saddle_escape.png, id=504, 
 650.43pt x 404.3105pt>
 File: ../ppt_assets/test_result_media/geometric_evidence/saddle_escape.png Grap
 hic file (type png)
 <use ../ppt_assets/test_result_media/geometric_evidence/saddle_escape.png>
 Package pdftex.def Info: ../ppt_assets/test_result_media/geometric_evidence/sad
-dle_escape.png  used on input line 1435.
+dle_escape.png  used on input line 1591.
 (pdftex.def)             Requested size: 165.1266pt x 102.64436pt.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 1445.
+(hyperref)                removing `math shift' on input line 1601.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 1445.
+(hyperref)                removing `math shift' on input line 1601.
 
 <../ppt_assets/test_result_media/metric_structure_scaling_study/metric_structur
-e_scaling.png, id=454, 542.025pt x 361.35pt>
+e_scaling.png, id=506, 542.025pt x 361.35pt>
 File: ../ppt_assets/test_result_media/metric_structure_scaling_study/metric_str
 ucture_scaling.png Graphic file (type png)
 <use ../ppt_assets/test_result_media/metric_structure_scaling_study/metric_stru
 cture_scaling.png>
 Package pdftex.def Info: ../ppt_assets/test_result_media/metric_structure_scali
-ng_study/metric_structure_scaling.png  used on input line 1501.
+ng_study/metric_structure_scaling.png  used on input line 1657.
 (pdftex.def)             Requested size: 236.86447pt x 157.90828pt.
+[13]
+Overfull \hbox (6.48116pt too wide) in paragraph at lines 1681--1695
+ [][] 
+ []
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+<../ppt_assets/test_result_media/runtime_normalized_comparison/runtime_normaliz
+ed_comparison.png, id=515, 794.97pt x 325.215pt>
+File: ../ppt_assets/test_result_media/runtime_normalized_comparison/runtime_nor
+malized_comparison.png Graphic file (type png)
+<use ../ppt_assets/test_result_media/runtime_normalized_comparison/runtime_norm
+alized_comparison.png>
+Package pdftex.def Info: ../ppt_assets/test_result_media/runtime_normalized_com
+parison/runtime_normalized_comparison.png  used on input line 1701.
+(pdftex.def)             Requested size: 236.86447pt x 96.90028pt.
 
- [12 <../ppt_assets/test_result_media/qaoa_benchmark/qaoa_approximation_ratio.p
+Underfull \vbox (badness 4832) has occurred while \output is active []
+
+ [14 <../ppt_assets/test_result_media/qaoa_benchmark/qaoa_approximation_ratio.p
 ng> <../ppt_assets/test_result_media/quantum_chaos_benchmark/quantum_chaos_fide
 lity.png>]
-Underfull \hbox (badness 3209) in paragraph at lines 1610--1622
+Underfull \hbox (badness 3209) in paragraph at lines 1824--1836
 []\OT1/cmr/m/n/10 Every par-tial con-fig-u-ra-tion ex-cept plain Hessian-
  []
 
-[13]
-Underfull \hbox (badness 1275) in paragraph at lines 1659--1678
+[15]
+Underfull \hbox (badness 1275) in paragraph at lines 1873--1892
 \OT1/cmr/m/n/10 specif-i-cally to stress-test -- not to re-confirm -- the
  []
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [14 <../ppt_assets/test_result_media/geometric_evidence/condition_number_scali
-ng.png> <../ppt_assets/test_result_media/geometric_evidence/phase_space_loss_en
-ergy.png> <../ppt_assets/test_result_media/geometric_evidence/saddle_escape.png
-> <../ppt_assets/test_result_media/metric_structure_scaling_study/metric_struct
-ure_scaling.png>]
-<../ablation styudy/figures/architecture_factorial.png, id=488, 867.24pt x 346.
+[16 <../ppt_assets/test_result_media/geometric_evidence/condition_number_scalin
+g.png> <../ppt_assets/test_result_media/geometric_evidence/phase_space_loss_ene
+rgy.png> <../ppt_assets/test_result_media/geometric_evidence/saddle_escape.png>
+ <../ppt_assets/test_result_media/metric_structure_scaling_study/metric_structu
+re_scaling.png> <../ppt_assets/test_result_media/runtime_normalized_comparison/
+runtime_normalized_comparison.png>]
+<../ablation styudy/figures/architecture_factorial.png, id=554, 867.24pt x 346.
 896pt>
 File: ../ablation styudy/figures/architecture_factorial.png Graphic file (type 
 png)
 <use ../ablation styudy/figures/architecture_factorial.png>
 Package pdftex.def Info: ../ablation styudy/figures/architecture_factorial.png 
- used on input line 1710.
+ used on input line 1924.
 (pdftex.def)             Requested size: 438.61067pt x 175.4431pt.
 
-Underfull \vbox (badness 3323) has occurred while \output is active []
+Underfull \vbox (badness 1210) has occurred while \output is active []
 
-<../ablation styudy/figures/quantum_ablation.png, id=497, 722.7pt x 346.896pt>
+<../ablation styudy/figures/quantum_ablation.png, id=563, 722.7pt x 346.896pt>
 File: ../ablation styudy/figures/quantum_ablation.png Graphic file (type png)
 <use ../ablation styudy/figures/quantum_ablation.png>
 Package pdftex.def Info: ../ablation styudy/figures/quantum_ablation.png  used 
-on input line 1775.
+on input line 1989.
 (pdftex.def)             Requested size: 438.61067pt x 210.53172pt.
- [15]
-Underfull \vbox (badness 2229) has occurred while \output is active []
+ [17]
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
-Overfull \hbox (39.72195pt too wide) in paragraph at lines 1822--1835
+Overfull \hbox (39.72195pt too wide) in paragraph at lines 2036--2049
  [][] 
  []
 
-<../ablation styudy/figures/gpu_ablation.png, id=509, 867.24pt x 346.896pt>
+<../ablation styudy/figures/gpu_ablation.png, id=577, 867.24pt x 346.896pt>
 File: ../ablation styudy/figures/gpu_ablation.png Graphic file (type png)
 <use ../ablation styudy/figures/gpu_ablation.png>
 Package pdftex.def Info: ../ablation styudy/figures/gpu_ablation.png  used on i
-nput line 1841.
+nput line 2055.
 (pdftex.def)             Requested size: 438.61067pt x 175.4431pt.
 
-Underfull \vbox (badness 1584) has occurred while \output is active []
+Underfull \vbox (badness 1303) has occurred while \output is active []
 
- [16 <../ablation styudy/figures/architecture_factorial.png>]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+ [18 <../ablation styudy/figures/architecture_factorial.png> <../ablation styud
+y/figures/quantum_ablation.png>]
+Underfull \vbox (badness 1571) has occurred while \output is active []
 
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [17 <../ablation styudy/figures/quantum_ablation.png> <../ablation styudy/figu
-res/gpu_ablation.png>]
-Underfull \hbox (badness 1281) in paragraph at lines 1887--1895
+Underfull \hbox (badness 1281) in paragraph at lines 2101--2109
 []\OT1/cmr/bx/n/10 The an-ti-sym-met-ric part of any can-di-date
  []
 
 
-Underfull \hbox (badness 1132) in paragraph at lines 1887--1895
+Underfull \hbox (badness 1132) in paragraph at lines 2101--2109
 \OT1/cmr/m/n/10 term $[]\OML/cmm/m/it/10 p[]g[]p$ \OT1/cmr/m/n/10 and the ge-o-
 met-ric force $\OML/cmm/m/it/10 F[] \OT1/cmr/m/n/10 =
  []
 
 <../ppt_assets/test_result_media/symmetry_exploits/metric_symmetry_exploits.png
-, id=534, 831.105pt x 339.669pt>
+, id=591, 831.105pt x 339.669pt>
 File: ../ppt_assets/test_result_media/symmetry_exploits/metric_symmetry_exploit
 s.png Graphic file (type png)
 <use ../ppt_assets/test_result_media/symmetry_exploits/metric_symmetry_exploits
 .png>
 Package pdftex.def Info: ../ppt_assets/test_result_media/symmetry_exploits/metr
-ic_symmetry_exploits.png  used on input line 1904.
+ic_symmetry_exploits.png  used on input line 2118.
 (pdftex.def)             Requested size: 229.38483pt x 93.74873pt.
 
-Underfull \hbox (badness 2790) in paragraph at lines 1916--1927
+Underfull \hbox (badness 2790) in paragraph at lines 2130--2141
 \OT1/cmr/m/n/10 MLPs with a few dozen hid-den units, a 64-
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 1957--1966
+[19 <../ablation styudy/figures/gpu_ablation.png> <../ppt_assets/test_result_me
+dia/symmetry_exploits/metric_symmetry_exploits.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 2176--2185
 []\OT1/cmr/bx/n/10 The modern-optimizer bench-mark's
  []
 
 
-Underfull \hbox (badness 6625) in paragraph at lines 1957--1966
+Underfull \hbox (badness 6625) in paragraph at lines 2176--2185
 \OT1/cmr/bx/n/10 Hamiltonian-geometric con-fig-u-ra-tion is a
  []
 
-[18 <../ppt_assets/test_result_media/symmetry_exploits/metric_symmetry_exploits
-.png>]
-Underfull \hbox (badness 2689) in paragraph at lines 2010--2018
+[20]
+Underfull \hbox (badness 2689) in paragraph at lines 2229--2237
 \OT1/cmr/m/n/10 her-ent once the spectral-force sign con-ven-tion and
  []
 
 
-Underfull \hbox (badness 1009) in paragraph at lines 2031--2048
+Underfull \hbox (badness 1009) in paragraph at lines 2250--2267
 \OT1/cmr/m/n/10 -- lies in their lead-ing group but does not sep-a-rate
  []
 
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [19]
-Underfull \hbox (badness 10000) in paragraph at lines 2098--2104
+Underfull \hbox (badness 10000) in paragraph at lines 2315--2321
 \OT1/cmr/m/n/10 and DeepOBS-style work-loads are lo-cal re-
  []
 
 
-Underfull \hbox (badness 1097) in paragraph at lines 2114--2119
-\OT1/cmr/m/n/10 but not sys-tem-at-i-cally: time-to-target, gradient-
+Underfull \hbox (badness 3323) in paragraph at lines 2321--2330
+[]\OT1/cmr/bx/n/10 Multi-seed neu-ral and LLM ex-per-i-ments
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2168--2171
+Underfull \hbox (badness 1189) in paragraph at lines 2321--2330
+\OT1/cmr/bx/n/10 with paired tests. \TS1/cmr/m/n/10 §[][]\OT1/cmr/m/n/10 9.1[][
+] now cov-ers MNIST,
+ []
+
+[21]
+Underfull \hbox (badness 1028) in paragraph at lines 2335--2342
+[]\OT1/cmr/bx/n/10 Compute-normalized eval-u-a-tion. \TS1/cmr/m/n/10 §[][]\OT1/
+cmr/m/n/10 11.2[][] now
+ []
+
+
+Underfull \hbox (badness 2961) in paragraph at lines 2335--2342
+\OT1/cmr/m/n/10 normalized com-par-isons to-gether, but only for
+ []
+
+
+Underfull \hbox (badness 2753) in paragraph at lines 2335--2342
+\OT1/cmr/m/n/10 neu-ral and LLM bench-marks still re-port fi-nal
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2385--2388
 []\OT1/cmr/m/n/10 C. J. Mad-di-son, D. Paulin, Y. W. Teh,
  []
 
 
-Underfull \hbox (badness 2310) in paragraph at lines 2168--2171
+Underfull \hbox (badness 2310) in paragraph at lines 2385--2388
 \OT1/cmr/m/n/10 B. O'Donoghue, and A. Doucet, ``Hamil-to-nian
  []
 
 
-Underfull \hbox (badness 1817) in paragraph at lines 2189--2192
+Underfull \hbox (badness 1817) in paragraph at lines 2406--2409
 []\OT1/cmr/m/n/10 M. Be-tan-court, ``A Con-cep-tual In-tro-duc-tion to
  []
 
 
-Underfull \hbox (badness 1137) in paragraph at lines 2194--2198
+Underfull \hbox (badness 1137) in paragraph at lines 2411--2415
 \OT1/cmr/m/n/10 for Stochas-tic Op-ti-miza-tion,'' \OT1/cmr/m/it/10 In-ter-na-t
 ional Con-
  []
 
 
-Underfull \hbox (badness 5652) in paragraph at lines 2200--2204
+Underfull \hbox (badness 5652) in paragraph at lines 2417--2421
 []\OT1/cmr/m/n/10 T. Tiele-man and G. Hin-ton, ``Lec-ture 6.5---
  []
 
-[20]
-Underfull \hbox (badness 2293) in paragraph at lines 2206--2209
+
+Underfull \hbox (badness 2293) in paragraph at lines 2423--2426
 []\OT1/cmr/m/n/10 S. Amari, ``Nat-u-ral Gra-di-ent Works Ef-fi-ciently
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2211--2215
+Underfull \hbox (badness 10000) in paragraph at lines 2428--2432
 \OT1/cmr/m/n/10 De-cay Reg-u-lar-iza-tion,'' \OT1/cmr/m/it/10 In-ter-na-tional 
 Con-fer-
  []
 
 
-Underfull \hbox (badness 1466) in paragraph at lines 2211--2215
+Underfull \hbox (badness 1466) in paragraph at lines 2428--2432
 \OT1/cmr/m/it/10 ence on Learn-ing Rep-re-sen-ta-tions (ICLR)\OT1/cmr/m/n/10 , 
 2019.
  []
 
 
-Underfull \hbox (badness 3281) in paragraph at lines 2217--2222
+Underfull \hbox (badness 3281) in paragraph at lines 2434--2439
 \OT1/cmr/m/n/10 Y. Liu, H. Pham, X. Dong, T. Lu-ong, C.-
  []
 
-
-Underfull \hbox (badness 1831) in paragraph at lines 2252--2255
+[22]
+Underfull \hbox (badness 1831) in paragraph at lines 2469--2472
 []\OT1/cmr/m/n/10 Y. You, I. Git-man, and B. Gins-burg, ``Large
  []
 
 
-Underfull \hbox (badness 1147) in paragraph at lines 2257--2262
+Underfull \hbox (badness 1147) in paragraph at lines 2474--2479
 \OT1/cmr/m/it/10 na-tional Con-fer-ence on Learn-ing Rep-re-sen-ta-tions
  []
 
-[21] (hamiltonian_geometric_consolidated_report.aux)
+[23
+
+] (hamiltonian_geometric_consolidated_report.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
  ***********
 Package rerunfilecheck Info: File `hamiltonian_geometric_consolidated_report.ou
 t' has not changed.
-(rerunfilecheck)             Checksum: DA2914F6AA098AEB13344E5BCFDCF40F;7575.
+(rerunfilecheck)             Checksum: 061AB7C2842FF6DC8C52E5D4C097C7C3;9035.
  ) 
 Here is how much of TeX's memory you used:
- 14812 strings out of 467871
- 244199 string characters out of 5419828
- 722250 words of memory out of 5000000
- 43329 multiletter control sequences out of 15000+600000
+ 14946 strings out of 467871
+ 247087 string characters out of 5419828
+ 720953 words of memory out of 5000000
+ 43446 multiletter control sequences out of 15000+600000
  641209 words of font info for 89 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,13n,79p,1040b,649s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,13n,79p,1040b,637s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\HP\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm090
 0.pk> <C:\Users\HP\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcti
 0900.pk> <C:\Users\HP\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\t
 crm1000.pk><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfon
 ts/cm/cmbx10.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/
 amsfonts/cm/cmbx12.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/p
-ublic/amsfonts/cm/cmbx6.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/ty
-pe1/public/amsfonts/cm/cmbx7.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fon
-ts/type1/public/amsfonts/cm/cmbx9.pfb><C:/Users/HP/AppData/Local/Programs/MiKTe
-X/fonts/type1/public/amsfonts/cm/cmbxti10.pfb><C:/Users/HP/AppData/Local/Progra
-ms/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/HP/AppData/Local/
-Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/HP/AppData/
-Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/HP/App
-Data/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/H
-P/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Us
-ers/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi9.pfb><
-C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.
+ublic/amsfonts/cm/cmbx5.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/ty
+pe1/public/amsfonts/cm/cmbx6.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fon
+ts/type1/public/amsfonts/cm/cmbx7.pfb><C:/Users/HP/AppData/Local/Programs/MiKTe
+X/fonts/type1/public/amsfonts/cm/cmbx9.pfb><C:/Users/HP/AppData/Local/Programs/
+MiKTeX/fonts/type1/public/amsfonts/cm/cmbxti10.pfb><C:/Users/HP/AppData/Local/P
+rograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/HP/AppData/L
+ocal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/HP/App
+Data/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/H
+P/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Us
+ers/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><
+C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi9.
 pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/c
-mr6.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/
-cm/cmr7.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfo
-nts/cm/cmr8.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/a
-msfonts/cm/cmr9.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/publ
-ic/amsfonts/cm/cmss8.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1
-/public/amsfonts/cm/cmsy10.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts
-/type1/public/amsfonts/cm/cmsy6.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/
-fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/HP/AppData/Local/Programs/Mi
-KTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/HP/AppData/Local/Progra
-ms/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy9.pfb><C:/Users/HP/AppData/Local/P
-rograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Users/HP/AppData/L
-ocal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti9.pfb><C:/Users/HP/AppD
-ata/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt10.pfb><C:/Users/H
-P/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-
-Output written on hamiltonian_geometric_consolidated_report.pdf (21 pages, 2280
-064 bytes).
+mr10.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts
+/cm/cmr6.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsf
+onts/cm/cmr7.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/
+amsfonts/cm/cmr8.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/pub
+lic/amsfonts/cm/cmr9.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1
+/public/amsfonts/cm/cmss8.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/
+type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/
+fonts/type1/public/amsfonts/cm/cmsy5.pfb><C:/Users/HP/AppData/Local/Programs/Mi
+KTeX/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Users/HP/AppData/Local/Progra
+ms/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/HP/AppData/Local/P
+rograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/HP/AppData/Lo
+cal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy9.pfb><C:/Users/HP/AppDa
+ta/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Users/HP
+/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti9.pfb><C:/Use
+rs/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt10.pfb><
+C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/m
+sbm10.pfb>
+Output written on hamiltonian_geometric_consolidated_report.pdf (23 pages, 2410
+132 bytes).
 PDF statistics:
- 778 PDF objects out of 1000 (max. 8388607)
- 192 named destinations out of 1000 (max. 500000)
- 15201 words of extra memory for PDF output out of 17280 (max. 10000000)
+ 853 PDF objects out of 1000 (max. 8388607)
+ 205 named destinations out of 1000 (max. 500000)
+ 15230 words of extra memory for PDF output out of 17280 (max. 10000000)
 

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.19)  21 JUL 2026 02:19
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.21)  21 JUL 2026 04:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1158,70 +1158,72 @@ Overfull \hbox (1.33167pt too wide) in paragraph at lines 252--252
 
 [8
 
+] [9
+
 ]
 <../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimizer_pa
-reto.png, id=131, 505.89pt x 397.485pt>
+reto.png, id=139, 505.89pt x 397.485pt>
 File: ../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimiz
 er_pareto.png Graphic file (type png)
 <use ../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimize
 r_pareto.png>
 Package pdftex.def Info: ../ppt_assets/test_result_media/modern_optimizer_bench
-mark/modern_optimizer_pareto.png  used on input line 262.
+mark/modern_optimizer_pareto.png  used on input line 291.
 (pdftex.def)             Requested size: 123.91711pt x 97.36345pt.
 <../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimizer_se
-ed_sweep.png, id=132, 578.16pt x 361.35pt>
+ed_sweep.png, id=140, 578.16pt x 361.35pt>
 File: ../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimiz
 er_seed_sweep.png Graphic file (type png)
 <use ../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimize
 r_seed_sweep.png>
 Package pdftex.def Info: ../ppt_assets/test_result_media/modern_optimizer_bench
-mark/modern_optimizer_seed_sweep.png  used on input line 262.
+mark/modern_optimizer_seed_sweep.png  used on input line 291.
 (pdftex.def)             Requested size: 138.673pt x 86.67062pt.
 <../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimizer_sc
-aling_sweep.png, id=133, 542.025pt x 361.35pt>
+aling_sweep.png, id=141, 542.025pt x 361.35pt>
 File: ../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimiz
 er_scaling_sweep.png Graphic file (type png)
 <use ../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimize
 r_scaling_sweep.png>
 Package pdftex.def Info: ../ppt_assets/test_result_media/modern_optimizer_bench
-mark/modern_optimizer_scaling_sweep.png  used on input line 262.
+mark/modern_optimizer_scaling_sweep.png  used on input line 291.
 (pdftex.def)             Requested size: 138.67355pt x 92.44904pt.
- [9
+ [10
 
  <../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimizer_p
 areto.png> <../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_o
 ptimizer_seed_sweep.png> <../ppt_assets/test_result_media/modern_optimizer_benc
-hmark/modern_optimizer_scaling_sweep.png>] [10
+hmark/modern_optimizer_scaling_sweep.png>] [11
 
 ]
-<../ablation styudy/figures/architecture_factorial.png, id=153, 867.24pt x 346.
+<../ablation styudy/figures/architecture_factorial.png, id=161, 867.24pt x 346.
 896pt>
 File: ../ablation styudy/figures/architecture_factorial.png Graphic file (type 
 png)
 <use ../ablation styudy/figures/architecture_factorial.png>
 Package pdftex.def Info: ../ablation styudy/figures/architecture_factorial.png 
- used on input line 310.
+ used on input line 339.
 (pdftex.def)             Requested size: 138.6686pt x 55.46744pt.
-<../ablation styudy/figures/quantum_ablation.png, id=154, 722.7pt x 346.896pt>
+<../ablation styudy/figures/quantum_ablation.png, id=162, 722.7pt x 346.896pt>
 File: ../ablation styudy/figures/quantum_ablation.png Graphic file (type png)
 <use ../ablation styudy/figures/quantum_ablation.png>
 Package pdftex.def Info: ../ablation styudy/figures/quantum_ablation.png  used 
-on input line 310.
+on input line 339.
 (pdftex.def)             Requested size: 138.6708pt x 66.56198pt.
-<../ablation styudy/figures/gpu_ablation.png, id=155, 867.24pt x 346.896pt>
+<../ablation styudy/figures/gpu_ablation.png, id=163, 867.24pt x 346.896pt>
 File: ../ablation styudy/figures/gpu_ablation.png Graphic file (type png)
 <use ../ablation styudy/figures/gpu_ablation.png>
 Package pdftex.def Info: ../ablation styudy/figures/gpu_ablation.png  used on i
-nput line 310.
+nput line 339.
 (pdftex.def)             Requested size: 138.6686pt x 55.46744pt.
- [11
+ [12
 
  <../ablation styudy/figures/architecture_factorial.png> <../ablation styudy/fi
-gures/quantum_ablation.png> <../ablation styudy/figures/gpu_ablation.png>] [12
-
-] [13
+gures/quantum_ablation.png> <../ablation styudy/figures/gpu_ablation.png>] [13
 
 ] [14
+
+] [15
 
 ]
 \tf@nav=\write6
@@ -1244,11 +1246,11 @@ Package rerunfilecheck Info: File `hamiltonian_geometric_short_presentation.out
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 26462 strings out of 467871
- 540527 string characters out of 5419828
- 920625 words of memory out of 5000000
- 54752 multiletter control sequences out of 15000+600000
- 712410 words of font info for 95 fonts, out of 8000000 for 9000
+ 26469 strings out of 467871
+ 540599 string characters out of 5419828
+ 920661 words of memory out of 5000000
+ 54756 multiletter control sequences out of 15000+600000
+ 718298 words of font info for 97 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,15n,123p,417b,797s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx6.pfb><C
@@ -1275,10 +1277,10 @@ pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsy5.pfb>
 <C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsy6.pfb><C:/
 Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsy7.pfb><C:/User
 s/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsy8.pfb>
-Output written on hamiltonian_geometric_short_presentation.pdf (14 pages, 13542
-44 bytes).
+Output written on hamiltonian_geometric_short_presentation.pdf (15 pages, 13748
+52 bytes).
 PDF statistics:
- 301 PDF objects out of 1000 (max. 8388607)
- 29 named destinations out of 1000 (max. 500000)
+ 309 PDF objects out of 1000 (max. 8388607)
+ 31 named destinations out of 1000 (max. 500000)
  177 words of extra memory for PDF output out of 10000 (max. 10000000)
 

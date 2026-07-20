@@ -16,7 +16,7 @@
 \hypersetup{colorlinks=true, linkcolor=hgpurple, urlcolor=hgpurple}
 
 \title{\color{hgpurple}\textbf{Hamiltonian-Geometric Optimization}\\[2pt]
-  \large Speaker Script and Anticipated Q\&A (14-Slide Deck)}
+  \large Speaker Script and Anticipated Q\&A (15-Slide Deck)}
 \author{Sparsho Chakraborty et al. --- Capacitor Fringes Project}
 \date{\today}
 
@@ -25,7 +25,7 @@
 
 \noindent This document accompanies \texttt{hamiltonian\_geometric\_short\_presentation.tex}.
 Part~\ref{sec:script} is a read-aloud script, one block per slide (each roughly 30--45 seconds,
-so the full talk runs about 8--10 minutes). Part~\ref{sec:qa} is a set of hard, likely audience
+so the full talk runs about 9--11 minutes). Part~\ref{sec:qa} is a set of hard, likely audience
 questions with grounded answers, meant to be read \emph{after} the talk, in preparation for
 questions --- not to be presented.
 
@@ -100,9 +100,23 @@ everything we compared against. The LLM row is the one I want to be honest about
 AdaFactor actually edges us out slightly on validation loss --- 6.765 versus our 6.778. But we
 still clearly beat AdamW and Lion, and we finish fastest of the five in wall-clock time.
 Muon-lite diverges entirely here, which is a reminder that these are untuned, single-seed runs,
-not a scaling claim.''
+not a scaling claim. And I mean that literally --- the next slide is exactly that check.''
 
-\subsection*{Slide 9 --- Modern Optimizer Comparison}
+\subsection*{Slide 9 --- Multi-Seed Reality Check}
+``We went back and re-ran three of those four workloads across 10 seeds each, and the LLM run
+across 3, using each benchmark's own script, not a re-implementation. I want to walk through this
+slide slowly because it's the most important honesty check in the whole talk. MNIST: the win
+doesn't hold up statistically, $p=0.688$. AlgoPerf-style: borderline favorable, $p=0.067$. DeepOBS
+is the big one --- the single-seed table showed us winning by more than two-to-one; across 10
+seeds we win exactly half of them. That was a lucky seed, not a real effect, and I'd rather tell
+you that than let the earlier table stand unchallenged. And then the LLM row flips the other way:
+we said `2nd best' before, like it was basically a tie --- it isn't. AdaFactor beats us in all
+three seeds and the gap is statistically significant. Last point: we tried to add PINN to this
+seed check too and couldn't finish it in the compute budget we had --- its geometric force needs
+finite differences over 64 dimensions every step, and that alone is why it's not in this table.
+That's a cost limitation, not a result, and I'm flagging it as exactly that.''
+
+\subsection*{Slide 10 --- Modern Optimizer Comparison}
 ``Now the harder comparison: against modern optimizers people actually use today. Left panel is
 compute cost versus accuracy --- Adam, our method, and Muon lead the pack. Middle panel is a
 10-seed sweep, and the near-tie holds up under that noise. Right panel is where it gets more
@@ -110,14 +124,14 @@ honest: as we scale model width, Adam scales a bit more consistently than we do.
 genuinely, but not a decisive win. And to be transparent, the version benchmarked here is a
 diagonal-metric reduction, not the full curvature-memory-entropy architecture.''
 
-\subsection*{Slide 10 --- Benchmark Results Table (Modern Optimizers)}
+\subsection*{Slide 11 --- Benchmark Results Table (Modern Optimizers)}
 ``And the numbers behind that comparison. Ranked by best-epoch validation loss on the spiral
 MLP: Adam, Hamiltonian-geometric, and Muon are within four ten-thousandths of each other ---
 that's noise, not a real ordering. AdamW and Lion trail by a clearer margin, and Shampoo is both
 slower per epoch and slightly worse here. The honest read is a narrow leading group of three, not
 a win for any one of them.''
 
-\subsection*{Slide 11 --- Extended Ablation Study: Design \& Evidence}
+\subsection*{Slide 12 --- Extended Ablation Study: Design \& Evidence}
 ``Everything up to here used the same seeds and setups as the original report. This next part is
 a separate, more rigorous replication we ran afterward, specifically to stress-test those claims:
 a full $2^3$ factorial crossing the geometric, memory, and spectral forces, with paired seeds ---
@@ -125,7 +139,7 @@ a full $2^3$ factorial crossing the geometric, memory, and spectral forces, with
 seeds on a CUDA scaling task using the diagonal reduction. The point of showing three panels at
 once is that this is one coherent study, not three unrelated plots.''
 
-\subsection*{Slide 12 --- Extended Ablation Study: Key Numbers}
+\subsection*{Slide 13 --- Extended Ablation Study: Key Numbers}
 ``And here's what that rigor actually found. On the architecture task, it confirms the earlier
 story precisely: the spectral term only has a significant effect --- a large one, $p$ under
 $10^{-4}$ --- when the metric is the genuine Hessian, not an unrelated control metric. But on the
@@ -136,24 +150,26 @@ magnitude less runtime. Same story on the CUDA scaling ablation: the diagonal re
 plain SGD and AdamW there too. I'd rather show you this than hide it --- it's exactly the kind of
 rigor that should update the claims, not just decorate them.''
 
-\subsection*{Slide 13 --- Limitations}
+\subsection*{Slide 14 --- Limitations}
 ``Four honest caveats. Scale: everything here is small; a full n-by-n metric is a mechanism
-demonstration, not something we're claiming replaces Adam in production. Statistics: the earlier
-classical and LLM benchmarks are mostly single-seed, but the modern-optimizer sweep and the
-extended ablation now give us real multi-seed variance --- and that's precisely where the
-negative quantum and GPU results show up. Tuning: learning rates come from modest grids, not
-exhaustive search. And comparability: both the modern-optimizer run and the CUDA ablation use a
-diagonal reduction, not the full curvature-memory-entropy architecture.''
+demonstration, not something we're claiming replaces Adam in production. Statistics: we now have
+real multi-seed variance from three places --- the modern-optimizer sweep, the classical/LLM
+reality check, and the extended ablation --- and it's not uniformly kind to us: DeepOBS's win
+evaporates and the LLM loss is real, not noise. Tuning: learning rates come from modest grids,
+not exhaustive search. And comparability: both the modern-optimizer run and the CUDA ablation use
+a diagonal reduction, not the full curvature-memory-entropy architecture.''
 
-\subsection*{Slide 14 --- Summary and Thank You}
+\subsection*{Slide 15 --- Summary and Thank You}
 ``Four takeaways. The formulation holds together once you're explicit about the spectral-force
 sign and the memory-metric construction. The empirical evidence is strongest exactly where the
 theory predicts it should be --- where there's real, exploitable curvature. Against modern
-optimizers, we're in the leading group, not decisively ahead of Adam or Muon. And the extended
-ablation sharpens that picture rather than softening it: it's a real, honest positive on the
-spectral term under a true Hessian metric, and a real, honest negative on quantum control and
-GPU-scale diagonal reduction. Happy to take questions, especially on the validation methodology,
-the ablation results, or where we'd want to push this next.''
+optimizers, we're in the leading group, not decisively ahead of Adam or Muon. And every rigor pass
+we added sharpens that picture rather than softening it: a real, honest positive on the spectral
+term under a true Hessian metric; a real, honest negative on quantum control, GPU-scale diagonal
+reduction, and now a WikiText-2 loss to AdaFactor that a 3-seed check shows is not noise; and one
+single-seed win, on DeepOBS, that the multi-seed check took back. Happy to take questions,
+especially on the validation methodology, the ablation results, or where we'd want to push this
+next.''
 
 \clearpage
 \section{Anticipated Questions and Answers}
@@ -269,6 +285,27 @@ significant, reproducible effect at all --- rather than the mixed, sign-flipping
 currently see --- that would undercut the core mechanistic claim. And if no cheap structured
 approximation to the full metric could be found, that would cap the framework's practical
 relevance at small-scale, mechanism-level demonstrations rather than anything deployable.
+
+\item \textbf{You added a multi-seed check and it took away a win. Why would you do that to your own paper?}\\
+Because a single favorable seed on DeepOBS-style ($0.0203$ vs.\ Adam's $0.0449$) was never a
+claim we could stand behind once asked ``does that replicate?'' --- and the honest answer, once
+we ran it, is no: 10 paired seeds give HG a win rate of 5/10 and $p=0.689$, indistinguishable from
+chance. We'd rather retract that specific claim ourselves, in our own report, than have someone
+else's replication attempt do it for us. The same check also went the other way: the WikiText-2
+loss to AdaFactor, which the single-seed table softened to ``2nd best,'' turns out to be
+consistent and significant across seeds ($p=0.0027$) --- so this wasn't a one-directional
+correction, it's just what happens when you actually check.
+
+\item \textbf{Is there any real theorem in this paper, or is it all empirical?}\\
+One, stated and proved for exactly the setting where it's provable in closed form: for a quadratic
+loss with the metric set to the exact (constant) Hessian, every correction term vanishes
+identically, and the resulting momentum recursion is provably stable and linearly convergent for
+any $0<\eta<\sqrt2$, $0\le\beta<1$, with a rate depending only on $(\eta,\beta)$ --- never on the
+Hessian's condition number. That's a real, checkable proof, not a citation to someone else's
+convergence theorem. It's deliberately narrow: it says nothing about the correction terms' effect
+when they're active on a non-quadratic loss, or about the regularized, $\theta$-dependent metric
+actually used in the benchmarks --- those remain empirical claims, backed by the ablations, not
+by this theorem.
 
 \end{enumerate}
 

@@ -1,0 +1,26 @@
+{
+  "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "workloads": [
+    "mnist",
+    "algoperf",
+    "deepobs"
+  ],
+  "comparison": "HG versus the lowest-loss non-HG optimizer within each seed",
+  "selection_warning": "The comparator is an oracle best-of-baselines per seed; this favors the comparator and its identity may vary.",
+  "summary_csv": "C:\\Users\\HP\\Desktop\\Hamlet\\HAMLET\\results\\classical_multiseed_summary.csv",
+  "raw_csv": "C:\\Users\\HP\\Desktop\\Hamlet\\HAMLET\\results\\classical_multiseed_raw.csv",
+  "per_seed_artifacts": "C:\\Users\\HP\\Desktop\\Hamlet\\HAMLET\\results\\_classical_multiseed_tmp"
+}
