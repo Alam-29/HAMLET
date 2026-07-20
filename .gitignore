@@ -1,4 +1,6 @@
 .venv/
+.venv-ablation/
+.uv-cache/
 .venv_algoperf/
 __pycache__/
 *.pyc

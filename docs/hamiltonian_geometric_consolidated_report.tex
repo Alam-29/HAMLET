@@ -8,7 +8,7 @@
 \usepackage{xcolor}
 \usepackage{caption}
 \usepackage{stfloats}
-\usepackage{microtype}
+\usepackage[expansion=false]{microtype}
 \usepackage{enumitem}
 
 \hypersetup{
@@ -84,9 +84,14 @@ Nishant M\textsuperscript{4}}
 This manuscript develops and evaluates a Hamiltonian--geometric optimizer for
 machine learning. It presents (1) the mathematical background of the
 framework; (2) an analytical validation of the update equations against the
-underlying Hamiltonian mechanics; and (3) empirical evidence from classical,
+underlying Hamiltonian mechanics; (3) empirical evidence from classical,
 geometric, and variational quantum benchmarks, together with visual
-diagnostics of the metric structure. A dedicated
+diagnostics of the metric structure; and (4) an independently coded,
+paired-seed, bootstrap-and-Holm-corrected extended ablation study that
+replicates the central curvature-dependent finding under a second
+implementation while also reporting where a fixed, non-task-tuned setting of
+the full architecture underperforms simple baselines, on a chaotic
+quantum-control task and a GPU-scale classification task. A dedicated
 derivation shows how gradient descent, momentum, Adam/RMSProp-style diagonal
 preconditioning, natural-gradient-style methods, entropy descent, and the full
 Hamiltonian-geometric optimizer arise within a single update family; it also gives
@@ -128,15 +133,19 @@ consistent as a mathematical dynamical system, and whether the additional
 geometric structure yields measurable advantages on workloads where curvature,
 conditioning, or phase-space behavior are relevant.
 
-The manuscript makes three contributions. First, it derives the unified update
+The manuscript makes four contributions. First, it derives the unified update
 family and gives a variational derivation of Adam as a diagonal-metric local
 step. Second, it extends the same view to modern optimizers, including AdamW,
 Lion, Shampoo/K-FAC, AdaFactor, LARS/LAMB, and Muon. Third, it evaluates the
 method on classical learning tasks, physics-informed learning, geometric
-diagnostics, a chaotic kicked-top control problem, and QAOA MaxCut. The
-resulting evidence supports a bounded claim: Hamiltonian-geometric
-optimization is especially effective when full-metric structure is available,
-while remaining competitive rather than uniformly dominant against the
+diagnostics, a chaotic kicked-top control problem, and QAOA MaxCut. Fourth,
+it reports an independently coded extended ablation study
+(\S\ref{sec:extended-ablation}) built specifically to stress-test the third
+contribution's findings under a second implementation, higher seed counts,
+and corrected multiple comparisons. The resulting evidence supports a
+bounded claim: Hamiltonian-geometric optimization is especially effective
+when full-metric structure is available, while remaining competitive rather
+than uniformly dominant against the
 strongest modern baselines.
 
 \section{Related Work}
@@ -153,7 +162,8 @@ a family of Bregman-Lagrangian dynamics whose Euler--Lagrange equations
 recover essentially all known accelerated first-order methods, already
 placing momentum and mirror-descent-style metrics in one variational
 framework. Betancourt, Jordan \& Wilson~\cite{betancourt2018symplectic}
-and Maddison et al.~\cite{maddison2018hamiltonian} go further and cast
+and Maddison et al.~\cite{maddison2018hamiltonian} -- whose title gives
+``Hamiltonian descent'' its name -- go further and cast
 accelerated methods explicitly as (dissipative, symplectic, or conformal)
 Hamiltonian systems on parameter-momentum phase space, with
 Fran\c ca et al.~\cite{franca2021conformal} analyzing the conformal-symplectic
@@ -187,7 +197,10 @@ treats the dynamical system as a \emph{prescriptive} template for a new,
 directly trainable optimizer with a metric built from the loss's own
 regularized Hessian, an explicit non-Markovian memory force, and a
 spectral-entropy regularizer on the metric's own eigenvalue spread --
-none of which appear as a package in the works above. Second,
+none of which appear as a package in the works above. The same template
+also recovers Adam and RMSProp themselves as a diagonal-metric special case
+(\S\ref{sec:special-cases}), rather than only the momentum-based accelerated
+methods the ODE-limit literature above already covers. Second,
 \S\ref{sec:modern-optimizers} extends the same correspondence to
 optimizers published independently and after this line of theoretical
 work (AdamW, Lion, Shampoo, Muon), which to our knowledge have not been
@@ -863,7 +876,26 @@ MLP~\cite{schneider2019deepobs}, the capacitor PINN, a chaotic quantum
 kicked-top control problem, and an exact-statevector QAOA
 MaxCut~\cite{farhi2014qaoa} angle-optimization problem.
 These experiments are intended as controlled local benchmarks rather than
-official MLCommons~\cite{dahl2023algoperf} submissions.
+official MLCommons~\cite{dahl2023algoperf} submissions, and the AlgoPerf- and
+DeepOBS-style labels below name local re-implementations inspired by those
+suites' workload style, not results obtained from the official benchmark
+harnesses.
+
+\textbf{Nomenclature.} ``Hamiltonian-geometric'' names five materially
+different configurations across this report, distinguished explicitly here
+and used consistently by these names hereafter: \textbf{Full HG} ($F_{\mathrm{geo}}$,
+$F_{\mathrm{mem}}$, and the spectral term all active on the full $n\times n$
+metric; used in the PINN benchmark, Table~\ref{tab:pinn}, and the
+architecture/quantum sub-studies of \S\ref{sec:extended-ablation});
+\textbf{Diagonal HG} (a diagonal adaptive metric with momentum only, all
+three correction terms absent; used in \S\ref{sec:modern-benchmark} and the
+GPU sub-study of \S\ref{sec:extended-ablation}); and, within the factorial
+designs of \S\ref{sec:architecture-ablation} and \S\ref{sec:extended-ablation}
+only, three single-term configurations, \textbf{HG w/o $G$}, \textbf{HG w/o
+$M$}, and \textbf{HG w/o $S$} (full architecture with exactly one correction
+term disabled). Results obtained under Diagonal HG are not, and are not
+presented as, evidence about Full HG's distinctive curvature/memory/entropy
+machinery; every table in this report states which configuration was used.
 
 \begin{table*}[t]
 \centering
@@ -961,8 +993,8 @@ delicate than in the classical benchmarks.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.48\linewidth]{../visualizations/pinn_benchmark/optimizer_convergence.png}
-\includegraphics[width=0.48\linewidth]{../visualizations/phase_space/phase_space.png}
+\includegraphics[width=0.48\linewidth]{../ppt_assets/test_result_media/pinn_benchmark/optimizer_convergence.png}
+\includegraphics[width=0.48\linewidth]{../ppt_assets/test_result_media/phase_space/phase_space.png}
 \caption{Log-scale training loss vs.\ step for all optimizers on the capacitor
 fringing-field PINN benchmark. Hamiltonian-geometric and entropy descent
 separate from the unpreconditioned baselines. The phase-space panel shows the
@@ -1048,7 +1080,7 @@ Shampoo & 117 & 0.024266 & 0.9933 \\
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.92\linewidth]{../visualizations/modern_optimizer_benchmark/modern_optimizer_loss.png}
+\includegraphics[width=0.92\linewidth]{../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimizer_loss.png}
 \caption{Validation loss vs.\ epoch for all six optimizers on the spiral MLP
 (log scale). Adam, Hamiltonian-geometric, and Muon occupy the same noisy
 band for most of training; Lion converges markedly slower under this
@@ -1110,9 +1142,9 @@ either way.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.32\linewidth]{../visualizations/modern_optimizer_benchmark/modern_optimizer_seed_sweep.png}
-\includegraphics[width=0.32\linewidth]{../visualizations/modern_optimizer_benchmark/modern_optimizer_scaling_sweep.png}
-\includegraphics[width=0.32\linewidth]{../visualizations/modern_optimizer_benchmark/modern_optimizer_pareto.png}
+\includegraphics[width=0.32\linewidth]{../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimizer_seed_sweep.png}
+\includegraphics[width=0.32\linewidth]{../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimizer_scaling_sweep.png}
+\includegraphics[width=0.32\linewidth]{../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimizer_pareto.png}
 \caption{Robustness follow-up on the modern-optimizer benchmark. Left:
 10-seed spread of best-epoch validation loss (log scale). Middle: best-epoch
 loss vs.\ hidden-layer width, same hyperparameters at every width -- Adam's
@@ -1249,8 +1281,8 @@ Entropy descent & -0.914199 & 0.914199 & 1.289 \\
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.48\linewidth]{../visualizations/qaoa_benchmark/qaoa_approximation_ratio.png}
-\includegraphics[width=0.48\linewidth]{../visualizations/quantum_chaos_benchmark/quantum_chaos_fidelity.png}
+\includegraphics[width=0.48\linewidth]{../ppt_assets/test_result_media/qaoa_benchmark/qaoa_approximation_ratio.png}
+\includegraphics[width=0.48\linewidth]{../ppt_assets/test_result_media/quantum_chaos_benchmark/quantum_chaos_fidelity.png}
 \caption{Variational quantum benchmark curves. Left: QAOA MaxCut approximation
 ratio over optimizer steps. Right: chaotic kicked-top state-transfer fidelity.
 The QAOA run is a cleaner VQA-style angle-optimization test, while the
@@ -1398,9 +1430,9 @@ that diagonal or flat optimizers cannot represent.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.32\linewidth]{../visualizations/geometric_evidence/condition_number_scaling.png}
-\includegraphics[width=0.32\linewidth]{../visualizations/geometric_evidence/phase_space_loss_energy.png}
-\includegraphics[width=0.32\linewidth]{../visualizations/geometric_evidence/saddle_escape.png}
+\includegraphics[width=0.32\linewidth]{../ppt_assets/test_result_media/geometric_evidence/condition_number_scaling.png}
+\includegraphics[width=0.32\linewidth]{../ppt_assets/test_result_media/geometric_evidence/phase_space_loss_energy.png}
+\includegraphics[width=0.32\linewidth]{../ppt_assets/test_result_media/geometric_evidence/saddle_escape.png}
 \caption{Mechanism-focused diagnostic graphs. Left: scaling with condition
 number on rotated quadratics, where the full metric removes the dominant
 ill-conditioning. Middle: double-well loss and Hamiltonian-style energy traces.
@@ -1466,7 +1498,7 @@ gap here is a convergence-speed effect, not a stability effect.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.95\linewidth]{../visualizations/metric_structure_scaling_study/metric_structure_scaling.png}
+\includegraphics[width=0.95\linewidth]{../ppt_assets/test_result_media/metric_structure_scaling_study/metric_structure_scaling.png}
 \caption{Median final loss vs.\ condition number, by metric structure, on the
 identical task and optimizer. The full metric is condition-number independent;
 the three coordinate-aligned structures all degrade, with the gap between them
@@ -1579,7 +1611,7 @@ Every partial configuration except plain Hessian-momentum (no corrections at
 all) shows at least one divergent seed; the full architecture is the only
 configuration besides the no-correction baseline that never diverges across
 all 40 seeds, and it reaches a median final loss ($-9.08$) matching tuned
-SGD and Adam (Figure~\ref{fig:ablation}, panel d). Inspecting a representative
+SGD and Adam. Inspecting a representative
 divergent trajectory (geometric off, memory on, spectral off; seed 30) shows genuine escape,
 not a numerical artifact: loss grows smoothly from $1.6$ to $3.5\times10^4$ by
 step 40 and to $5\times10^{12}$ by step 280, while a typical seed under the
@@ -1588,16 +1620,17 @@ events (1--4 of 40 per cell), no formal significance test is reported on the
 divergence counts themselves -- the counts are presented descriptively, not as
 a hypothesis-tested claim.
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.95\linewidth]{../visualizations/ablation_study/ablation_study_figure.png}
-\caption{(a) Full architecture (Hessian metric) tracks tuned SGD/Adam.
-(b) Main effects by metric: only the spectral term matters on average, and
-only under the true Hessian metric. (c) Divergence counts by configuration,
-Hessian metric -- only all-off and all-on are divergence-free. (d) Final-loss
-distributions for the four divergence-free configurations are similar.}
-\label{fig:ablation}
-\end{figure}
+\begin{quote}
+\small\textit{Plotting-artifact note: the four-panel figure for this specific
+run --- (a) full architecture (Hessian metric) tracking tuned SGD/Adam, (b)
+main effects by metric, (c) divergence counts by configuration, and (d)
+final-loss distributions for the divergence-free configurations --- is not
+retained in this repository. \S\ref{sec:extended-ablation} reports an
+independently coded, higher-seed-count replication of the same $2^3$ design
+(Figure~\ref{fig:ext-architecture}) with its plotting artifact included, so
+the qualitative claims above remain checkable against real generated data
+even though this specific image file is not.}
+\end{quote}
 
 \subsection{Interpretation}
 
@@ -1619,6 +1652,228 @@ that behave normally in every configuration; the raw divergence count is the
 statistic that exposes it. Neither the toy-metric run (which never
 diverges) nor the single-seed quantum ablation (which cannot see a rate at
 all) could have revealed this.
+
+\section{Extended Ablation Study: An Independent, Higher-Powered Replication}
+\label{sec:extended-ablation}
+
+The two ablations above establish real findings but share a weakness a single
+report can fall into unnoticed: the same author, the same codebase, and the
+same run producing both the claim and its only test. This section reports a
+second, independently coded and separately executed ablation package
+(\texttt{run\_ablation\_study.py}), built specifically to stress-test --
+not to re-confirm -- the architecture-ablation and quantum-benchmark
+findings above, plus a workload neither of them covers: GPU-scale neural
+training. Its design differs from the studies above in three ways that
+matter for how its results should be read: every comparison uses
+\emph{paired} random seeds (the same initial draw across every configuration
+within a study), bootstrap 95\% confidence intervals accompany every summary
+statistic, and every prespecified paired comparison (29 in total, across all
+three studies) carries a Holm--Bonferroni-corrected $p$-value alongside the
+uncorrected one, so a single favorable-looking comparison cannot be read in
+isolation. Provenance: git commit \texttt{b900d96f}, Python 3.11.9, NumPy
+2.4.6, and (for the GPU study) PyTorch 2.13.0+cu126 on an NVIDIA GeForce GTX
+1050. The completed run covers 40 architecture seeds at 300 steps, 10 quantum
+seeds at 40 iterations, and 10 GPU seeds at 600 minibatch steps; raw per-seed
+observations, not only summaries, are retained.
+
+\subsection{Architecture-factorial replication}
+\label{sec:ext-architecture}
+
+This sub-study re-implements \S\ref{sec:architecture-ablation}'s exact
+design -- the same $2^3$ factorial crossing $G$, $M$, and $S$ under a
+control (unrelated, positive-definite) metric and under the true Hessian
+metric of a $\theta$-dependent quartic, $N=40$ paired seeds, 300 steps --
+from scratch, in the separate package described above, rather than re-running
+the original script.
+
+\begin{table}[t]
+\centering\small
+\begin{tabular}{@{}llrr@{}}
+\toprule
+Metric & Factor & Effect & $p$ \\
+\midrule
+Control & $G$ & $-0.005$ & $0.991$ \\
+Control & $M$ & $-0.485$ & $0.304$ \\
+Control & $S$ & $\phantom{-}0.585$ & $0.216$ \\
+\textbf{Hessian} & \textbf{$S$} & \textbf{$2.08$} & $\mathbf{9.25\times10^{-5}}$ \\
+Hessian & $G$ & $-0.321$ & $0.541$ \\
+Hessian & $M$ & $\phantom{-}0.189$ & $0.719$ \\
+\bottomrule
+\end{tabular}
+\caption{Independent replication of the $2^3$ factorial-effects decomposition
+(cf.\ Table~\ref{tab:factorial-effects}).}
+\label{tab:ext-factorial-effects}
+\end{table}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.85\linewidth]{"../ablation styudy/figures/architecture_factorial.png"}
+\caption{Independent replication: final-loss distributions across the full
+$2^3$ factorial, control vs.\ Hessian metric. Compare with the
+plotting-artifact note in \S\ref{sec:architecture-ablation}.}
+\label{fig:ext-architecture}
+\end{figure*}
+
+The central finding replicates cleanly under a different implementation and a
+freshly generated dataset instance: the spectral term $S$ is large and
+highly significant under the true Hessian metric ($p=9.25\times10^{-5}$,
+replicating $p=3.2\times10^{-8}$ in \S\ref{sec:architecture-ablation}) and
+statistically inert under the control metric ($p=0.216$), while $G$ and $M$
+remain non-significant under the Hessian metric in both runs. One secondary
+finding does \emph{not} replicate: the original run found a small but
+significant average effect for $M$ under the control metric
+($p=7.4\times10^{-4}$); this replication finds no such effect ($p=0.304$).
+Reported plainly rather than explained away, this is exactly the kind of
+result a second, independent run exists to catch -- the primary,
+curvature-dependent claim about $S$ is robust across two independent
+implementations, while the smaller $M$ effect should now be treated as
+unreplicated rather than established.
+
+\subsection{Chaotic quantum-control replication}
+\label{sec:ext-quantum}
+
+This sub-study reuses the identical physical task from
+\S\ref{sec:quantum-benchmark} ($\mathrm{spin}\text{-}j=4$, 14 kicks,
+kick strength $7.0$, seed family $41{+}k$), but changes what is held fixed.
+Table~\ref{tab:quantum}'s favorable Hamiltonian-geometric result comes from a
+single configuration tuned aggressively \emph{for this workload}
+(learning rate $0.35$, $\beta=0.7$, up to $30$ energy-backtracks) with the
+geometric and memory corrections switched off. The critical quantum
+ablation (Table~\ref{tab:quantum-ablation}) instead varies components with
+the safeguard \emph{disabled}. This replication does neither: it holds one
+modest, non-task-tuned hyperparameter setting fixed (learning rate $0.16$,
+$\beta=0.30$, at most $4$ energy-backtracks) across all eight $G/M/S$
+configurations and against three simple baselines, so that the factorial
+comparison -- not any single tuned configuration -- is what gets measured.
+
+\begin{table}[t]
+\centering\scriptsize
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Configuration & $n$ & Fidelity [95\% CI] & Runtime (s) \\
+\midrule
+G0M0S0 (baseline) & 10 & $0.974$ [$0.946$, $0.989$] & $3.9$ \\
+G0M0S1 & 10 & $0.977$ [$0.926$, $0.986$] & $39.8$ \\
+G0M1S0 & 10 & $0.957$ [$0.931$, $0.973$] & $3.9$ \\
+G0M1S1 & 10 & $0.960$ [$0.919$, $0.979$] & $38.9$ \\
+G1M0S0 & 10 & $0.881$ [$0.831$, $0.915$] & $39.3$ \\
+G1M0S1 & 10 & $0.857$ [$0.821$, $0.916$] & $73.7$ \\
+G1M1S0 & 10 & $0.875$ [$0.837$, $0.914$] & $40.3$ \\
+G1M1S1 & 10 & $0.875$ [$0.819$, $0.916$] & $77.7$ \\
+Heavy-ball & 10 & $\mathbf{0.993}$ [$0.990$, $0.995$] & $1.2$ \\
+Entropy descent & 10 & $0.988$ [$0.979$, $0.990$] & $2.3$ \\
+AdamW & 10 & $0.986$ [$0.976$, $0.989$] & $1.2$ \\
+\bottomrule
+\end{tabular}
+\caption{Paired 10-seed best-seen fidelity, same kicked-top task as
+Table~\ref{tab:quantum}, fixed non-task-tuned hyperparameters throughout.}
+\label{tab:ext-quantum}
+\end{table}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.85\linewidth]{"../ablation styudy/figures/quantum_ablation.png"}
+\caption{Median fidelity with bootstrap 95\% confidence intervals, paired
+10-seed replication, same task as Table~\ref{tab:quantum}.}
+\label{fig:ext-quantum}
+\end{figure*}
+
+Under this fixed setting, the factorial-effects decomposition again finds a
+single dominant, significant term, but this time an unfavorable one: $G$ has
+a large, significant effect ($t\text{-effect}=0.88$, $p=1.57\times10^{-4}$),
+and it is a \emph{harmful} one -- every $G{=}1$ configuration is significantly
+worse than the G0M0S0 baseline in a Holm-corrected paired test
+($p<4\times10^{-4}$ in every case). $M$ and $S$ show no significant average
+effect individually ($p=0.171$ and $p=0.318$). More strikingly, every one of
+the eight Hamiltonian-geometric configurations -- including the best one,
+G0M0S0 -- is beaten by all three simple baselines; the paired comparisons
+against G0M0S0 are nominally significant for all three baselines
+($p=0.012$--$0.024$, paired $t$), remain Holm-significant by the Wilcoxon
+test for heavy-ball and entropy descent ($p=0.0195$ after correction), and
+cost the baselines $10$--$20\times$ less wall-clock runtime. \textbf{This
+does not contradict Table~\ref{tab:quantum}}, but it substantially narrows
+its scope: the earlier positive result depended on aggressive,
+workload-specific tuning of the learning rate, momentum, and backtrack
+budget together, not on the geometric or memory correction terms, which this
+replication shows are actively counterproductive on this task under a fixed,
+untuned setting. Read together, the two results say that on this particular
+chaotic-control problem, the energy-backtracking safeguard combined with an
+aggressively tuned learning rate and momentum can be made competitive, while
+the geometric correction term specifically should not be assumed to help
+here without such tuning -- and, on the evidence in hand, may actively hurt.
+
+\subsection{CUDA neural-scaling ablation}
+\label{sec:ext-gpu}
+
+The third sub-study asks whether \S\ref{sec:modern-benchmark}'s diagonal
+reduction -- momentum plus a diagonal adaptive metric, with
+$F_{\mathrm{geo}}$, $F_{\mathrm{mem}}$, and the spectral term all absent --
+retains any advantage in a GPU training loop, rather than the local NumPy
+spiral-MLP benchmark used there. The task is a synthetic linear-teacher
+classification problem (32{,}768 examples, 128 input features projected
+through a random teacher matrix to 10 classes with additive noise), trained
+on a 3-layer MLP ($128\to512\to256\to10$, GELU activations) for 600
+minibatch steps, 10 paired seeds, on the GTX 1050 named above. Four
+Hamiltonian-geometric variants (diagonal metric or scalar step size, each
+with or without momentum) are compared against tuned SGD-momentum and AdamW.
+
+\begin{table}[t]
+\centering\small
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Configuration & $n$ & Val.\ acc.\ [95\% CI] & Runtime (s) \\
+\midrule
+SGD-momentum & 10 & $\mathbf{0.993}$ [$0.991$, $0.994$] & $1.68$ \\
+AdamW & 10 & $0.987$ [$0.984$, $0.988$] & $2.06$ \\
+HG scalar, momentum & 10 & $0.979$ [$0.976$, $0.981$] & $3.87$ \\
+HG diagonal, momentum & 10 & $0.978$ [$0.977$, $0.983$] & $3.80$ \\
+HG diagonal, no momentum & 10 & $0.970$ [$0.969$, $0.971$] & $3.66$ \\
+HG scalar, no momentum & 10 & $0.972$ [$0.970$, $0.974$] & $3.66$ \\
+\bottomrule
+\end{tabular}
+\caption{Paired 10-seed validation accuracy, synthetic GPU classification
+task, diagonal-metric Torch reduction only (see text).}
+\label{tab:ext-gpu}
+\end{table}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.85\linewidth]{"../ablation styudy/figures/gpu_ablation.png"}
+\caption{Validation accuracy and wall-clock cost, paired 10-seed CUDA
+scaling ablation.}
+\label{fig:ext-gpu}
+\end{figure*}
+
+Momentum helps every Hamiltonian-geometric variant here, and the diagonal
+and scalar step-size choices are close to each other (within $0.001$ of
+validation accuracy) -- but every Hamiltonian-geometric variant trails both
+plain SGD-momentum and AdamW, at roughly double their runtime. Peak GPU
+memory is essentially identical across all six configurations
+($50.8$--$51.6\,\mathrm{MB}$), so the diagonal reduction carries no
+meaningful memory overhead; the cost here is entirely in wall-clock time and
+final accuracy, not memory footprint. This sharpens rather than reverses
+\S\ref{sec:modern-benchmark}'s own hedge that its diagonal-metric comparison
+is not evidence about the full architecture: on this GPU classification
+task, even the diagonal reduction alone does not merely tie simple
+baselines, as it did on the spiral MLP, but measurably underperforms them.
+
+\subsection{Cross-study interpretation}
+
+Taken together, this replication package does two things a single-author
+report cannot easily do for itself: it strengthens one finding and weakens
+another, in the same section. The strengthened finding is the central
+mechanistic claim of \S\ref{sec:architecture-ablation}: under two
+independent implementations, the spectral-entropy term is inert absent a
+curvature-derived metric and highly significant with one
+($p=3.2\times10^{-8}$ and $p=9.25\times10^{-5}$, respectively). The weakened
+findings are the quantum-control and GPU results: a fixed, non-task-tuned
+setting of the full architecture underperforms simple baselines on both a
+chaotic-control task and a synthetic GPU classification task, in the second
+case even in its cheap diagonal reduction. None of this reverses
+Table~\ref{tab:quantum}'s result, which used a different, deliberately tuned
+configuration -- but it does mean that result should not be read as evidence
+that the geometric or memory correction terms generalize favorably to
+quantum control without comparably aggressive, workload-specific tuning.
 
 \section{Symmetry Structure of the Metric}
 
@@ -1646,7 +1901,7 @@ $2.2\times10^{-15}$ (Figure~\ref{fig:symmetry}, bottom-right).
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.92\linewidth]{../visualizations/symmetry_exploits/metric_symmetry_exploits.png}
+\includegraphics[width=0.92\linewidth]{../ppt_assets/test_result_media/symmetry_exploits/metric_symmetry_exploits.png}
 \caption{Top: a random raw metric decomposed into symmetric part $S$ (kept)
 and antisymmetric part $A$ (discarded). Bottom-left: $p^{\mathsf T}Sp$ varies
 with $p$; $p^{\mathsf T}Ap$ is zero to floating-point precision for every $p$.
@@ -1670,13 +1925,17 @@ The scaling sweep in \S\ref{sec:robustness-followup} is the one direct test
 of this concern, and it is unfavorable: Hamiltonian-geometric's advantage at
 the tuned width does not persist as width grows.
 \item \textbf{Seed coverage is uneven across benchmarks.} The multi-seed
-check (10 seeds, \S\ref{sec:robustness-followup}) and the quantum robustness
-check (5 seeds, \S\ref{sec:quantum-benchmark}) are the only places variance
-across random seeds is reported; the four classical tables
+check (10 seeds, \S\ref{sec:robustness-followup}), the quantum robustness
+check (5 seeds, \S\ref{sec:quantum-benchmark}), and the extended ablation
+package (\S\ref{sec:extended-ablation}: 40/10/10 paired seeds) are the
+places variance across random seeds is reported; the four classical tables
 (Tables~\ref{tab:mnist}--\ref{tab:pinn}) and the quantum ablation
-(Table~\ref{tab:quantum-ablation}) are single-seed point estimates. $n=10$
-seeds is itself underpowered to resolve the near-tie with Adam and Muon
-decisively (\S\ref{sec:robustness-followup}).
+(Table~\ref{tab:quantum-ablation}) remain single-seed point estimates. Even
+where multi-seed data exists, $n=10$ is underpowered to resolve the near-tie
+with Adam and Muon decisively (\S\ref{sec:robustness-followup}), and several
+Holm-corrected comparisons in \S\ref{sec:extended-ablation} sit in a
+borderline $0.05$--$0.15$ range rather than being decisively resolved either
+way.
 \item \textbf{Hyperparameter tuning is a small grid search, not a proof of
 optimality.} Every optimizer's learning rate in every benchmark was found by
 sweeping a modest number of values on that same benchmark; the
@@ -1710,6 +1969,20 @@ DeepOBS-style benchmarks here are local, small-scale re-implementations
 inspired by those suites, not the official harnesses, because the official
 external dependencies are not present in this workspace
 (\S\ref{sec:experimental-validation}).
+\item \textbf{Under a fixed, non-task-tuned hyperparameter setting, the full
+architecture underperforms simple baselines on two workloads.} The extended
+ablation (\S\ref{sec:extended-ablation}) finds every Hamiltonian-geometric
+configuration -- including the diagonal reduction used elsewhere in this
+report -- beaten by heavy-ball, entropy descent, and/or AdamW on both the
+chaotic quantum-control task and a synthetic GPU classification task, at
+$2$--$20\times$ their runtime. This does not overturn
+Table~\ref{tab:quantum}'s favorable result, which relied on aggressive,
+workload-specific tuning of the learning rate, momentum, and backtrack
+budget rather than on the geometric or memory correction terms; but it means
+those correction terms should not be assumed to help on quantum-control or
+GPU workloads without comparably aggressive, per-workload tuning, and on the
+GPU task the diagonal reduction underperforms outright rather than merely
+tying its baselines.
 \end{enumerate}
 
 \section*{Reproducibility Statement}
@@ -1723,8 +1996,14 @@ closed-form recursion), the $L_1$-kinetic sign bound (Lion), the
 decoupled-decay/$L_2$ distinction (AdamW), the $\operatorname{vec}(AXB)$
 Kronecker identity (Shampoo), and the spectral-entropy maximality of
 orthogonalization (Muon). The benchmark pipeline writes its CSV/PNG outputs
-under \texttt{visualizations/} and prints the exact numbers quoted in this
-report; all code is NumPy-only with fixed, documented random seeds.
+and prints the exact numbers quoted in this report; all of this code is
+NumPy-only with fixed, documented random seeds. The extended ablation
+(\S\ref{sec:extended-ablation}) is a separate, independently coded package
+with its own raw-observation CSVs, bootstrap confidence intervals, and
+recorded software/hardware provenance (git commit \texttt{b900d96f}; see
+\S\ref{sec:extended-ablation} for full environment details), so that its
+results can be checked without depending on the same code path as the rest
+of this report.
 
 \section{Conclusion}
 
@@ -1750,16 +2029,22 @@ combinations can introduce rare divergent trajectories that are not captured
 by average-case summaries alone.
 
 Third, the benchmark evidence should be interpreted as competitive rather
-than universally dominant. Hamiltonian-geometric performs strongly on the
-classical tables and the kicked-top control instance, and it ties heavy-ball
-on QAOA MaxCut. Against modern optimizers derived as additional members of
-the same family -- AdamW, Lion, Shampoo, and Muon -- it lies in the leading
-group but does not separate decisively from Adam or Muon. The most defensible
-claim is therefore not that Hamiltonian-geometric supersedes existing
-optimizers, but that it provides a coherent unifying geometry in which many
-optimizer families arise from specific choices of metric, kinetic term, and
-potential splitting, while remaining empirically competitive on the benchmark
-suite studied here.
+than universally dominant, and the nomenclature introduced in
+\S\ref{sec:experimental-validation} matters for stating this precisely.
+Full HG performs strongly on the classical tables and the kicked-top control
+instance under aggressive, workload-specific tuning, and ties heavy-ball on
+QAOA MaxCut; Diagonal HG, compared against modern optimizers derived as
+additional members of the same family -- AdamW, Lion, Shampoo, and Muon --
+lies in their leading group but does not separate decisively from Adam or
+Muon, and (\S\ref{sec:extended-ablation}) underperforms simple baselines
+outright on a GPU-scale classification task. The most defensible claim is
+therefore not that Hamiltonian-geometric supersedes existing optimizers, but
+this: \emph{Hamiltonian-geometric optimization defines a unifying framework
+whose scalable diagonal reduction is competitive on selected
+stochastic-learning tasks, while controlled ablations identify the metric
+and momentum conditions under which its additional geometric terms help or
+hurt.} That framing -- not universal superiority -- is what the evidence in
+this report actually supports.
 
 Fourth, two follow-up studies (\S\ref{sec:robustness-followup}) were run
 specifically to stress-test rather than confirm this picture, since a report
@@ -1774,6 +2059,91 @@ well-posed and unit-verified, measurably \emph{hurt} performance on the one
 real benchmark it was tested against and is not claimed as a practical
 improvement. Both results are included because the honest boundary of a
 method matters as much as its favorable cases.
+
+Fifth, an independently coded, paired-seed, bootstrap-and-Holm-corrected
+replication package (\S\ref{sec:extended-ablation}) was run specifically to
+test whether the findings above survive a second implementation and a
+higher seed count. They survive unevenly, and both directions of that are
+reported. The central mechanistic claim -- that the spectral term is
+significant only under a genuine curvature-derived metric -- replicates
+cleanly under an independent implementation ($p=9.25\times10^{-5}$, against
+$p=3.2\times10^{-8}$ originally), while a smaller secondary effect from the
+original architecture ablation does not replicate. More consequentially, a
+fixed, non-task-tuned setting of the full architecture is beaten by simple
+baselines on both the chaotic quantum-control task and a synthetic GPU
+classification task -- on the latter, even in the cheap diagonal reduction
+used elsewhere in this report. This narrows, rather than reverses, the
+quantum-control result in \S\ref{sec:quantum-benchmark}: that result rested
+on aggressive, workload-specific tuning of the learning rate, momentum, and
+energy-backtracking budget, not on the geometric or memory correction terms,
+which the replication shows can be actively counterproductive absent such
+tuning. Reporting a replication that partly disagrees with earlier sections
+of the same report is itself the intended use of \S\ref{sec:extended-ablation}:
+the framework's boundary of usefulness is defined as much by where an
+independent, higher-powered check disagrees with a favorable result as by
+where it agrees.
+
+\section*{Positioning for a Stronger Venue}
+\label{sec:positioning}
+
+This report is best read as a careful study of \emph{when}
+Hamiltonian-geometric optimization helps, not as a claim of a universally
+superior optimizer -- and, in its current form, it falls short of the bar
+for a top-tier (Q1) optimization or machine-learning venue. Stating this
+precisely is itself part of the report's own stress-testing standard
+(\S\ref{sec:extended-ablation}, and the conclusions above). The concrete
+gaps, and what closing them would require, are:
+
+\begin{enumerate}
+\item \textbf{Official benchmark execution.} \S\ref{sec:experimental-validation}'s
+AlgoPerf- and DeepOBS-style workloads are local re-implementations of those
+suites' style, not results from the official harnesses; a stronger revision
+would run the official AlgoPerf harness (or drop the AlgoPerf name from
+headline claims) and include established DeepOBS problems beyond a single
+spiral MLP.
+\item \textbf{Multi-seed neural and LLM experiments with paired tests.}
+Coverage is uneven (Limitation 2): $\ge10$ seeds with confidence intervals
+and paired tests for small tasks, and $3$--$5$ seeds for LLM-scale training,
+are not yet uniformly present outside \S\ref{sec:robustness-followup} and
+\S\ref{sec:extended-ablation}.
+\item \textbf{Equal, seed-averaged tuning budgets.} Every optimizer's
+learning rate was swept comparably but not identically or exhaustively
+(Limitation 3); a stronger revision would fix a shared validation-trial
+budget and tune every optimizer, including baselines, over comparable
+learning-rate, momentum, decay, and regularization spaces.
+\item \textbf{Compute-normalized evaluation.} This report reports final
+loss/accuracy and wall-clock runtime, but not systematically: time-to-target,
+gradient-evaluation counts, and peak memory (reported only for
+\S\ref{sec:ext-gpu}'s CUDA study) across every benchmark, and energy
+consumption nowhere.
+\item \textbf{Stronger workloads.} No ImageNet-scale vision benchmark,
+official DeepOBS problem beyond one MLP, longer-horizon transformer
+pretraining, multiple WikiText/OpenWebText-scale runs, or multiple
+independent quantum systems and dimensions are included (Limitation 7);
+\S\ref{sec:ext-quantum}'s single kicked-top configuration and
+\S\ref{sec:experimental-validation}'s single 200-step WikiText-2 run are
+illustrative, not comprehensive.
+\item \textbf{An explicit theoretical result.} Every claim in this report is
+empirical or a direct symbolic/numeric verification of an equation
+(\S\ref{sec:review}); none is a convergence proof, a discretization-stability
+bound for the damped Hamiltonian update, a formal statement of when the
+metric provably improves conditioning, or an error bound for the diagonal or
+low-rank reductions used in \S\ref{sec:modern-benchmark} and
+\S\ref{sec:ext-gpu}. A theorem of any of these kinds -- even restricted to a
+convex or quadratic setting -- would be the single highest-value addition for
+a top optimization venue.
+\end{enumerate}
+
+Given these gaps, the manuscript in its current form should be read as
+promising but requiring major revision before a strong Q1 submission; the
+reframed central claim above (Conclusion) is deliberately the claim the
+\emph{current} evidence supports, not the claim a completed revision along
+the lines above might eventually support. The extended ablation's negative
+findings (\S\ref{sec:extended-ablation}) do not, by themselves, make the
+work unpublishable -- honestly identifying the operating regime in which
+Hamiltonian-geometric optimization helps, and the regime in which its
+additional corrections hurt, is closer to this report's actual scientific
+contribution than a claim of outright superiority would have been.
 
 \begin{thebibliography}{99}
 

@@ -1,18 +1,17 @@
 {
-  "generated_at": "2026-07-20 21:33:55 +0530",
+  "generated_at": "2026-07-21 02:51:01 +0530",
   "mode": "full",
   "arguments": {
     "mode": "full",
     "require_cuda": false,
     "skip_gpu": false,
-    "architecture_seeds": 40,
-    "architecture_steps": 300,
+    "architecture_seeds": null,
+    "architecture_steps": null,
     "quantum_seeds": null,
     "quantum_iterations": null,
     "gpu_seeds": null,
     "gpu_steps": null,
     "sections": [
-      "architecture",
       "report"
     ]
   },
@@ -28,6 +27,14 @@
     "probe": 256.0
   },
   "cuda_results_completed": true,
-  "elapsed_s": 182.93974129999697,
-  "git_commit": "be4f26f7e6f2a46e13a645205f43658c1cf70637"
+  "observed_design": {
+    "architecture_seeds": 40,
+    "architecture_steps": 300,
+    "quantum_seeds": 10,
+    "quantum_iterations": 40,
+    "gpu_seeds": 10,
+    "gpu_steps": 600
+  },
+  "elapsed_s": 12.651588299995637,
+  "git_commit": "b900d96f0368118d4250a207d07ccbf90dfe7f05"
 }

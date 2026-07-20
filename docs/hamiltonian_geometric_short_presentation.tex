@@ -29,6 +29,7 @@
 \setbeamercolor{structure}{fg=hgpurple}
 
 \newcommand{\safeimage}[2][]{\includegraphics[#1]{../ppt_assets/#2}}
+\newcommand{\abimage}[2][]{\includegraphics[#1]{"../ablation styudy/figures/#2"}}
 
 % 2x2 grid of graphs on one slide, with a compact caption line
 \newcommand{\quadfigs}[6]{
@@ -284,20 +285,76 @@
   \end{itemize}
 \end{frame}
 
-% ---------- 11. Limitations ----------
+% ---------- 11. Extended ablation study: evidence (3 graphs, one slide) ----------
+\begin{frame}{Extended Ablation Study --- Design \& Evidence}
+  \centering
+  \begin{columns}[T,totalwidth=\linewidth]
+    \begin{column}{0.32\linewidth}
+      \centering
+      \abimage[width=\linewidth,height=0.42\textheight,keepaspectratio]{architecture_factorial.png}
+    \end{column}
+    \begin{column}{0.32\linewidth}
+      \centering
+      \abimage[width=\linewidth,height=0.42\textheight,keepaspectratio]{quantum_ablation.png}
+    \end{column}
+    \begin{column}{0.32\linewidth}
+      \centering
+      \abimage[width=\linewidth,height=0.42\textheight,keepaspectratio]{gpu_ablation.png}
+    \end{column}
+  \end{columns}
+  \vspace{2mm}
+  {\scriptsize A separate, more rigorous $2^3$ factorial (geometric $\times$ memory $\times$
+  spectral force), paired-seed replication: 40 seeds/300 steps (architecture, left), 10
+  seeds/40 iterations (chaotic quantum, center), 10 seeds/600 steps (CUDA diagonal reduction,
+  right).}
+\end{frame}
+
+% ---------- 12. Extended ablation study: key numbers ----------
+\begin{frame}{Extended Ablation Study --- Key Numbers}
+  \scriptsize
+  \begin{tabular}{@{}p{0.27\linewidth}p{0.16\linewidth}rr@{}}
+    \toprule
+    Study & Factor & Effect & $p$ \\
+    \midrule
+    Architecture, control metric & $G$, $M$, $S$ & $\le 0.59$ & all $> 0.2$ (n.s.) \\
+    Architecture, \textbf{Hessian metric} & \textbf{$S$ (spectral)} & \textbf{$2.08$} & $\mathbf{9.25\times10^{-5}}$ \\
+    Architecture, Hessian metric & $G$, $M$ & $\le 0.32$ & $> 0.5$ (n.s.) \\
+    Quantum (kicked-top) & $G$ (geometric) & $0.88$ & $1.57\times10^{-4}$ \\
+    \bottomrule
+  \end{tabular}
+  \vspace{0.7em}
+  \begin{itemize}
+    \item \textbf{Architecture (40 seeds):} confirms the earlier story --- the spectral term
+      only matters when the metric is genuinely tied to loss curvature (Hessian), not under an
+      unrelated control metric.
+    \item \textbf{Quantum (10 seeds, paired):} here the honest result is negative --- turning on
+      the geometric force \emph{significantly lowers} fidelity ($0.86$--$0.88$ vs.\ $0.96$--$0.98$
+      with it off), and every simple baseline (heavy-ball $0.993$, entropy descent $0.988$, AdamW
+      $0.986$) beats every full-HG variant, while costing $10$--$20\times$ more runtime.
+    \item \textbf{CUDA scaling (10 seeds):} the diagonal-metric Torch reduction ($0.978$ acc.)
+      trails plain SGD ($0.993$) and AdamW ($0.987$) here too, at roughly $2\times$ the runtime.
+    \item Rigor rewards honesty: this replication does not uniformly favor Hamiltonian-geometric
+      --- it sharpens exactly where the framework helps (curvature-tied spectral term) and where
+      it currently does not (quantum control, GPU-scale diagonal reduction).
+  \end{itemize}
+\end{frame}
+
+% ---------- 13. Limitations ----------
 \begin{frame}{Limitations}
   \begin{itemize}
     \item \textbf{Scale}: all systems are small; full $n\times n$ metric is mechanism evidence,
       not a production-scale replacement for Adam-family optimizers.
-    \item \textbf{Statistics}: most results are single-seed point estimates; only the
-      modern-optimizer sweep has 10-seed variance.
+    \item \textbf{Statistics}: the earlier classical/LLM benchmarks are mostly single-seed;
+      multi-seed variance now comes from the modern-optimizer sweep (10 seeds) \emph{and} the
+      extended ablation (40/10/10 seeds) --- and the latter is where the negative quantum and
+      GPU-scaling results appear.
     \item \textbf{Tuning}: learning rates from modest grids, not exhaustive search.
-    \item \textbf{Comparability}: the modern-optimizer run uses a diagonal reduction, not the full
-      curvature-memory-entropy architecture.
+    \item \textbf{Comparability}: the modern-optimizer and CUDA-ablation runs both use a diagonal
+      reduction, not the full curvature-memory-entropy architecture.
   \end{itemize}
 \end{frame}
 
-% ---------- 12. Summary / Thank you ----------
+% ---------- 14. Summary / Thank you ----------
 \begin{frame}{Summary}
   \begin{itemize}
     \item Formulation is mathematically coherent once the spectral-force sign convention and
@@ -305,6 +362,9 @@
     \item Evidence is strongest where exploitable full-metric geometry is present.
     \item Places the method in the leading group of modern optimizers, without separating it
       decisively from Adam or Muon.
+    \item The rigorous extended ablation confirms this precisely: the spectral term earns its
+      keep only under a genuine Hessian metric, while quantum and GPU-scale results caution
+      against over-claiming.
   \end{itemize}
   \vfill
   \centering

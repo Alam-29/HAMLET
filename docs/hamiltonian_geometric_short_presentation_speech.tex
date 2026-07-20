@@ -16,7 +16,7 @@
 \hypersetup{colorlinks=true, linkcolor=hgpurple, urlcolor=hgpurple}
 
 \title{\color{hgpurple}\textbf{Hamiltonian-Geometric Optimization}\\[2pt]
-  \large Speaker Script and Anticipated Q\&A (12-Slide Deck)}
+  \large Speaker Script and Anticipated Q\&A (14-Slide Deck)}
 \author{Sparsho Chakraborty et al. --- Capacitor Fringes Project}
 \date{\today}
 
@@ -25,7 +25,7 @@
 
 \noindent This document accompanies \texttt{hamiltonian\_geometric\_short\_presentation.tex}.
 Part~\ref{sec:script} is a read-aloud script, one block per slide (each roughly 30--45 seconds,
-so the full talk runs about 7--9 minutes). Part~\ref{sec:qa} is a set of hard, likely audience
+so the full talk runs about 8--10 minutes). Part~\ref{sec:qa} is a set of hard, likely audience
 questions with grounded answers, meant to be read \emph{after} the talk, in preparation for
 questions --- not to be presented.
 
@@ -117,20 +117,43 @@ that's noise, not a real ordering. AdamW and Lion trail by a clearer margin, and
 slower per epoch and slightly worse here. The honest read is a narrow leading group of three, not
 a win for any one of them.''
 
-\subsection*{Slide 11 --- Limitations}
-``Four honest caveats. Scale: everything here is small; a full n-by-n metric is a mechanism
-demonstration, not something we're claiming replaces Adam in production. Statistics: most results
-are single-seed; the 10-seed sweep is the only place we have real variance data. Tuning: learning
-rates come from modest grids, not exhaustive search. And comparability: the modern-optimizer
-benchmark uses a reduced, diagonal version of our method, so that comparison specifically isn't
-testing the full framework.''
+\subsection*{Slide 11 --- Extended Ablation Study: Design \& Evidence}
+``Everything up to here used the same seeds and setups as the original report. This next part is
+a separate, more rigorous replication we ran afterward, specifically to stress-test those claims:
+a full $2^3$ factorial crossing the geometric, memory, and spectral forces, with paired seeds ---
+40 seeds over 300 steps on the architecture task, 10 seeds on the chaotic quantum task, and 10
+seeds on a CUDA scaling task using the diagonal reduction. The point of showing three panels at
+once is that this is one coherent study, not three unrelated plots.''
 
-\subsection*{Slide 12 --- Summary and Thank You}
-``Three takeaways. The formulation holds together once you're explicit about the spectral-force
+\subsection*{Slide 12 --- Extended Ablation Study: Key Numbers}
+``And here's what that rigor actually found. On the architecture task, it confirms the earlier
+story precisely: the spectral term only has a significant effect --- a large one, $p$ under
+$10^{-4}$ --- when the metric is the genuine Hessian, not an unrelated control metric. But on the
+chaotic quantum task, I want to be direct: the result is negative. Turning on the geometric force
+significantly \emph{lowers} fidelity, and every simple baseline we tested --- heavy-ball, entropy
+descent, AdamW --- beats every full Hamiltonian-geometric variant, while costing an order of
+magnitude less runtime. Same story on the CUDA scaling ablation: the diagonal reduction trails
+plain SGD and AdamW there too. I'd rather show you this than hide it --- it's exactly the kind of
+rigor that should update the claims, not just decorate them.''
+
+\subsection*{Slide 13 --- Limitations}
+``Four honest caveats. Scale: everything here is small; a full n-by-n metric is a mechanism
+demonstration, not something we're claiming replaces Adam in production. Statistics: the earlier
+classical and LLM benchmarks are mostly single-seed, but the modern-optimizer sweep and the
+extended ablation now give us real multi-seed variance --- and that's precisely where the
+negative quantum and GPU results show up. Tuning: learning rates come from modest grids, not
+exhaustive search. And comparability: both the modern-optimizer run and the CUDA ablation use a
+diagonal reduction, not the full curvature-memory-entropy architecture.''
+
+\subsection*{Slide 14 --- Summary and Thank You}
+``Four takeaways. The formulation holds together once you're explicit about the spectral-force
 sign and the memory-metric construction. The empirical evidence is strongest exactly where the
-theory predicts it should be --- where there's real, exploitable curvature. And against modern
-optimizers, we're in the leading group, not decisively ahead of Adam or Muon. Happy to take
-questions, especially on the validation methodology or where we'd want to push this next.''
+theory predicts it should be --- where there's real, exploitable curvature. Against modern
+optimizers, we're in the leading group, not decisively ahead of Adam or Muon. And the extended
+ablation sharpens that picture rather than softening it: it's a real, honest positive on the
+spectral term under a true Hessian metric, and a real, honest negative on quantum control and
+GPU-scale diagonal reduction. Happy to take questions, especially on the validation methodology,
+the ablation results, or where we'd want to push this next.''
 
 \clearpage
 \section{Anticipated Questions and Answers}
@@ -172,7 +195,22 @@ only the memory term is significant ($p{=}7.4\times10^{-4}$, a small $\sim$12\% 
 the true Hessian metric the spectral term becomes highly significant
 ($p{=}3.2\times10^{-8}$) while memory and geometric forces are not. The takeaway we lead with is
 that these terms matter most --- and differently --- depending on whether the metric is actually
-tied to real loss curvature.
+tied to real loss curvature. The extended, paired-seed ablation (10 seeds) sharpens this further
+in the geometric force's disfavor specifically: $G$ has a significant \emph{negative} effect on
+fidelity ($t$-effect $0.88$, $p{=}1.57\times10^{-4}$), and every full-HG variant (fidelity
+$0.86$--$0.98$) is beaten by every simple baseline tested --- heavy-ball ($0.993$), entropy
+descent ($0.988$), AdamW ($0.986$) --- at $10$--$20\times$ lower runtime.
+
+\item \textbf{Your own extended ablation study shows Hamiltonian-geometric losing on quantum control and GPU scaling. Doesn't that undercut the whole pitch?}\\
+It sharpens the pitch rather than undercutting it, and we'd rather present it than bury it. The
+extended ablation was commissioned specifically to stress-test the original claims with more
+seeds and a full factorial design, and it does two things at once: it \emph{strengthens} the
+architecture claim (spectral term significant only under the true Hessian metric, $p{=}9.25\times
+10^{-5}$, replicated at 40 seeds instead of the smaller earlier run), and it \emph{reverses} the
+naive expectation on quantum control and GPU-scale diagonal reduction, where every HG variant
+loses to simple baselines. The honest overall claim was always "strongest where full-metric
+curvature is exploitable, not uniformly superior" --- this result is that claim being confirmed
+in both directions, including the direction that doesn't flatter us.
 
 \item \textbf{On WikiText-2, AdaFactor beat you. Doesn't that undercut the "works across domains" claim?}\\
 Yes, on that specific metric, and we report it rather than hide it: AdaFactor's validation loss

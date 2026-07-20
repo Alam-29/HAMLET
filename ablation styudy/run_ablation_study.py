@@ -388,12 +388,60 @@ def summarize(rows: list[dict], value_key: str, group_keys: tuple[str, ...]) -> 
     return output
 
 
+def paired_tests(rows: list[dict], study: str, value_key: str, reference: str,
+                 metric: str | None = None, higher_is_better: bool = False) -> list[dict]:
+    subset = [r for r in rows if r.get("study") == study]
+    if metric is not None:
+        subset = [r for r in subset if r.get("metric") == metric]
+    by_config: dict[str, dict[int, float]] = {}
+    for row in subset:
+        value = float(row[value_key])
+        if np.isfinite(value):
+            by_config.setdefault(str(row["configuration"]), {})[int(row["seed"])] = value
+    if reference not in by_config:
+        return []
+    output: list[dict] = []
+    for config in sorted(by_config):
+        if config == reference:
+            continue
+        common = sorted(set(by_config[reference]) & set(by_config[config]))
+        ref = np.array([by_config[reference][seed] for seed in common])
+        candidate = np.array([by_config[config][seed] for seed in common])
+        improvement = (candidate - ref) if higher_is_better else (ref - candidate)
+        t_result = stats.ttest_rel(candidate, ref)
+        try:
+            wilcoxon_p = float(stats.wilcoxon(candidate, ref, zero_method="wilcox").pvalue)
+        except ValueError:
+            wilcoxon_p = 1.0
+        sd = float(np.std(improvement, ddof=1)) if len(improvement) > 1 else 0.0
+        output.append({
+            "study": study, "metric": metric or "none", "reference": reference,
+            "configuration": config, "n_pairs": len(common),
+            "mean_improvement": float(np.mean(improvement)),
+            "median_improvement": float(np.median(improvement)),
+            "cohen_dz": float(np.mean(improvement) / sd) if sd > 0 else 0.0,
+            "paired_t_p": float(t_result.pvalue), "wilcoxon_p": wilcoxon_p,
+        })
+    # Holm correction is applied separately within each predeclared comparison family.
+    for key in ("paired_t_p", "wilcoxon_p"):
+        order = np.argsort([float(r[key]) for r in output])
+        adjusted = np.ones(len(output))
+        running = 0.0
+        for rank, index in enumerate(order):
+            value = min(1.0, (len(output) - rank) * float(output[index][key]))
+            running = max(running, value)
+            adjusted[index] = running
+        for row, value in zip(output, adjusted):
+            row[f"holm_{key}"] = float(value)
+    return output
+
+
 def make_figures(architecture: list[dict], quantum: list[dict], gpu: list[dict]) -> None:
     FIGURES.mkdir(parents=True, exist_ok=True)
     fig, axes = plt.subplots(1, 2, figsize=(12, 4.8))
     for ax, metric in zip(axes, ("control", "hessian")):
         groups = {config: [float(r["final_loss"]) for r in architecture
-                           if r["metric"] == metric and r["configuration"] == config and not r["diverged"]]
+                           if r["metric"] == metric and r["configuration"] == config and not int(r["diverged"])]
                   for config in (config_name(*f) for f in FACTORS)}
         ax.boxplot(list(groups.values()), tick_labels=list(groups), showfliers=True)
         ax.tick_params(axis="x", rotation=45)
@@ -442,7 +490,7 @@ def tex_escape(value: object) -> str:
 
 
 def generate_tex(architecture_summary: list[dict], quantum_summary: list[dict],
-                 gpu_summary: list[dict], effects: list[dict], metadata: dict) -> None:
+                 gpu_summary: list[dict], effects: list[dict], paired: list[dict], metadata: dict) -> None:
     main_effects = [r for r in effects if r["term"] in ("G", "M", "S")]
     effect_lines = "\n".join(
         f"{tex_escape(r['study'])}/{tex_escape(r['metric'])} & {r['term']} & {r['factorial_effect']:.3g} & {r['p']:.3g} \\\\" for r in main_effects
@@ -510,6 +558,12 @@ metric.  The chaotic quantum experiment repeats the same eight configurations
 with paired problem seeds and adds AdamW, heavy-ball, and entropy-descent
 references.  Medians and nonparametric bootstrap 95\% intervals use raw
 per-seed values.  Diverged trials remain in the raw CSV and are counted.
+The completed data contain {metadata['observed_design']['architecture_seeds']}
+architecture seeds at {metadata['observed_design']['architecture_steps']} steps,
+{metadata['observed_design']['quantum_seeds']} quantum seeds at
+{metadata['observed_design']['quantum_iterations']} iterations, and
+{metadata['observed_design']['gpu_seeds']} CUDA seeds at
+{metadata['observed_design']['gpu_steps']} minibatch steps.
 
 \section{{Full-architecture factorial results}}
 \begin{{table}}[ht]\centering\scriptsize
@@ -535,6 +589,9 @@ Study/metric & Factor & Effect & $p$ \\\midrule
 \bottomrule\end{{tabular}}
 \caption{{Main factorial effects. Full interactions and standard errors are in \texttt{{results/factorial\_effects.csv}}.}}
 \end{{table}}
+Paired $t$ tests, Wilcoxon signed-rank tests, standardized paired effect sizes,
+and within-family Holm corrections are reported in
+\texttt{{results/paired\_tests.csv}} ({len(paired)} prespecified comparisons).
 
 \section{{Chaotic quantum-control replication}}
 \begin{{table}}[ht]\centering\small
@@ -593,10 +650,15 @@ def main() -> None:
     effects = factorial_effects(architecture, "architecture", "control")
     effects += factorial_effects(architecture, "architecture", "hessian")
     effects += factorial_effects(quantum, "quantum")
+    paired = paired_tests(architecture, "architecture", "final_loss", "G0M0S0", "control")
+    paired += paired_tests(architecture, "architecture", "final_loss", "G0M0S0", "hessian")
+    paired += paired_tests(quantum, "quantum", "final_fidelity", "G0M0S0", higher_is_better=True)
+    paired += paired_tests(gpu, "gpu_neural", "validation_accuracy", "HG_metric_momentum", higher_is_better=True)
     write_csv(RESULTS / "architecture_summary.csv", architecture_summary)
     write_csv(RESULTS / "quantum_summary.csv", quantum_summary)
     write_csv(RESULTS / "gpu_summary.csv", gpu_summary)
     write_csv(RESULTS / "factorial_effects.csv", effects)
+    write_csv(RESULTS / "paired_tests.csv", paired)
     make_figures(architecture, quantum, gpu)
 
     cuda_available, cuda_info, _torch = cuda_status()
@@ -606,12 +668,20 @@ def main() -> None:
         "platform": platform.platform(), "numpy": np.__version__,
         "scipy": stats.__version__ if hasattr(stats, "__version__") else "see scipy package",
         "cuda": cuda_info, "cuda_results_completed": bool(gpu),
+        "observed_design": {
+            "architecture_seeds": len({int(r["seed"]) for r in architecture}),
+            "architecture_steps": max((int(r["steps_requested"]) for r in architecture), default=0),
+            "quantum_seeds": len({int(r["seed"]) for r in quantum}),
+            "quantum_iterations": max((int(r["iterations"]) for r in quantum), default=0),
+            "gpu_seeds": len({int(r["seed"]) for r in gpu}),
+            "gpu_steps": max((int(r["steps"]) for r in gpu), default=0),
+        },
         "elapsed_s": time.perf_counter() - started,
         "git_commit": subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT,
                                      capture_output=True, text=True).stdout.strip(),
     }
     (RESULTS / "metadata.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
-    generate_tex(architecture_summary, quantum_summary, gpu_summary, effects, metadata)
+    generate_tex(architecture_summary, quantum_summary, gpu_summary, effects, paired, metadata)
     print(f"completed in {metadata['elapsed_s']:.1f}s; CUDA results={bool(gpu)}", flush=True)
     print(f"supplement = {HERE / 'supplementary_ablation.tex'}", flush=True)
 

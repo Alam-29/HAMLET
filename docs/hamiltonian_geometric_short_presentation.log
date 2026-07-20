@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.19)  20 JUL 2026 21:58
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.19)  21 JUL 2026 02:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -914,7 +914,7 @@ File: tikzlibrarybackgrounds.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 \pgf@layerboxsaved@background=\box84
 )
 LaTeX Font Info:    Trying to load font information for T1+lmss on input line 9
-1.
+2.
 
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmss.fd
 File: t1lmss.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
@@ -926,24 +926,24 @@ File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
 ) (hamiltonian_geometric_short_presentation.aux)
 \openout1 = `hamiltonian_geometric_short_presentation.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 91.
-LaTeX Font Info:    ... okay on input line 91.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 91.
-LaTeX Font Info:    ... okay on input line 91.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 91.
-LaTeX Font Info:    ... okay on input line 91.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 91.
-LaTeX Font Info:    ... okay on input line 91.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 91.
-LaTeX Font Info:    ... okay on input line 91.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 91.
-LaTeX Font Info:    ... okay on input line 91.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 91.
-LaTeX Font Info:    ... okay on input line 91.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 91.
-LaTeX Font Info:    ... okay on input line 91.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 91.
-LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 92.
+LaTeX Font Info:    ... okay on input line 92.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 92.
+LaTeX Font Info:    ... okay on input line 92.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 92.
+LaTeX Font Info:    ... okay on input line 92.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 92.
+LaTeX Font Info:    ... okay on input line 92.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 92.
+LaTeX Font Info:    ... okay on input line 92.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 92.
+LaTeX Font Info:    ... okay on input line 92.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 92.
+LaTeX Font Info:    ... okay on input line 92.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 92.
+LaTeX Font Info:    ... okay on input line 92.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 92.
+LaTeX Font Info:    ... okay on input line 92.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -1002,7 +1002,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/00miktex\epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-Package hyperref Info: Link coloring OFF on input line 91.
+Package hyperref Info: Link coloring OFF on input line 92.
  (hamiltonian_geometric_short_presentation.out)
 (hamiltonian_geometric_short_presentation.out)
 \@outlinefile=\write5
@@ -1038,73 +1038,73 @@ Dictionary: translator-theorem-dictionary, Language: English
 {C:/Users/HP/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/HP/AppD
 ata/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}]
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 1
-11.
+12.
 
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/lm\ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OML+lmm on input line 1
-11.
+12.
 
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/lm\omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-111.
+112.
 
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/lm\omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-111.
+112.
 
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/lm\omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10.95> on input line 111.
+(Font)              <10.95> on input line 112.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 111.
+(Font)              <8> on input line 112.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 111.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 111
+(Font)              <6> on input line 112.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 112
 .
 
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 111
+LaTeX Font Info:    Trying to load font information for U+msb on input line 112
 .
 
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <10.95> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 111.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 112.
  [2
 
 {C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathit.enc}{C:
 /Users/HP/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-rm.enc}]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 153.
+(Font)              <5> on input line 154.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <8> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 153.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 154.
  [3
 
 {C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathsy.enc}]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 169.
+(Font)              <10> on input line 170.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 169.
+(Font)              <7> on input line 170.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <10> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 169.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 170.
  [4
 
 ] [5
 
 ]
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <9> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 220.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 221.
 
 [6
 
@@ -1116,7 +1116,7 @@ racy.png Graphic file (type png)
 <use ../ppt_assets/test_result_media/mnist_optimizer_benchmark/mnist_test_accur
 acy.png>
 Package pdftex.def Info: ../ppt_assets/test_result_media/mnist_optimizer_benchm
-ark/mnist_test_accuracy.png  used on input line 229.
+ark/mnist_test_accuracy.png  used on input line 230.
 (pdftex.def)             Requested size: 121.3896pt x 75.45638pt.
 <../ppt_assets/test_result_media/deepobs_style_benchmark/deepobs_style_accuracy
 .png, id=109, 650.43pt x 419.166pt>
@@ -1125,7 +1125,7 @@ uracy.png Graphic file (type png)
 <use ../ppt_assets/test_result_media/deepobs_style_benchmark/deepobs_style_accu
 racy.png>
 Package pdftex.def Info: ../ppt_assets/test_result_media/deepobs_style_benchmar
-k/deepobs_style_accuracy.png  used on input line 229.
+k/deepobs_style_accuracy.png  used on input line 230.
 (pdftex.def)             Requested size: 117.08226pt x 75.45302pt.
 <../ppt_assets/test_result_media/algoperf_style_hg_nonzero_150epochs/algoperf_s
 tyle_validation_loss.png, id=110, 650.43pt x 419.166pt>
@@ -1134,7 +1134,7 @@ erf_style_validation_loss.png Graphic file (type png)
 <use ../ppt_assets/test_result_media/algoperf_style_hg_nonzero_150epochs/algope
 rf_style_validation_loss.png>
 Package pdftex.def Info: ../ppt_assets/test_result_media/algoperf_style_hg_nonz
-ero_150epochs/algoperf_style_validation_loss.png  used on input line 229.
+ero_150epochs/algoperf_style_validation_loss.png  used on input line 230.
 (pdftex.def)             Requested size: 117.08226pt x 75.45302pt.
 <../ppt_assets/test_result_media/industry_llm_benchmark_wikitext2_200steps/indu
 stry_llm_validation_loss.png, id=111, 628.3475pt x 375.804pt>
@@ -1143,7 +1143,7 @@ File: ../ppt_assets/test_result_media/industry_llm_benchmark_wikitext2_200steps
 <use ../ppt_assets/test_result_media/industry_llm_benchmark_wikitext2_200steps/
 industry_llm_validation_loss.png>
 Package pdftex.def Info: ../ppt_assets/test_result_media/industry_llm_benchmark
-_wikitext2_200steps/industry_llm_validation_loss.png  used on input line 229.
+_wikitext2_200steps/industry_llm_validation_loss.png  used on input line 230.
 (pdftex.def)             Requested size: 126.15625pt x 75.4519pt.
  [7
 
@@ -1152,7 +1152,7 @@ _wikitext2_200steps/industry_llm_validation_loss.png  used on input line 229.
 curacy.png> <../ppt_assets/test_result_media/algoperf_style_hg_nonzero_150epoch
 s/algoperf_style_validation_loss.png> <../ppt_assets/test_result_media/industry
 _llm_benchmark_wikitext2_200steps/industry_llm_validation_loss.png>]
-Overfull \hbox (1.33167pt too wide) in paragraph at lines 251--251
+Overfull \hbox (1.33167pt too wide) in paragraph at lines 252--252
 [][] 
  []
 
@@ -1166,7 +1166,7 @@ er_pareto.png Graphic file (type png)
 <use ../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimize
 r_pareto.png>
 Package pdftex.def Info: ../ppt_assets/test_result_media/modern_optimizer_bench
-mark/modern_optimizer_pareto.png  used on input line 261.
+mark/modern_optimizer_pareto.png  used on input line 262.
 (pdftex.def)             Requested size: 123.91711pt x 97.36345pt.
 <../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimizer_se
 ed_sweep.png, id=132, 578.16pt x 361.35pt>
@@ -1175,7 +1175,7 @@ er_seed_sweep.png Graphic file (type png)
 <use ../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimize
 r_seed_sweep.png>
 Package pdftex.def Info: ../ppt_assets/test_result_media/modern_optimizer_bench
-mark/modern_optimizer_seed_sweep.png  used on input line 261.
+mark/modern_optimizer_seed_sweep.png  used on input line 262.
 (pdftex.def)             Requested size: 138.673pt x 86.67062pt.
 <../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimizer_sc
 aling_sweep.png, id=133, 542.025pt x 361.35pt>
@@ -1184,7 +1184,7 @@ er_scaling_sweep.png Graphic file (type png)
 <use ../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimize
 r_scaling_sweep.png>
 Package pdftex.def Info: ../ppt_assets/test_result_media/modern_optimizer_bench
-mark/modern_optimizer_scaling_sweep.png  used on input line 261.
+mark/modern_optimizer_scaling_sweep.png  used on input line 262.
 (pdftex.def)             Requested size: 138.67355pt x 92.44904pt.
  [9
 
@@ -1193,9 +1193,35 @@ areto.png> <../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_o
 ptimizer_seed_sweep.png> <../ppt_assets/test_result_media/modern_optimizer_benc
 hmark/modern_optimizer_scaling_sweep.png>] [10
 
-] [11
+]
+<../ablation styudy/figures/architecture_factorial.png, id=153, 867.24pt x 346.
+896pt>
+File: ../ablation styudy/figures/architecture_factorial.png Graphic file (type 
+png)
+<use ../ablation styudy/figures/architecture_factorial.png>
+Package pdftex.def Info: ../ablation styudy/figures/architecture_factorial.png 
+ used on input line 310.
+(pdftex.def)             Requested size: 138.6686pt x 55.46744pt.
+<../ablation styudy/figures/quantum_ablation.png, id=154, 722.7pt x 346.896pt>
+File: ../ablation styudy/figures/quantum_ablation.png Graphic file (type png)
+<use ../ablation styudy/figures/quantum_ablation.png>
+Package pdftex.def Info: ../ablation styudy/figures/quantum_ablation.png  used 
+on input line 310.
+(pdftex.def)             Requested size: 138.6708pt x 66.56198pt.
+<../ablation styudy/figures/gpu_ablation.png, id=155, 867.24pt x 346.896pt>
+File: ../ablation styudy/figures/gpu_ablation.png Graphic file (type png)
+<use ../ablation styudy/figures/gpu_ablation.png>
+Package pdftex.def Info: ../ablation styudy/figures/gpu_ablation.png  used on i
+nput line 310.
+(pdftex.def)             Requested size: 138.6686pt x 55.46744pt.
+ [11
 
-] [12
+ <../ablation styudy/figures/architecture_factorial.png> <../ablation styudy/fi
+gures/quantum_ablation.png> <../ablation styudy/figures/gpu_ablation.png>] [12
+
+] [13
+
+] [14
 
 ]
 \tf@nav=\write6
@@ -1218,39 +1244,41 @@ Package rerunfilecheck Info: File `hamiltonian_geometric_short_presentation.out
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 26420 strings out of 467871
- 539019 string characters out of 5419828
- 920505 words of memory out of 5000000
- 54718 multiletter control sequences out of 15000+600000
- 700649 words of font info for 91 fonts, out of 8000000 for 9000
+ 26462 strings out of 467871
+ 540527 string characters out of 5419828
+ 920625 words of memory out of 5000000
+ 54752 multiletter control sequences out of 15000+600000
+ 712410 words of font info for 95 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,15n,123p,417b,797s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmmi10.pfb><
-C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmmi5.pfb><C:/U
-sers/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmmi6.pfb><C:/Users
-/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmmi7.pfb><C:/Users/HP/
-AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmmi8.pfb><C:/Users/HP/AppD
-ata/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr10.pfb><C:/Users/HP/AppData/
-Local/Programs/MiKTeX/fonts/type1/public/lm/lmr5.pfb><C:/Users/HP/AppData/Local
-/Programs/MiKTeX/fonts/type1/public/lm/lmr6.pfb><C:/Users/HP/AppData/Local/Prog
-rams/MiKTeX/fonts/type1/public/lm/lmr7.pfb><C:/Users/HP/AppData/Local/Programs/
-MiKTeX/fonts/type1/public/lm/lmr8.pfb><C:/Users/HP/AppData/Local/Programs/MiKTe
-X/fonts/type1/public/lm/lmss10.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/f
-onts/type1/public/lm/lmss12.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/font
-s/type1/public/lm/lmss8.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/ty
-pe1/public/lm/lmss9.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/
-public/lm/lmssbx10.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/p
-ublic/lm/lmsso10.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/pub
-lic/lm/lmsso8.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public
-/lm/lmsso9.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm
-/lmsy10.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lm
-sy5.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsy6.
-pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsy7.pfb>
-<C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsy8.pfb>
-Output written on hamiltonian_geometric_short_presentation.pdf (12 pages, 10660
-46 bytes).
+<C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx6.pfb><C
+:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx8.pfb><C:/Us
+ers/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmmi10.pfb><C:/Users
+/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmmi5.pfb><C:/Users/HP/
+AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmmi6.pfb><C:/Users/HP/AppD
+ata/Local/Programs/MiKTeX/fonts/type1/public/lm/lmmi7.pfb><C:/Users/HP/AppData/
+Local/Programs/MiKTeX/fonts/type1/public/lm/lmmi8.pfb><C:/Users/HP/AppData/Loca
+l/Programs/MiKTeX/fonts/type1/public/lm/lmr10.pfb><C:/Users/HP/AppData/Local/Pr
+ograms/MiKTeX/fonts/type1/public/lm/lmr5.pfb><C:/Users/HP/AppData/Local/Program
+s/MiKTeX/fonts/type1/public/lm/lmr6.pfb><C:/Users/HP/AppData/Local/Programs/MiK
+TeX/fonts/type1/public/lm/lmr7.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/f
+onts/type1/public/lm/lmr8.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/
+type1/public/lm/lmss10.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/typ
+e1/public/lm/lmss12.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/
+public/lm/lmss8.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/publ
+ic/lm/lmss9.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/l
+m/lmssbx10.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm
+/lmsso10.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/l
+msso8.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmss
+o9.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsy10.
+pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsy5.pfb>
+<C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsy6.pfb><C:/
+Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsy7.pfb><C:/User
+s/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsy8.pfb>
+Output written on hamiltonian_geometric_short_presentation.pdf (14 pages, 13542
+44 bytes).
 PDF statistics:
- 270 PDF objects out of 1000 (max. 8388607)
- 25 named destinations out of 1000 (max. 500000)
- 162 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 301 PDF objects out of 1000 (max. 8388607)
+ 29 named destinations out of 1000 (max. 500000)
+ 177 words of extra memory for PDF output out of 10000 (max. 10000000)
 
