@@ -94,6 +94,8 @@ optimizer-specific-minibatch design and must not be used in the manuscript.
   per-file SHA-256 manifest; the builder rejects absolute local paths and
   normalizes ZIP metadata for byte-for-byte reproducible rebuilds, then
   reopens and verifies every archived member before issuing the checksum.
+  Regression tests cover deterministic metadata, successful verification,
+  and rejection of a deliberately mismatched member hash.
 - [ ] Deposit the prepared release archive in a public repository and insert
   its archival URL/DOI in the data-availability statement.
 

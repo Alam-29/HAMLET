@@ -26,9 +26,9 @@ def deterministic_info(relative: str) -> zipfile.ZipInfo:
     return info
 
 
-def verify_written_archive(expected: list[dict[str, object]]) -> None:
+def verify_written_archive(output: Path, expected: list[dict[str, object]]) -> None:
     """Reopen the ZIP and verify its file set, sizes, and internal hashes."""
-    with zipfile.ZipFile(OUTPUT, "r") as archive:
+    with zipfile.ZipFile(output, "r") as archive:
         names = archive.namelist()
         if len(names) != len(set(names)):
             raise ValueError("duplicate member found in release archive")
@@ -85,7 +85,7 @@ def main() -> None:
             archive_manifest.append({"path": member, "bytes": len(data), "sha256": digest(data)})
         payload = (json.dumps({"schema_version": 1, "files": archive_manifest}, indent=2) + "\n").encode()
         archive.writestr(deterministic_info("RELEASE_MANIFEST.json"), payload)
-    verify_written_archive(archive_manifest)
+    verify_written_archive(OUTPUT, archive_manifest)
     archive_hash = digest(OUTPUT.read_bytes())
     OUTPUT.with_suffix(OUTPUT.suffix + ".sha256").write_text(
         f"{archive_hash}  {OUTPUT.name}\n", encoding="ascii"
