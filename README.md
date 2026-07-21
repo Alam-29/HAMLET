@@ -101,7 +101,9 @@ The authoritative audit-grade results can be verified without rerunning the
 long experiments. The command also refreshes the SHA-256 manifest and rebuilds
 the privacy-checked release archive, preventing those deliverables from
 drifting behind the checked evidence. ZIP member timestamps and permissions
-are normalized, so identical inputs produce the same archive checksum:
+are normalized, so identical inputs produce the same archive checksum. The
+builder reopens the ZIP and validates every member against its internal
+SHA-256 manifest before writing the external checksum:
 
 ```powershell
 .\scripts\reproduce_submission_evidence.ps1 -Mode verify

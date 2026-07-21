@@ -92,7 +92,8 @@ optimizer-specific-minibatch design and must not be used in the manuscript.
 - [x] Exact experiment dependency lock and SHA-256 archival artifact manifest.
 - [x] Privacy-checked code/data release archive with an internal
   per-file SHA-256 manifest; the builder rejects absolute local paths and
-  normalizes ZIP metadata for byte-for-byte reproducible rebuilds.
+  normalizes ZIP metadata for byte-for-byte reproducible rebuilds, then
+  reopens and verifies every archived member before issuing the checksum.
 - [ ] Deposit the prepared release archive in a public repository and insert
   its archival URL/DOI in the data-availability statement.
 

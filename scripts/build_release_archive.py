@@ -26,6 +26,26 @@ def deterministic_info(relative: str) -> zipfile.ZipInfo:
     return info
 
 
+def verify_written_archive(expected: list[dict[str, object]]) -> None:
+    """Reopen the ZIP and verify its file set, sizes, and internal hashes."""
+    with zipfile.ZipFile(OUTPUT, "r") as archive:
+        names = archive.namelist()
+        if len(names) != len(set(names)):
+            raise ValueError("duplicate member found in release archive")
+        if names.count("RELEASE_MANIFEST.json") != 1:
+            raise ValueError("release archive must contain exactly one internal manifest")
+        embedded = json.loads(archive.read("RELEASE_MANIFEST.json"))
+        if embedded != {"schema_version": 1, "files": expected}:
+            raise ValueError("embedded release manifest differs from the build manifest")
+        expected_names = {item["path"] for item in expected} | {"RELEASE_MANIFEST.json"}
+        if set(names) != expected_names:
+            raise ValueError("release archive member set differs from its manifest")
+        for item in expected:
+            data = archive.read(item["path"])
+            if len(data) != item["bytes"] or digest(data) != item["sha256"]:
+                raise ValueError(f"release member failed integrity check: {item['path']}")
+
+
 def main() -> None:
     evidence = json.loads(MANIFEST.read_text(encoding="utf-8"))
     paths = {item["path"] for item in evidence["authoritative_files"]}
@@ -65,11 +85,12 @@ def main() -> None:
             archive_manifest.append({"path": member, "bytes": len(data), "sha256": digest(data)})
         payload = (json.dumps({"schema_version": 1, "files": archive_manifest}, indent=2) + "\n").encode()
         archive.writestr(deterministic_info("RELEASE_MANIFEST.json"), payload)
+    verify_written_archive(archive_manifest)
     archive_hash = digest(OUTPUT.read_bytes())
     OUTPUT.with_suffix(OUTPUT.suffix + ".sha256").write_text(
         f"{archive_hash}  {OUTPUT.name}\n", encoding="ascii"
     )
-    print(f"wrote {OUTPUT.relative_to(ROOT)} with {len(archive_manifest)} files")
+    print(f"wrote and verified {OUTPUT.relative_to(ROOT)} with {len(archive_manifest)} files")
 
 
 if __name__ == "__main__":
