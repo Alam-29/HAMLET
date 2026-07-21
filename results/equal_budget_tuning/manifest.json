@@ -1,0 +1,47 @@
+{
+  "protocol": "six trials per optimizer, mean over disjoint tuning seeds, frozen evaluation",
+  "tuning_seeds": [
+    100,
+    101,
+    102
+  ],
+  "evaluation_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "trials_per_optimizer": 6,
+  "selected": {
+    "adamw": {
+      "learning_rate": 0.03,
+      "beta1": 0.9,
+      "beta2": 0.999,
+      "weight_decay": 0.0001
+    },
+    "nag": {
+      "learning_rate": 0.06,
+      "momentum": 0.9,
+      "weight_decay": 0.0001
+    },
+    "heavy_ball": {
+      "learning_rate": 0.06,
+      "momentum": 0.9,
+      "weight_decay": 0.0001
+    },
+    "hamiltonian_geometric": {
+      "learning_rate": 0.03,
+      "beta": 0.9,
+      "memory_coupling": 0.003,
+      "metric_decay": 0.99,
+      "metric_epsilon": 1e-08,
+      "weight_decay": 0.0001
+    }
+  }
+}

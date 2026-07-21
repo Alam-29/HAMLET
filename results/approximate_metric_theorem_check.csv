@@ -1,0 +1,5 @@
+delta,learning_rate,momentum,min_relative_eigenvalue,max_relative_eigenvalue,max_spectral_radius,interval_ok,theorem_condition,empirically_stable,complex_mode_radius,condition_number_A
+0.2,0.9,0.7,0.8,1.2,0.8366600265340758,True,True,True,0.8366600265340756,1.0
+0.2,0.9,0.7,0.8,1.2,0.8366600265340758,True,True,True,0.8366600265340756,100.0
+0.2,0.9,0.7,0.8,1.2,0.8366600265340758,True,True,True,0.8366600265340756,10000.0
+0.2,0.9,0.7,0.8,1.2,0.8366600265340758,True,True,True,0.8366600265340756,100000000.0

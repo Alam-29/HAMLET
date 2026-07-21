@@ -41,6 +41,7 @@ class RunResult:
     optimizer: str
     runtime_s: float
     history: list[dict[str, float]]
+    peak_gpu_memory_mb: float = 0.0
 
     @property
     def final(self) -> dict[str, float]:
@@ -154,6 +155,12 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--batch-size", type=int, default=16)
     parser.add_argument("--block-size", type=int, default=128)
     parser.add_argument("--eval-batches", type=int, default=10)
+    parser.add_argument(
+        "--target-val-loss",
+        type=float,
+        default=7.5,
+        help="Prespecified validation-loss threshold for time/update-to-target reporting.",
+    )
     parser.add_argument("--n-layer", type=int, default=4)
     parser.add_argument("--n-head", type=int, default=4)
     parser.add_argument("--n-embd", type=int, default=128)
@@ -218,7 +225,12 @@ def main() -> None:
         write_outputs(results, args, device, param_count, vocab_size, output_dir, seed)
         print_results(results)
     if len(seeded_results) > 1:
-        write_aggregate_outputs(seeded_results, args.output_dir)
+        write_aggregate_outputs(
+            seeded_results,
+            args.output_dir,
+            target_val_loss=args.target_val_loss,
+            max_steps=args.max_steps,
+        )
 
 
 def run_seed(
@@ -238,9 +250,20 @@ def run_seed(
         set_seed(seed)
         model = GPT2LMHeadModel(config).to(device)
         model.load_state_dict(initial_state)
+        if device.type == "cuda":
+            torch.cuda.reset_peak_memory_stats(device)
+            torch.cuda.synchronize(device)
         start = time.perf_counter()
         history = train_one(name, model, train_tokens, val_tokens, args, device, seed)
-        results.append(RunResult(name, time.perf_counter() - start, history))
+        if device.type == "cuda":
+            torch.cuda.synchronize(device)
+        runtime_s = time.perf_counter() - start
+        peak_memory_mb = (
+            torch.cuda.max_memory_allocated(device) / (1024.0**2)
+            if device.type == "cuda"
+            else 0.0
+        )
+        results.append(RunResult(name, runtime_s, history, peak_memory_mb))
     return results
 
 
@@ -321,6 +344,9 @@ def train_one(
     optimizer = make_optimizer(optimizer_name, model, args)
     train_generator = torch.Generator().manual_seed(seed)
     history = []
+    if device.type == "cuda":
+        torch.cuda.synchronize(device)
+    training_start = time.perf_counter()
     running_loss = 0.0
     running_count = 0
     for step in range(1, args.max_steps + 1):
@@ -338,12 +364,15 @@ def train_one(
             running_loss = 0.0
             running_count = 0
             val_loss = evaluate(model, val_tokens, args, device, seed)
+            if device.type == "cuda":
+                torch.cuda.synchronize(device)
             history.append(
                 {
                     "step": float(step),
                     "train_loss": train_loss,
                     "val_loss": val_loss,
                     "val_perplexity": math.exp(min(val_loss, 20.0)),
+                    "elapsed_s": time.perf_counter() - training_start,
                 }
             )
             print(f"{optimizer_name} step={step} val_loss={val_loss:.4f}", flush=True)
@@ -384,17 +413,18 @@ def write_outputs(
 
     with history_path.open("w", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
-        writer.writerow(["optimizer", "step", "train_loss", "val_loss", "val_perplexity"])
+        writer.writerow(["optimizer", "step", "train_loss", "val_loss", "val_perplexity", "elapsed_s"])
         for result in results:
             for row in result.history:
-                writer.writerow([result.optimizer, int(row["step"]), row["train_loss"], row["val_loss"], row["val_perplexity"]])
+                writer.writerow([result.optimizer, int(row["step"]), row["train_loss"], row["val_loss"], row["val_perplexity"], row["elapsed_s"]])
 
     with summary_path.open("w", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
-        writer.writerow(["optimizer", "final_train_loss", "final_val_loss", "final_val_perplexity", "runtime_s"])
+        writer.writerow(["optimizer", "final_train_loss", "final_val_loss", "final_val_perplexity", "runtime_s", "peak_gpu_memory_mb", "target_val_loss", "updates_to_target", "time_to_target_s", "target_reached"])
         for result in sorted(results, key=lambda item: item.final["val_loss"]):
             row = result.final
-            writer.writerow([result.optimizer, row["train_loss"], row["val_loss"], row["val_perplexity"], result.runtime_s])
+            reached = next((item for item in result.history if item["val_loss"] <= args.target_val_loss), None)
+            writer.writerow([result.optimizer, row["train_loss"], row["val_loss"], row["val_perplexity"], result.runtime_s, result.peak_gpu_memory_mb, args.target_val_loss, int(reached["step"]) if reached else "", reached["elapsed_s"] if reached else "", reached is not None])
 
     export_plot(results, loss_plot_path, "val_loss", "validation loss")
     export_plot(results, perplexity_plot_path, "val_perplexity", "validation perplexity")
@@ -415,19 +445,29 @@ def write_outputs(
         f"Seed: `{seed}` (identical training and evaluation samples for every optimizer)",
         f"Hamiltonian-geometric settings: lr=`{args.hg_lr}`, beta=`{args.hg_beta}`, metric decay=`{args.hg_metric_decay}`, memory decay=`{args.hg_memory_decay}`, memory coupling=`{args.hg_memory_coupling}`, weight decay=`{args.hg_weight_decay}`",
         "",
-        "| optimizer | final val loss | final val perplexity | runtime s |",
-        "|---|---:|---:|---:|",
+        f"Time-to-target threshold: validation loss <= `{args.target_val_loss}`; failures are right-censored at `{args.max_steps}` updates.",
+        "",
+        "| optimizer | final val loss | perplexity | runtime s | peak GPU MiB | updates to target | time to target s |",
+        "|---|---:|---:|---:|---:|---:|---:|",
     ]
     for result in sorted(results, key=lambda item: item.final["val_loss"]):
         final = result.final
-        lines.append(f"| {result.optimizer} | {final['val_loss']:.4f} | {final['val_perplexity']:.3f} | {result.runtime_s:.2f} |")
+        reached = next((row for row in result.history if row["val_loss"] <= args.target_val_loss), None)
+        updates = str(int(reached["step"])) if reached else f">{args.max_steps} (censored)"
+        target_time = f"{reached['elapsed_s']:.2f}" if reached else f">{result.runtime_s:.2f} (censored)"
+        lines.append(f"| {result.optimizer} | {final['val_loss']:.4f} | {final['val_perplexity']:.3f} | {result.runtime_s:.2f} | {result.peak_gpu_memory_mb:.1f} | {updates} | {target_time} |")
     report_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
     for path in (history_path, summary_path, loss_plot_path, perplexity_plot_path, report_path):
         print(f"exported = {path}")
 
 
-def write_aggregate_outputs(seeded_results: list[tuple[int, list[RunResult]]], output_dir: Path) -> None:
+def write_aggregate_outputs(
+    seeded_results: list[tuple[int, list[RunResult]]],
+    output_dir: Path,
+    target_val_loss: float = 7.5,
+    max_steps: int = 200,
+) -> None:
     csv_path = output_dir / "industry_llm_seed_aggregate.csv"
     report_path = output_dir / "industry_llm_seed_aggregate.md"
     rows = []
@@ -436,6 +476,12 @@ def write_aggregate_outputs(seeded_results: list[tuple[int, list[RunResult]]], o
         losses = [result.final["val_loss"] for result in matches]
         perplexities = [result.final["val_perplexity"] for result in matches]
         runtimes = [result.runtime_s for result in matches]
+        reached = [
+            next((item for item in result.history if item["val_loss"] <= target_val_loss), None)
+            for result in matches
+        ]
+        target_times = [item["elapsed_s"] for item in reached if item is not None and "elapsed_s" in item]
+        target_updates = [item["step"] for item in reached if item is not None]
         rows.append(
             {
                 "optimizer": optimizer,
@@ -445,6 +491,12 @@ def write_aggregate_outputs(seeded_results: list[tuple[int, list[RunResult]]], o
                 "mean_val_perplexity": statistics.fmean(perplexities),
                 "std_val_perplexity": statistics.stdev(perplexities),
                 "mean_runtime_s": statistics.fmean(runtimes),
+                "mean_peak_gpu_memory_mb": statistics.fmean(result.peak_gpu_memory_mb for result in matches),
+                "target_val_loss": target_val_loss,
+                "target_successes": sum(item is not None for item in reached),
+                "target_trials": len(matches),
+                "mean_updates_to_target_successes": statistics.fmean(target_updates) if target_updates else "",
+                "mean_time_to_target_s_successes": statistics.fmean(target_times) if target_times else "",
             }
         )
     rows.sort(key=lambda row: row["mean_val_loss"])
@@ -458,13 +510,18 @@ def write_aggregate_outputs(seeded_results: list[tuple[int, list[RunResult]]], o
         "",
         f"Seeds: `{', '.join(str(seed) for seed, _ in seeded_results)}`",
         "",
-        "| optimizer | mean val loss | std | mean perplexity | std | mean runtime s |",
-        "|---|---:|---:|---:|---:|---:|",
+        f"Target: validation loss <= `{target_val_loss}`; failures are right-censored at `{max_steps}` updates.",
+        "",
+        "| optimizer | mean val loss | std | runtime s | peak GPU MiB | target reached | updates (successes) | time s (successes) |",
+        "|---|---:|---:|---:|---:|---:|---:|---:|",
     ]
     for row in rows:
         lines.append(
             f"| {row['optimizer']} | {row['mean_val_loss']:.4f} | {row['std_val_loss']:.4f} | "
-            f"{row['mean_val_perplexity']:.2f} | {row['std_val_perplexity']:.2f} | {row['mean_runtime_s']:.2f} |"
+            f"{row['mean_runtime_s']:.2f} | {row['mean_peak_gpu_memory_mb']:.1f} | "
+            f"{row['target_successes']}/{row['target_trials']} | "
+            f"{row['mean_updates_to_target_successes'] or '--'} | "
+            f"{row['mean_time_to_target_s_successes'] or '--'} |"
         )
     report_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(f"exported = {csv_path}")

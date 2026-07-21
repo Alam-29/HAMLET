@@ -95,6 +95,29 @@ Hamiltonian-geometric optimizer, read `docs/mathematical_validation.md`.
 
 ## Run
 
+### Reproduce the submission evidence
+
+The authoritative audit-grade results can be verified without rerunning the
+long experiments:
+
+```powershell
+.\scripts\reproduce_submission_evidence.ps1 -Mode verify
+```
+
+To regenerate the full factorial ablation (including CUDA), paired classical
+and PINN replications, equal-budget held-out tuning, modern-optimizer
+robustness, the synchronized three-seed WikiText-2 compute audit, theorem
+checks, runtime-normalized evidence, tests, and SHA-256 artifact manifest:
+
+```powershell
+.\scripts\reproduce_submission_evidence.ps1 -Mode full
+```
+
+Use Python 3.11 with `requirements-repro.txt`. The full run takes several
+hours and requires CUDA. `results/submission_artifact_manifest.json` identifies
+the authoritative artifacts; older unpaired `classical_multiseed_*` files are
+retained for audit history but are superseded and must not be cited.
+
 ```powershell
 python .\main\run_models.py
 ```

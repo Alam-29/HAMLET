@@ -1,0 +1,9 @@
+Implementation notes
+
+MLCommons AlgoPerf evaluates training algorithms by time-to-target on fixed workloads and
+hardware. This benchmark reimplements AlgoPerf's target-setting/reference baseline families --
+AdamW, Nesterov Momentum, and Heavy Ball Momentum -- directly in NumPy rather than depending on
+the reference `algorithmic-efficiency` harness, and uses a fixed workload-agnostic tuning
+budget rather than the substantially larger budget used in official target-setting runs.
+
+Local max_trials_per_optimizer = 6

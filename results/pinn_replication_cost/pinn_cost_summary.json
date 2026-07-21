@@ -1,0 +1,20 @@
+{
+  "parameter_count": 65,
+  "metric_shape": [
+    65,
+    65
+  ],
+  "central_metric_probes_per_step": 130,
+  "target_steps": 600,
+  "target_seeds": 10,
+  "literal_fit_intercept_s": 0.5639860217412629,
+  "literal_fit_s_per_step": 2.776775860869954,
+  "predicted_literal_one_seed_s": 1666.629502543714,
+  "predicted_literal_ten_seed_hours": 4.629526395954761,
+  "measured_analytic_zero_one_seed_s": 3.977834300007089,
+  "estimated_speedup": 418.9791169885442,
+  "equivalence_basis": "metric is constant in theta, hence F_geo is identically zero",
+  "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "numpy": "2.4.6"
+}

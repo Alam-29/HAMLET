@@ -80,7 +80,10 @@ def deepobs_seed(seed: int, tmp: Path) -> tuple[float, float, str]:
 def pinn_seed(seed: int, tmp: Path) -> tuple[float, float, str]:
     out = tmp / f"pinn_{seed}"
     if not (out / "pinn_optimizer_summary.csv").exists():
-        _run("run_pinn_benchmark.py", seed, out, [])
+        # The fixed-feature PINN Hessian metric is constant in theta, so
+        # F_geo is exactly zero. Avoid the legacy 2n finite-difference probes
+        # that numerically rediscover this zero at every update.
+        _run("run_pinn_benchmark.py", seed, out, ["--disable-geometric-correction"])
     rows = _read_csv(out / "pinn_optimizer_summary.csv")
     return _extract(rows, "final_loss")
 
@@ -185,8 +188,8 @@ def main() -> None:
         "python": sys.version, "platform": platform.platform(), "seeds": args.seeds,
         "workloads": args.workloads, "comparison": "HG versus the lowest-loss non-HG optimizer within each seed",
         "selection_warning": "The comparator is an oracle best-of-baselines per seed; this favors the comparator and its identity may vary.",
-        "summary_csv": str(args.output_csv.resolve()), "raw_csv": str(args.raw_output_csv.resolve()),
-        "per_seed_artifacts": str(args.tmp_dir.resolve()),
+        "summary_csv": str(args.output_csv), "raw_csv": str(args.raw_output_csv),
+        "per_seed_artifacts": str(args.tmp_dir),
     }
     args.manifest.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     print(f"exported = {args.output_csv}")

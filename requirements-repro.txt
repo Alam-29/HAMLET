@@ -1,0 +1,14 @@
+# Exact environment used for the paired reruns and ablation audit on 2026-07-21.
+# Install with Python 3.11: python -m pip install -r requirements-repro.txt
+--extra-index-url https://download.pytorch.org/whl/cu126
+datasets==5.0.0
+huggingface_hub==1.24.0
+matplotlib==3.11.1
+numpy==2.4.6
+pandas==3.0.3
+pillow==12.3.0
+pyarrow==25.0.0
+scipy==1.17.1
+tokenizers==0.22.2
+torch==2.13.0+cu126
+transformers==5.14.1

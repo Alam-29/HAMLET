@@ -2,8 +2,32 @@
 .venv-ablation/
 .uv-cache/
 .venv_algoperf/
+.venv-algoperf-official/
 __pycache__/
 *.pyc
+
+# LaTeX intermediates (compiled PDFs remain eligible for version control)
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+
+# Downloaded third-party benchmark data (fetched by the runbooks)
+data/downloads/algoperf/
+data/downloads/deepobs/
+
+# Local diagnostic and hyperparameter-search scratch outputs
+results/_adamw_debug/
+results/_adamw_debug2/
+results/_adamw_lr_sweep/
+results/_classical_multiseed_tmp/
+results/_deepobs_smoketest/
+results/_hg_lr_sweep/
+results/_sgd_lr_sweep/
 
 # Generated benchmark/demo outputs (regenerate via README commands)
 visualizations/

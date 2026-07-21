@@ -71,11 +71,17 @@
   {\normalsize\bfseries\itshape}}
 \makeatother
 
-\title{A Hamiltonian--Geometric Optimization Framework for Machine Learning}
+\title{Hamiltonian--Geometric Optimization for Neural Learning Systems:
+Exact- and Approximate-Metric Theory with Controlled Ablations}
 \author{Sparsho Chakraborty\textsuperscript{1},
 Mohammad Alamgir\textsuperscript{2},
 Adreet Sarkar\textsuperscript{3}, and
-Nishant M\textsuperscript{4}}
+Nishanth M\textsuperscript{1}\\[-0.1em]
+\small \textsuperscript{1}Indian Institute of Technology Bhubaneswar, Odisha, India\\
+\small \textsuperscript{2}Narula Institute of Technology, West Bengal, India\\
+\small \textsuperscript{3}Indian Institute of Technology Guwahati, Assam, India\\
+\small Corresponding author: Sparsho Chakraborty
+(\texttt{25ph05023@gmail.com})}
 \date{}
 
 \begin{document}
@@ -105,11 +111,16 @@ analysis also establishes the sign convention for the spectral Hamiltonian and
 supplies an explicit vector-to-matrix construction for the memory metric
 $M_{ij}$, yielding a self-contained formulation suitable for empirical
 comparison.
+For constant quadratic metrics, two theorems give condition-number-independent
+linear convergence under the exact Hessian and an explicit stability bound
+for spectrally approximate metrics. Multi-seed replications, held-out
+equal-budget tuning, and synchronized time-to-target/memory measurements
+separate mechanism evidence from broad optimizer-superiority claims.
 \end{abstract}
 \vspace{0.35em}
 \begin{center}
-\small\textbf{Keywords:} Hamiltonian optimization; Riemannian metrics;
-adaptive optimizers; geometric machine learning; variational quantum algorithms.
+\small\textbf{Keywords:} dynamical systems; Riemannian preconditioning;
+adaptive methods; convergence analysis; optimizer ablation; physics-informed learning.
 \end{center}
 \vspace{0.45em}
 ]
@@ -850,10 +861,10 @@ trials.}
 
 Every claim elsewhere in this report is empirical or a direct numeric
 verification of an equation (\S\ref{sec:review}); this section supplies the
-one thing \S\ref{sec:positioning} identifies as missing, a genuine
-theorem, restricted honestly to the setting in which it is provable in
-closed form: an exact quadratic loss with the exact (constant) Hessian
-metric. It formalizes, rather than only measures
+two conditioning results, restricted honestly to the constant-metric
+quadratic setting in which they are provable in closed form. The first treats
+the exact Hessian; the second quantifies a spectrally approximate metric. They
+formalize, rather than only measure
 (Tables~\ref{tab:condition-scaling}, \ref{tab:metric-structure-scaling}),
 why the full metric removes condition-number dependence.
 
@@ -917,14 +928,78 @@ repeated-eigenvalue case, where the $2\times2$ block may be defective and
 $\|M^t\|$ can contain a polynomial prefactor.
 \end{proof}
 
-Two scope notes, stated as sharply as the theorem itself. First, this result
-covers only the base momentum dynamics with every correction term exactly
+\begin{theorem}[Linear convergence under a spectrally approximate constant metric]
+\label{thm:approximate-metric}
+Under the quadratic assumptions of Theorem~\ref{thm:conditioning}, let the
+constant metric be any $B\succ0$ satisfying, for some $0\le\delta<1$,
+\begin{equation}
+ (1-\delta)B\preceq A\preceq(1+\delta)B.
+ \label{eq:spectral-equivalence}
+\end{equation}
+With the correction terms off, $0\le\beta<1$, and
+\begin{equation}
+ 0<\eta^2(1+\delta)<2(1+\beta),
+ \label{eq:approximate-stability}
+\end{equation}
+the iterates converge linearly to zero. More precisely, if
+$\mu\in[1-\delta,1+\delta]$ is a generalized eigenvalue of $(A,B)$,
+its modal update has characteristic polynomial
+\begin{equation}
+ z^2-\bigl(1+\beta-\eta^2\mu\bigr)z+\beta.
+ \label{eq:approximate-modal-polynomial}
+\end{equation}
+Let $\rho_\delta$ be the largest root modulus over this interval. Then
+$\rho_\delta<1$, and for every $r\in(\rho_\delta,1)$ there is a finite
+$C(\delta,\eta,\beta,r)$ such that the transformed state obeys
+$\|(B^{1/2}\theta_t,B^{1/2}q_t)\|\le
+C r^t\|(B^{1/2}\theta_0,B^{1/2}q_0)\|$, where $q_t=B^{-1}p_t$.
+Thus the rate is independent of $\operatorname{cond}(A)$ whenever the
+relative approximation constant $\delta$ is; poor diagonal or low-rank
+approximations reintroduce conditioning precisely through a growing
+$\delta$ (or failure of Eq.~\eqref{eq:spectral-equivalence}).
+\end{theorem}
+
+\begin{proof}
+The constant metric again makes all metric-derivative corrections zero. Set
+$x_t=B^{1/2}\theta_t$, $u_t=B^{1/2}q_t$, and
+$C=B^{-1/2}AB^{-1/2}$. The update becomes
+$u_{t+1}=\beta u_t-\eta Cx_t$ and
+$x_{t+1}=x_t+\eta u_{t+1}$. Equation~\eqref{eq:spectral-equivalence}
+places every eigenvalue $\mu$ of the symmetric matrix $C$ in
+$[1-\delta,1+\delta]$. Orthogonally diagonalizing $C$ reduces each mode to
+the block
+$\left(\begin{smallmatrix}1-\eta^2\mu&\eta\beta\\-\eta\mu&\beta\end{smallmatrix}\right)$,
+whose determinant is $\beta$, trace is $1+\beta-\eta^2\mu$, and
+characteristic polynomial is Eq.~\eqref{eq:approximate-modal-polynomial}.
+The Jury conditions for a real monic quadratic are
+$1-\beta>0$, $\eta^2\mu>0$, and
+$2(1+\beta)-\eta^2\mu>0$. They hold simultaneously for the whole interval
+by Eq.~\eqref{eq:approximate-stability}; hence $\rho_\delta<1$.
+The same defective-eigenvalue-safe matrix-power argument used in
+Theorem~\ref{thm:conditioning}, followed by the orthogonal modal transform,
+gives the stated bound. Its constants involve only the compact relative
+spectrum interval and scalar update parameters, not the absolute eigenvalues
+or condition number of $A$.
+\end{proof}
+
+The executable audit in
+\path{results/approximate_metric_theorem_check.csv} evaluates the modal
+roots at $\delta=0.2$, $\eta=0.9$, and $\beta=0.7$ while changing
+$\operatorname{cond}(A)$ from $1$ to $10^8$; the maximum spectral radius is
+unchanged at $\sqrt{0.7}=0.836660$. A boundary test also verifies that
+violating Eq.~\eqref{eq:approximate-stability} makes the upper endpoint mode
+unstable.
+
+Two scope notes, stated as sharply as the theorems themselves. First, these results
+cover only the base momentum dynamics with every correction term exactly
 zero; it is not a claim about $F_{\mathrm{geo}}$, $F_{\mathrm{mem}}$, or the
 spectral term's effect when they are active on a non-quadratic loss --
 those effects remain the empirical, sign-mixed findings of
 \S\ref{sec:architecture-ablation} and \S\ref{sec:extended-ablation}, not a
-theorem. Second, the theorem requires the metric to be \emph{exactly} the
-constant Hessian $A$; \S\ref{sec:experimental-validation}'s benchmarks use a
+theorem. Second, Theorem~\ref{thm:approximate-metric} permits an approximate
+constant metric only under the explicit relative spectral bound
+Eq.~\eqref{eq:spectral-equivalence}; it does not cover an arbitrary diagonal
+approximation. \S\ref{sec:experimental-validation}'s benchmarks use a
 \emph{regularized}, generally $\theta$-dependent Hessian metric, for which
 $F_{\mathrm{geo}}\ne0$ and the guarantee above does not directly apply.
 Near an isolated, non-degenerate local minimum $\theta^\ast$ of a general
@@ -957,6 +1032,26 @@ Eqs.~\eqref{eq:update-p}--\eqref{eq:update-theta} directly, with:
   the sign convention derived in \S\ref{sec:review}.
 \end{itemize}
 
+\paragraph{Implemented cost.}
+Let $n$ be the parameter dimension and $C_g(n)$ the cost of one metric
+evaluation. The NumPy reference implementation is deliberately dense: it
+stores $g$, $g^{-1}$, and, when $F_{\mathrm{geo}}$ is enabled, the full
+$n\times n\times n$ finite-difference derivative tensor. A basic dense step
+without geometric or spectral forces costs $O(C_g(n)+n^3)$ time and $O(n^2)$
+auxiliary storage because it eigendecomposes and pseudoinverts the metric.
+The implemented central-difference geometric force makes $2n$ additional
+metric evaluations and positive-definiteness checks, giving
+$O(nC_g(n)+n^4)$ time and $O(n^3)$ auxiliary storage. The finite-difference
+spectral force has the same $O(nC_g(n)+n^4)$ leading time but need not retain
+the derivative tensor. By contrast, Diagonal HG in the PyTorch experiments
+stores two vectors and performs elementwise operations, hence $O(n)$ time
+and $O(n)$ optimizer-state storage per step, in addition to the ordinary
+gradient evaluation. Block-diagonal and low-rank metrics are conceptual
+scaling routes in this paper, not implemented or benchmarked here; no
+empirical complexity claim is made for them. These costs explain why the
+full architecture is a mechanism study at the reported scales rather than a
+production-scale competitor.
+
 \section{Experimental Validation}
 \label{sec:experimental-validation}
 
@@ -964,16 +1059,16 @@ The finite-plate capacitor fringing-field problem
 ($\nabla^2\varphi = 0$ with Dirichlet plate boundary conditions) is used as a
 physics-informed neural network benchmark. The present evaluation expands
 the empirical scope to six workloads: MNIST softmax
-regression~\cite{lecun1998mnist}, an
-AlgoPerf-style MLP~\cite{dahl2023algoperf}, a DeepOBS-style
-MLP~\cite{schneider2019deepobs}, the capacitor PINN, a chaotic quantum
+regression~\cite{lecun1998mnist}, two synthetic spiral-MLP protocols (an
+equal-budget tuning protocol informed by AlgoPerf's evaluation
+principles~\cite{dahl2023algoperf}, and a fixed-hyperparameter robustness
+protocol informed by DeepOBS~\cite{schneider2019deepobs}), the capacitor PINN, a chaotic quantum
 kicked-top control problem, and an exact-statevector QAOA
 MaxCut~\cite{farhi2014qaoa} angle-optimization problem.
 These experiments are intended as controlled local benchmarks rather than
-official MLCommons~\cite{dahl2023algoperf} submissions, and the AlgoPerf- and
-DeepOBS-style labels below name local re-implementations inspired by those
-suites' workload style, not results obtained from the official benchmark
-harnesses.
+official MLCommons~\cite{dahl2023algoperf} submissions. The two spiral-MLP
+protocols are local synthetic experiments, not results obtained from either
+official benchmark harness.
 
 \textbf{Nomenclature.} ``Hamiltonian-geometric'' names five materially
 different configurations across this report, distinguished explicitly here
@@ -1012,7 +1107,7 @@ Entropy descent & 0.1663 & 0.3210 & 0.9513 & 0.9040 \\
 
 \begin{table*}[t]
 \centering
-\caption{Local AlgoPerf-style MLP benchmark with equal short tuning budgets.
+\caption{Synthetic spiral-MLP tuning protocol with equal short tuning budgets.
 Lower validation loss is better.}
 \label{tab:algoperf-local}
 \begin{tabular}{@{}lrrr@{}}
@@ -1029,7 +1124,7 @@ Nesterov & 0.0696 & 0.9833 & 0.409 \\
 
 \begin{table*}[t]
 \centering
-\caption{DeepOBS-style nonconvex MLP benchmark. Lower validation loss is
+\caption{Synthetic spiral-MLP robustness protocol. Lower validation loss is
 better.}
 \label{tab:deepobs-local}
 \begin{tabular}{@{}lrrrr@{}}
@@ -1067,9 +1162,9 @@ best reported validation or test loss. This result depends on two
 methodological details that should be stated explicitly.
 
 \begin{enumerate}
-\item \textbf{Reproducibility.} Optimizer-specific minibatch seeds are fixed
-by deterministic integer offsets, so each method is evaluated under a stable
-data-ordering protocol.
+\item \textbf{Reproducibility and pairing.} All optimizers receive identical
+minibatch indices within each experimental seed (a common-random-numbers
+design), so paired differences are not confounded by data-ordering luck.
 \item \textbf{Learning-rate calibration.} The Hamiltonian-geometric update
 uses the learning rate once in the momentum update and again when mapping
 momentum to a parameter displacement (Eqs.~33--34; see
@@ -1106,7 +1201,7 @@ Tables~\ref{tab:mnist}--\ref{tab:pinn} above, and the WikiText-2 LLM run
 (\S\ref{sec:experimental-validation}), are single-seed point estimates -- a
 limitation stated plainly elsewhere in this report
 (\S\ref{sec:limitations}, item 2). This subsection closes that gap directly
-for the three cheapest classical benchmarks and the LLM run, using each
+for all four classical benchmarks and the LLM run, using each
 workload's own checked-in script re-run across multiple seeds (not a
 reimplementation), with a paired $t$-test against each seed's best
 non-Hamiltonian-geometric optimizer -- the same statistical protocol as
@@ -1118,35 +1213,47 @@ non-Hamiltonian-geometric optimizer -- the same statistical protocol as
 \toprule
 Workload & $n$ & HG mean $\pm$ SD & Best-other mean $\pm$ SD & $d_z$ & Holm $p$ \\
 \midrule
-MNIST (test loss) & 10 & $0.336\pm0.027$ & $0.338\pm0.028$ & $-0.13$ & $1.000$ \\
-AlgoPerf-style (val.\ loss) & 10 & $0.0485\pm0.028$ & $0.0549\pm0.026$ & $-0.66$ & $0.201$ \\
-DeepOBS-style (val.\ loss) & 10 & $0.0580\pm0.039$ & $0.0551\pm0.025$ & $0.13$ & $1.000$ \\
+MNIST (test loss) & 10 & $0.337\pm0.028$ & $0.338\pm0.029$ & $-0.26$ & $0.430$ \\
+Spiral MLP, tuned (val.\ loss) & 10 & $0.0514\pm0.025$ & $0.0537\pm0.026$ & $-0.90$ & $0.058$ \\
+Spiral MLP, fixed (val.\ loss) & 10 & $0.0465\pm0.036$ & $0.0571\pm0.027$ & $-0.65$ & $0.143$ \\
 WikiText-2 LLM (val.\ loss) & 3 & $7.368\pm0.015$ & $7.237\pm0.006$ & $11.12$ & $\mathbf{0.011}$ \\
+Capacitor PINN (final loss) & 10 & $17.135\pm0.082$ & $17.272\pm0.074$ & $-2.24$ & $\mathbf{0.0003}$ \\
 \bottomrule
 \end{tabular}
 \caption{Multi-seed replication against each seed's lowest-loss non-HG
 comparator (lower is better). $d_z$ is the standardized paired difference
 (HG minus comparator); $p$-values use paired $t$-tests with Holm correction
-across the four workloads. This per-seed oracle comparator favors the
-baseline family; LLM best-other is AdaFactor in every seed.}
+across the four paired classical workloads and the LLM comparison. The
+classical reruns use identical minibatch streams within seed. This per-seed
+oracle comparator favors the baseline family; LLM best-other is AdaFactor in
+every seed.}
 \label{tab:classical-multiseed}
 \end{table*}
 
-The picture changes materially once seed variance is accounted for, and not
-in Hamiltonian-geometric's favor. On MNIST, the single-seed win
-(Table~\ref{tab:mnist}) does not replicate as a reliable effect: HG wins
-7 of 10 seeds, but the paired difference is not significant (Holm
-$p=1.000$).
-AlgoPerf-style is a borderline, directionally favorable case (HG wins 8/10,
-unadjusted $p=0.067$, Holm $p=0.201$), similar in character to
-\S\ref{sec:robustness-followup}'s
-Adam comparison. \textbf{DeepOBS-style is the most consequential reversal
-in this report}: Table~\ref{tab:deepobs-local}'s single-seed result showed
-Hamiltonian-geometric winning by more than a factor of two ($0.0203$ vs.\
-Adam's $0.0449$); across 10 seeds, HG wins only 5 of 10 -- a coin flip -- and
-the paired difference is not significant (Holm $p=1.000$). That single-seed table
-entry should therefore not be read as a reliable advantage on this workload;
-it was, on the evidence here, a favorable draw of the seed. The WikiText-2
+\paragraph{Sensitivity of the paired design.}
+For a two-sided paired $t$-test at a conservative per-comparison threshold
+$\alpha=0.05/5=0.01$, the minimum standardized paired effect detectable
+with 80\% power is $|d_z|=1.332$ at $n=10$ and $|d_z|=7.320$ at $n=3$
+(noncentral-$t$ calculation). At unadjusted $\alpha=0.05$, the corresponding
+thresholds are $0.997$ and $3.265$. Consequently, the MNIST and DeepOBS
+non-significant results are evidence of uncertainty, not equivalence; their
+confidence intervals and effect sizes should guide interpretation. Conversely,
+the observed LLM effect ($d_z=11.12$) is large enough to be resolved even by
+the three-seed design. The 40-seed architecture experiment can detect
+$|d_z|\ge0.565$ at the same conservative threshold, but smaller component
+effects remain outside its planned sensitivity.
+
+The paired rerun gives a more stable picture. On MNIST, HG wins 6 of 10 seeds
+and the difference remains unresolved (unadjusted and Holm $p=0.430$).
+The tuned spiral-MLP protocol is consistently favorable (HG wins 9/10; $d_z=-0.90$;
+unadjusted $p=0.019$, Holm $p=0.058$), although the familywise-corrected
+parametric result narrowly misses $0.05$; the paired Wilcoxon result remains
+significant after Holm correction ($p=0.012$). On the fixed spiral-MLP protocol, HG wins
+8/10 and has a moderate paired effect ($d_z=-0.65$), but uncertainty remains
+substantial (unadjusted $p=0.072$, Holm $p=0.143$). Thus the large
+single-seed DeepOBS result should be interpreted as an exaggerated instance
+of a favorable but not yet statistically resolved tendency, rather than as
+a reliable factor-of-two advantage. The WikiText-2
 LLM result is the opposite kind of correction: the single-seed table already
 showed HG trailing AdaFactor slightly; the 3-seed replication shows this is
 not noise -- AdaFactor beats Hamiltonian-geometric in all 3 seeds, and the
@@ -1157,17 +1264,54 @@ to the run-to-run spread ($\mathrm{SD}\approx0.015$). Reported plainly: on
 this LLM workload, the earlier ``2nd-best, fastest wall-clock'' framing
 understated how consistent AdaFactor's advantage actually is.
 
-A multi-seed check of the capacitor PINN table was attempted with the same
-protocol but is not included here: each Hamiltonian-geometric PINN run
-computes $F_{\mathrm{geo}}$ by finite differences over a 64-dimensional
-metric at every one of 600 steps (\S\ref{sec:computational-form}), and a
-single seed did not complete evaluation within this report's available
-compute budget -- consistent with \S\ref{sec:quantum-benchmark}'s own
-critical-ablation observation that explicit finite-difference metric
-differentiation is over an order of magnitude slower than the other
-correction terms. A multi-seed
-PINN check is therefore left as a concrete, costed item of future work
-rather than attempted with a reduced, non-comparable configuration.
+The PINN replication exploits an exact simplification rather than changing
+the optimizer: because its fixed-feature Hessian metric is constant in
+$\theta$, $F_{\mathrm{geo}}=0$ analytically. The legacy literal path still
+uses $2n=130$ central-difference metric probes per update to rediscover that
+zero. A retained timing study
+(\texttt{results/pinn\_replication\_cost/}) estimates $2.777$ s/update,
+$1667$ s per 600-step seed, and $4.63$ h for 10 seeds; directly applying the
+analytic zero takes $3.98$ s/seed, a $419\times$ speedup. Under this
+mathematically equivalent path, HG beats entropy descent (the best non-HG
+method in every seed) in 10/10 trials: mean paired difference $-0.1375$,
+$t(9)=-7.08$, unadjusted $p=5.81\times10^{-5}$, five-test Holm
+$p=2.91\times10^{-4}$, Wilcoxon $p=0.00195$, and $d_z=-2.24$.
+
+\subsection{Confirmatory equal-budget, seed-averaged tuning}
+\label{sec:equal-budget-tuning}
+
+To remove the remaining ambiguity around optimizer-specific tuning effort,
+the principal tuned spiral-MLP comparison was repeated under a fully explicit
+selection/evaluation split. AdamW, NAG, heavy-ball, and diagonal HG each
+receive exactly six configurations fixed in the checked-in search spaces.
+Each configuration is ranked by mean validation loss on tuning seeds
+$\{100,101,102\}$; the selected configuration is then frozen and evaluated
+on disjoint seeds $0$--$9$. Thus no evaluation seed selects its own
+hyperparameters, and HG receives neither more trials nor more tuning seeds.
+
+\begin{table}[t]
+\centering\small
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Optimizer & Val. loss mean $\pm$ SD & HG wins & Holm $p$ \\
+\midrule
+HG & $0.05290\pm0.02466$ & -- & -- \\
+AdamW & $0.05371\pm0.02556$ & 7/10 & $0.593$ \\
+NAG & $0.08830\pm0.02473$ & 10/10 & $3.99\times10^{-7}$ \\
+Heavy-ball & $0.09063\pm0.02528$ & 10/10 & $3.99\times10^{-7}$ \\
+\bottomrule
+\end{tabular}
+\caption{Held-out evaluation after equal six-trial, three-seed tuning.
+``HG wins'' counts paired evaluation seeds; Holm correction covers the three
+HG comparisons. Raw tuning and evaluation rows are retained under
+\texttt{results/equal\_budget\_tuning/}.}
+\label{tab:equal-budget-tuning}
+\end{table}
+
+HG and AdamW remain statistically unresolved (mean difference $-0.00081$,
+$d_z=-0.18$), while both momentum baselines are clearly worse. This confirms
+the evidence-aligned claim: diagonal HG belongs to the leading group on this
+small stochastic workload, but does not establish superiority over AdamW.
 
 \subsection{Phase-space visualization of the optimizer trajectory}
 \label{sec:phase-space}
@@ -1279,59 +1423,58 @@ hyperparameters as Table~\ref{tab:modern-optimizers}.}
 \toprule
 Optimizer & Loss (mean $\pm$ std) \\
 \midrule
-\textbf{hamiltonian\_geometric} & $\mathbf{0.01817 \pm 0.00860}$ \\
-muon & $0.01992 \pm 0.01123$ \\
-adam & $0.02066 \pm 0.00993$ \\
-adamw & $0.02105 \pm 0.01111$ \\
-lion & $0.02265 \pm 0.01391$ \\
-shampoo & $0.04125 \pm 0.02071$ \\
+\textbf{muon} & $\mathbf{0.01708 \pm 0.00892}$ \\
+hamiltonian\_geometric & $0.02084 \pm 0.01397$ \\
+adam & $0.02185 \pm 0.01127$ \\
+adamw & $0.02222 \pm 0.01182$ \\
+lion & $0.02224 \pm 0.01414$ \\
+shampoo & $0.03870 \pm 0.02310$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-HG has the best \emph{mean} over 10 seeds, but the standard deviations are
-large relative to the gaps separating HG, Muon, Adam, and AdamW -- their
+Muon has the best \emph{mean} over 10 seeds, but the standard deviations are
+large relative to the gaps separating Muon, HG, Adam, AdamW, and Lion -- their
 spreads overlap heavily (Figure~\ref{fig:robustness}, left), confirming the
 single-seed near-tie rather than resolving it into a clear ranking. Shampoo
 alone separates clearly from the rest. Because every optimizer trained on the
-same paired (theta$_0$, dataset) draw per seed, a paired $t$-test is licensed
-and more informative than the unpaired spread alone: HG vs.\ Adam gives
-$t(9){=}{-2.234}$, $p{=}0.052$ (borderline, HG lower on 7/10 seeds); HG vs.\
-Muon gives $t{=}{-0.838}$, $p{=}0.424$; HG vs.\ AdamW gives $t{=}{-1.457}$,
-$p{=}0.179$. Read plainly: there is a weak, borderline-significant
-directional signal favoring HG over Adam specifically, and no significant
-signal against Muon or AdamW -- consistent with, but slightly more informative
-than, ``no clear ranking.'' $n=10$ seeds remains underpowered to settle this
-either way.
+same paired (theta$_0$, dataset, minibatch stream) draw per seed, paired tests
+are licensed and more informative than the unpaired spread alone. HG vs.\ Adam
+gives $t(9){=}{-0.449}$, $p{=}0.664$ (HG lower on 7/10 seeds); HG vs.\ Muon gives
+$t{=}0.894$, $p{=}0.395$; HG vs.\ AdamW gives $t{=}{-0.836}$, $p{=}0.425$; and
+HG vs.\ Lion gives $t{=}{-1.352}$, $p{=}0.209$. Only HG vs.\ Shampoo separates
+($t{=}{-5.487}$, unadjusted $p=3.9\times10^{-4}$; HG lower on 10/10 seeds).
+Read plainly: the corrected paired-stream experiment supports no ranking among
+Muon, HG, Adam, AdamW, and Lion. $n=10$ remains underpowered to resolve small
+differences among that leading group.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.32\linewidth]{../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimizer_seed_sweep.png}
-\includegraphics[width=0.32\linewidth]{../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimizer_scaling_sweep.png}
-\includegraphics[width=0.32\linewidth]{../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimizer_pareto.png}
+\includegraphics[width=0.32\linewidth]{../ppt_assets/test_result_media/modern_optimizer_benchmark_paired/modern_optimizer_seed_sweep.png}
+\includegraphics[width=0.32\linewidth]{../ppt_assets/test_result_media/modern_optimizer_benchmark_paired/modern_optimizer_scaling_sweep.png}
+\includegraphics[width=0.32\linewidth]{../ppt_assets/test_result_media/modern_optimizer_benchmark_paired/modern_optimizer_pareto.png}
 \caption{Robustness follow-up on the modern-optimizer benchmark. Left:
 10-seed spread of best-epoch validation loss (log scale). Middle: best-epoch
-loss vs.\ hidden-layer width, same hyperparameters at every width -- Adam's
-loss falls monotonically with width while Hamiltonian-geometric's does not,
-so Adam overtakes it by width 96. Right: mean runtime vs.\ mean loss over
-the 10 seeds; Hamiltonian-geometric is Pareto-optimal \emph{at this specific
-model size}.}
+loss vs.\ hidden-layer width, same hyperparameters at every width. Right: mean
+runtime vs.\ mean loss over the 10 seeds. Every optimizer receives the same
+minibatch stream within each seed.}
 \label{fig:robustness}
 \end{figure*}
 
 The middle panel of Figure~\ref{fig:robustness} is the most important
 negative-leaning result in this report: as hidden-layer width increases from
 8 to 96 with the hyperparameters fixed at their tuned values, Adam's
-validation loss decreases monotonically ($0.0186\to0.0099$), while
-Hamiltonian-geometric's does not ($0.0225\to0.0158\to0.0124\to0.0138\to0.0127$)
-and Adam overtakes it by width 96. This is exactly the scalability concern
+validation loss changes from $0.0188$ to $0.0120$, while
+Hamiltonian-geometric changes non-monotonically
+($0.0358\to0.0154\to0.0158\to0.0147\to0.0135$), and Adam is better at widths
+8, 16, and 96. This is exactly the scalability concern
 raised in this report's own introduction: Hamiltonian-geometric's edge at the
 tuned operating point does not extrapolate to larger models without
 re-tuning, while Adam's diagonal preconditioner keeps improving with scale on
 this task. It is reported here precisely because it argues against, not for,
 treating Hamiltonian-geometric as a generally superior optimizer. Shampoo's
 cost also scales sharply with width over the same sweep (runtime
-$1.0\,\mathrm{s}\to21.2\,\mathrm{s}$ from width 8 to 96), the clearest direct evidence
+$1.9\,\mathrm{s}\to23.6\,\mathrm{s}$ from width 8 to 96), the clearest direct evidence
 for the eigendecomposition cost argued for it above.
 
 Learning-rate sensitivity curves (not shown as a table for space) add a
@@ -1606,7 +1749,8 @@ step-size calibration.}
 \label{fig:geometric-evidence-graphs}
 \end{figure*}
 
-\subsection{Metric-structure scaling: does richness of $g$ predict the advantage?}
+\subsection{Metric-structure scaling: does richness of
+\texorpdfstring{$g$}{g} predict the advantage?}
 \label{sec:metric-structure-scaling}
 
 The condition-scaling result above (Table~\ref{tab:condition-scaling}) compares
@@ -1686,6 +1830,7 @@ wall-clock time, and total loss-plus-gradient evaluations.
 
 \begin{table}[t]
 \centering\scriptsize
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{@{}lrrr@{}}
 \toprule
 Optimizer & Median loss & Median (s) & Median fn-evals \\
@@ -1698,6 +1843,7 @@ Entropy descent & $2576$ & $0.0027$ & $161$ \\
 \textbf{HG, with backtrack} & $\mathbf{2.56\times10^{-31}}$ & $0.0895$ & $512$ \\
 \bottomrule
 \end{tabular}
+}
 \caption{Compute-normalized comparison, 10 seeds, rotated quadratic
 ($\kappa=10^5$). ``HG'' rows use the full architecture with the exact
 Hessian metric.}
@@ -1727,7 +1873,40 @@ task) where accepting a raw step can blow up the trajectory, not a free
 improvement. This closes one instance of the compute-normalized-evaluation
 gap in \S\ref{sec:positioning} for the mechanism-evidence rotated-quadratic
 task; it is not a substitute for the same instrumentation on the neural or
-LLM benchmarks, which remains future work.
+LLM benchmarks. We therefore instrumented both CUDA workloads directly.
+
+On the three-seed WikiText-2/GPT-2 benchmark (7.24M parameters), the
+prespecified threshold was validation loss $\le7.50$; a failure is
+right-censored at 200 updates. AdaFactor reached it first, followed by AdamW
+and HG, while Lion and Muon-Lite never reached it. Peak memory is allocated
+CUDA memory, measured after resetting PyTorch's peak counter for each run.
+
+\begin{table}[t]
+\centering\scriptsize
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+Optimizer & Target hits & Updates$^\dagger$ & Time (s)$^\dagger$ & Total (s) & Peak MiB \\
+\midrule
+AdaFactor & 3/3 & $66.7$ & $20.15$ & $60.19$ & $1350.4$ \\
+AdamW & 3/3 & $133.3$ & $37.14$ & $55.70$ & $1405.3$ \\
+HG & 3/3 & $150.0$ & $45.09$ & $59.98$ & $1433.0$ \\
+Lion & 0/3 & $>200$ & censored & $57.47$ & $1377.7$ \\
+Muon-Lite & 0/3 & $>200$ & censored & $69.80$ & $1377.7$ \\
+\bottomrule
+\end{tabular}}
+\caption{Compute-normalized WikiText-2 results. $^\dagger$Means among
+successful runs; all timings use CUDA synchronization. Identical
+initialization and minibatch streams are used within seed.}
+\label{tab:llm-compute}
+\end{table}
+
+Thus HG's final-loss proximity to AdamW does not translate into a systems
+advantage: it needs about 12.7\% more updates and 21.4\% more time to reach
+the threshold and uses about 2.0\% more allocated memory. AdaFactor is both
+more accurate and faster to target. These measurements close the neural/LLM
+instrumentation gap for the reported small-scale workloads, but not for
+large-scale language-model pretraining.
 
 \section{Architecture Ablation: A Controlled Statistical Study}
 \label{sec:architecture-ablation}
@@ -1735,7 +1914,7 @@ LLM benchmarks, which remains future work.
 The quantum-control ablation above isolates several architectural choices on
 one chaotic workload, but it is a single-seed estimate and therefore does not
 provide variance estimates or formal hypothesis tests. The capacitor PINN and
-DeepOBS/AlgoPerf-style benchmarks are also not ideal for ablation of
+The two synthetic spiral-MLP protocols are also not ideal for ablation of
 $F_{\mathrm{geo}}$ or $\nabla_\theta S(g)$, because their metrics are either
 fixed-feature (constant in $\theta$, making both terms zero) or diagonal
 adaptive accumulators. This section therefore studies the three additive
@@ -2040,19 +2219,21 @@ Hamiltonian-geometric variants (diagonal metric or scalar step size, each
 with or without momentum) are compared against tuned SGD-momentum and AdamW.
 
 \begin{table}[t]
-\centering\small
+\centering
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{@{}lrrr@{}}
 \toprule
 Configuration & $n$ & Val.\ acc.\ [95\% CI] & Runtime (s) \\
 \midrule
-SGD-momentum & 10 & $\mathbf{0.993}$ [$0.991$, $0.994$] & $1.68$ \\
-AdamW & 10 & $0.987$ [$0.984$, $0.988$] & $2.06$ \\
-HG scalar, momentum & 10 & $0.979$ [$0.976$, $0.981$] & $3.87$ \\
-HG diagonal, momentum & 10 & $0.978$ [$0.977$, $0.983$] & $3.80$ \\
-HG diagonal, no momentum & 10 & $0.970$ [$0.969$, $0.971$] & $3.66$ \\
-HG scalar, no momentum & 10 & $0.972$ [$0.970$, $0.974$] & $3.66$ \\
+SGD-momentum & 10 & $\mathbf{0.910}$ [$0.907$, $0.912$] & $2.67$ \\
+HG scalar, no momentum & 10 & $0.908$ [$0.903$, $0.910$] & $5.70$ \\
+HG diagonal, no momentum & 10 & $0.907$ [$0.903$, $0.910$] & $5.66$ \\
+AdamW & 10 & $0.888$ [$0.883$, $0.891$] & $3.27$ \\
+HG scalar, momentum & 10 & $0.863$ [$0.857$, $0.866$] & $5.66$ \\
+HG diagonal, momentum & 10 & $0.860$ [$0.858$, $0.863$] & $5.74$ \\
 \bottomrule
 \end{tabular}
+}
 \caption{Paired 10-seed validation accuracy, synthetic GPU classification
 task, diagonal-metric Torch reduction only (see text).}
 \label{tab:ext-gpu}
@@ -2066,18 +2247,17 @@ scaling ablation.}
 \label{fig:ext-gpu}
 \end{figure*}
 
-Momentum helps every Hamiltonian-geometric variant here, and the diagonal
-and scalar step-size choices are close to each other (within $0.001$ of
-validation accuracy) -- but every Hamiltonian-geometric variant trails both
-plain SGD-momentum and AdamW, at roughly double their runtime. Peak GPU
-memory is essentially identical across all six configurations
-($50.8$--$51.6\,\mathrm{MB}$), so the diagonal reduction carries no
-meaningful memory overhead; the cost here is entirely in wall-clock time and
-final accuracy, not memory footprint. This sharpens rather than reverses
-\S\ref{sec:modern-benchmark}'s own hedge that its diagonal-metric comparison
-is not evidence about the full architecture: on this GPU classification
-task, even the diagonal reduction alone does not merely tie simple
-baselines, as it did on the spiral MLP, but measurably underperforms them.
+The corrected protocol reserves the last 4096 examples exclusively for
+validation and resets the minibatch generator for every optimizer; an earlier
+exploratory artifact that sampled the validation tail during training is
+superseded. Momentum hurts both HG variants here, while diagonal and scalar
+metrics remain nearly indistinguishable. At a prespecified 90\% target,
+SGD reaches 10/10 trials (mean 345 updates, 1.56 s), both no-momentum HG
+variants reach 9/10 (mean 461 updates, 4.43--4.46 s), AdamW reaches 2/10,
+and momentum HG reaches 0/10. Peak allocated memory is $51.0$ MiB for SGD
+and $51.7$ MiB for the other methods. The diagonal reduction therefore has
+small memory overhead but substantially worse time-to-target than SGD; the
+full dense architecture is not tested by this scaling experiment.
 
 \subsection{Cross-study interpretation}
 
@@ -2156,9 +2336,11 @@ the places variance across random seeds is reported; the capacitor PINN
 table and the quantum ablation (Table~\ref{tab:quantum-ablation}) remain
 single-seed point estimates. Where multi-seed data now exists, it does not
 uniformly favor Hamiltonian-geometric: \S\ref{sec:classical-multiseed} finds
-the single-seed DeepOBS-style win does not replicate (HG wins 5/10 seeds,
-$p=0.689$) and the WikiText-2 LLM loss to AdaFactor is consistent and
-significant across seeds ($p=0.0027$), not a near-tie. $n=10$ remains
+directionally favorable effects on the tuned and fixed spiral-MLP protocols, but
+their paired parametric tests are not significant after Holm correction
+($p=0.058$ and $0.143$), while the WikiText-2 LLM loss to AdaFactor is
+consistent and significant across seeds (Holm $p=0.0107$), not a near-tie.
+$n=10$ remains
 underpowered to resolve the near-tie with Adam and Muon decisively
 (\S\ref{sec:robustness-followup}), and several Holm-corrected comparisons in
 \S\ref{sec:extended-ablation} sit in a borderline $0.05$--$0.15$ range
@@ -2191,9 +2373,9 @@ distinctive curvature/memory/entropy machinery outperforms modern adaptive
 methods -- only that a diagonal reduction of it does about as well as they
 do.
 \item \textbf{No large-scale, standard deep-learning benchmark (ImageNet-scale
-vision, language-model pretraining) is included.} The AlgoPerf- and
-DeepOBS-style benchmarks here are local, small-scale re-implementations
-inspired by those suites, not the official harnesses, because the official
+vision, language-model pretraining) is included.} The two spiral-MLP benchmarks
+are local, small-scale synthetic protocols informed by, but not part of,
+AlgoPerf and DeepOBS; the official
 external dependencies are not present in this workspace
 (\S\ref{sec:experimental-validation}).
 \item \textbf{Under a fixed, non-task-tuned hyperparameter setting, the full
@@ -2214,20 +2396,22 @@ tying its baselines.
 
 \section*{Reproducibility Statement}
 
-Every table and figure in this report is generated by a checked-in,
-deterministically seeded computational pipeline and can be regenerated
-exactly. The mathematical claims are backed by executable unit tests, not
+The authoritative numerical tables and figures are backed by checked-in,
+deterministically seeded computational pipelines; raw confirmatory rows,
+environment records, and SHA-256 hashes are retained in the submission
+artifact manifest. The mathematical claims are backed by executable unit tests, not
 asserted: the tests verify the energy-backtracking safeguard and the $M_{ij}$
 construction (symmetry, positive semidefiniteness, exact agreement with the
 closed-form recursion), the $L_1$-kinetic sign bound (Lion), the
 decoupled-decay/$L_2$ distinction (AdamW), the $\operatorname{vec}(AXB)$
 Kronecker identity (Shampoo), and the spectral-entropy maximality of
 orthogonalization (Muon). The benchmark pipeline writes its CSV/PNG outputs
-and prints the exact numbers quoted in this report; all of this code is
-NumPy-only with fixed, documented random seeds. The extended ablation
+and prints the values quoted in this report. The environment uses pinned
+NumPy/SciPy, PyTorch/CUDA, Hugging Face, and plotting dependencies with fixed,
+documented random seeds. The extended ablation
 (\S\ref{sec:extended-ablation}) is a separate, independently coded package
 with its own raw-observation CSVs, bootstrap confidence intervals, and
-recorded software/hardware provenance (git commit \texttt{b900d96f}; see
+recorded software/hardware provenance (base commit \texttt{6225fdd}; see
 \S\ref{sec:extended-ablation} for full environment details), so that its
 results can be checked without depending on the same code path as the rest
 of this report.
@@ -2321,32 +2505,31 @@ mechanism-focused results from being extrapolated beyond their support.
 
 \begin{enumerate}
 \item \textbf{Official benchmark execution.} \S\ref{sec:experimental-validation}'s
-AlgoPerf- and DeepOBS-style workloads are local re-implementations of those
-suites' style, not results from the official harnesses; a stronger revision
-would run the official AlgoPerf harness (or drop the AlgoPerf name from
-headline claims) and include established DeepOBS problems beyond a single
-spiral MLP.
+spiral-MLP workloads are local synthetic protocols, not results from the
+AlgoPerf or DeepOBS official harnesses. Those suite names are therefore not
+used as result labels or headline claims. Broader validation would require an
+official harness and established workloads beyond a single spiral MLP.
 \item \textbf{Multi-seed neural and LLM experiments with paired tests.}
-\S\ref{sec:classical-multiseed} now covers MNIST, AlgoPerf-style, and
-DeepOBS-style (10 seeds) and the WikiText-2 LLM run (3 seeds) with paired
+\S\ref{sec:classical-multiseed} now covers MNIST and both spiral-MLP protocols
+(10 seeds each), the capacitor PINN (10 seeds), and the WikiText-2 LLM run
+(3 seeds) with paired
 tests, alongside \S\ref{sec:robustness-followup} and
-\S\ref{sec:extended-ablation}; the capacitor PINN table remains a
-single-seed point estimate because a multi-seed replication did not
-complete within available compute (\S\ref{sec:classical-multiseed}), and no
-larger-scale LLM run (more steps, a bigger model, more seeds) has been
-attempted.
-\item \textbf{Equal, seed-averaged tuning budgets.} Every optimizer's
-learning rate was swept comparably but not identically or exhaustively
-(Limitation 3); a stronger revision would fix a shared validation-trial
-budget and tune every optimizer, including baselines, over comparable
-learning-rate, momentum, decay, and regularization spaces.
+\S\ref{sec:extended-ablation}; no larger-scale LLM run (more steps, a bigger
+model, more seeds) has been attempted.
+\item \textbf{Equal, seed-averaged tuning budgets.}
+\S\ref{sec:equal-budget-tuning} supplies a held-out confirmatory protocol
+with six trials and three tuning seeds per optimizer for the principal tuned
+spiral-MLP comparison. Other benchmark tables use fixed settings or smaller
+task-specific sweeps and should not be interpreted as globally optimal
+hyperparameter comparisons.
 \item \textbf{Compute-normalized evaluation.} \S\ref{sec:runtime-normalized}
 now reports step-, wall-clock-, and function-evaluation-normalized
-comparisons together, but only for the mechanism-evidence rotated-quadratic
-task; the neural and LLM benchmarks still report final loss/accuracy and
-wall-clock runtime without systematic time-to-target or gradient-evaluation
-instrumentation, peak memory is reported only for \S\ref{sec:ext-gpu}'s CUDA
-study, and energy consumption is reported nowhere.
+comparisons for the mechanism-evidence rotated quadratic and synchronized
+time/update-to-target plus peak CUDA allocation for the neural and LLM
+benchmarks. Gradient/function-evaluation counts are explicit for the
+quadratic and fixed by update count for the neural/LLM runs, but hardware
+energy consumption is reported nowhere and these small workloads do not
+establish large-scale systems efficiency.
 \item \textbf{Stronger workloads.} No ImageNet-scale vision benchmark,
 official DeepOBS problem beyond one MLP, longer-horizon transformer
 pretraining, multiple WikiText/OpenWebText-scale runs, or multiple
@@ -2397,8 +2580,8 @@ arXiv:1809.05042.
 \bibitem{franca2021conformal}
 G.~Fran\c ca, J.~Sulam, D.~P.~Robinson, and R.~Vidal,
 ``Conformal Symplectic and Relativistic Optimization,''
-\emph{Journal of Statistical Mechanics: Theory and Experiment},
-2021(4):043402, 2021.
+\emph{Advances in Neural Information Processing Systems}, vol.~33, 2020.
+arXiv:1903.04100.
 
 \bibitem{nemirovski1983problem}
 A.~Nemirovski and D.~Yudin,

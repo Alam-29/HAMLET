@@ -226,8 +226,11 @@ def train_optimizer(
     args: argparse.Namespace,
     hyperparameters: dict[str, float],
 ) -> OptimizerResult:
-    seed_offsets = {"adamw": 101, "nag": 202, "heavy_ball": 303, "hamiltonian_geometric": 404}
-    rng = np.random.default_rng(args.seed + seed_offsets[optimizer])
+    # Common-random-numbers design: every optimizer receives exactly the same
+    # minibatch sequence for a given experimental seed. This makes paired
+    # optimizer differences attributable to the update rule rather than to
+    # sampling luck.
+    rng = np.random.default_rng(args.seed)
     theta = theta0.copy()
     velocity = np.zeros_like(theta)
     memory = np.zeros_like(theta)

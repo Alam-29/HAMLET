@@ -1,0 +1,6 @@
+Implementation notes
+
+This benchmark reimplements the DeepOBS nonconvex MLP classification protocol
+directly in NumPy rather than depending on the reference deepobs package, which
+requires TensorFlow. A dependency-free implementation keeps the benchmark
+deterministic and portable across the environments used to reproduce this study.

@@ -1,0 +1,11 @@
+workload_key,workload,seed,hg_value,best_other_value,best_other_optimizer,difference_hg_minus_other
+pinn,Capacitor PINN (final loss),0,17.0581809058,17.1641405092,entropy_descent,-0.10595960339999877
+pinn,Capacitor PINN (final loss),1,17.1008717613,17.2958526224,entropy_descent,-0.194980861100003
+pinn,Capacitor PINN (final loss),2,17.2410091453,17.3159055254,entropy_descent,-0.07489638010000021
+pinn,Capacitor PINN (final loss),3,17.0307933439,17.2943943991,entropy_descent,-0.26360105519999877
+pinn,Capacitor PINN (final loss),4,17.179453706,17.3443792776,entropy_descent,-0.16492557160000132
+pinn,Capacitor PINN (final loss),5,17.0193333903,17.1310771734,entropy_descent,-0.11174378309999966
+pinn,Capacitor PINN (final loss),6,17.145321569,17.2546450443,entropy_descent,-0.10932347529999831
+pinn,Capacitor PINN (final loss),7,17.1321778025,17.3106444276,entropy_descent,-0.17846662510000044
+pinn,Capacitor PINN (final loss),8,17.1855349351,17.2543816264,entropy_descent,-0.06884669129999921
+pinn,Capacitor PINN (final loss),9,17.2526316168,17.3547917312,entropy_descent,-0.10216011440000017

@@ -1,0 +1,4 @@
+workload_key,workload,seed,hg_value,best_other_value,best_other_optimizer,difference_hg_minus_other
+llm,"WikiText-2 LLM, 200 steps (val loss)",0,7.369910192489624,7.242333793640137,adafactor,0.12757639884948713
+llm,"WikiText-2 LLM, 200 steps (val loss)",1,7.352218341827393,7.230723857879639,adafactor,0.12149448394775408
+llm,"WikiText-2 LLM, 200 steps (val loss)",2,7.382077836990357,7.23781533241272,adafactor,0.1442625045776369

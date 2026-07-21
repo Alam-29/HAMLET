@@ -149,7 +149,9 @@ def read_idx_labels(path: Path) -> np.ndarray:
 
 
 def train_optimizer(name, theta0, x_train, y_train, x_test, y_test, args, params):
-    rng = np.random.default_rng(args.seed + sum(ord(char) for char in name))
+    # Common-random-numbers design: optimizer comparisons within a seed use
+    # identical minibatch indices.
+    rng = np.random.default_rng(args.seed)
     theta = theta0.copy()
     velocity = np.zeros_like(theta)
     memory = np.zeros_like(theta)

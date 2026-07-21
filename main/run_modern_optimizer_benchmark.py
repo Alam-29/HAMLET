@@ -122,7 +122,9 @@ def _epoch_metrics(theta, shape, x_train, y_train, x_val, y_val, epoch):
 
 
 def train_lion_or_adamw(name, theta0, shape, x_train, y_train, x_val, y_val, args):
-    rng = np.random.default_rng(args.seed + {"lion": 11, "adamw": 12}[name] * 1_000)
+    # Common-random-numbers design: all optimizers receive identical
+    # minibatch indices for a given experimental seed.
+    rng = np.random.default_rng(args.seed)
     theta = theta0.copy()
     state = lion_initial_state(theta.shape) if name == "lion" else adamw_initial_state(theta.shape)
     step_fn = lion_step if name == "lion" else adamw_step
@@ -145,7 +147,7 @@ def train_lion_or_adamw(name, theta0, shape, x_train, y_train, x_val, y_val, arg
 
 
 def train_shampoo_or_muon(name, theta0, shape, x_train, y_train, x_val, y_val, args):
-    rng = np.random.default_rng(args.seed + {"shampoo": 21, "muon": 22}[name] * 1_000)
+    rng = np.random.default_rng(args.seed)
     theta = theta0.copy()
     w1, b1, w2, b2 = unpack_parameters(theta, shape)
     # Learning rates found by sweeping each optimizer on this benchmark, the
@@ -192,7 +194,7 @@ def train_shampoo_or_muon(name, theta0, shape, x_train, y_train, x_val, y_val, a
 
 
 def train_hamiltonian_geometric(theta0, shape, x_train, y_train, x_val, y_val, args):
-    rng = np.random.default_rng(args.seed + 31 * 1_000)
+    rng = np.random.default_rng(args.seed)
     theta = theta0.copy()
     velocity = np.zeros_like(theta)
     memory = np.zeros_like(theta)
@@ -220,7 +222,7 @@ def train_hamiltonian_geometric(theta0, shape, x_train, y_train, x_val, y_val, a
 
 
 def train_adam_baseline(theta0, shape, x_train, y_train, x_val, y_val, args):
-    rng = np.random.default_rng(args.seed + 41 * 1_000)
+    rng = np.random.default_rng(args.seed)
     theta = theta0.copy()
     first_moment = np.zeros_like(theta)
     second_moment = np.zeros_like(theta)

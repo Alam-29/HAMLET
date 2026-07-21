@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "authoritative_files": [
+    {
+      "path": "docs/hamiltonian_geometric_consolidated_report.tex",
+      "bytes": 137756,
+      "sha256": "bcafdf0cd3aaae310453bd96f88feaff776808d2a4a5a7ca2bc45b96b1dc04eb"
+    },
+    {
+      "path": "docs/hamiltonian_geometric_consolidated_report.pdf",
+      "bytes": 2455823,
+      "sha256": "d485655dcc0cf354afe31d214092a25ca5c832470f1aad7270350cad140792f2"
+    },
+    {
+      "path": "results/classical_multiseed_paired_raw.csv",
+      "bytes": 3026,
+      "sha256": "81addb497bd5b1d55d1b83061851a988fe80c0e88d730d05b6c44f17a74a04bf"
+    },
+    {
+      "path": "results/classical_multiseed_paired_summary.csv",
+      "bytes": 1130,
+      "sha256": "311e6786a23bbe6e79a00d56fc462ae7b35a385601a8d10aa8355f3baa4fc40e"
+    },
+    {
+      "path": "results/classical_multiseed_paired_manifest.json",
+      "bytes": 725,
+      "sha256": "02e05b7c040bddbc67060966c508ee752e0b04d4d101a5692e4f11c7c5db23d7"
+    },
+    {
+      "path": "results/classical_multiseed_raw_llm.csv",
+      "bytes": 435,
+      "sha256": "54f993a98d17e6337762c2f3adb5582c13dd3b967e70cc7666b7815847ad98bb"
+    },
+    {
+      "path": "results/classical_multiseed_summary_llm_audit.csv",
+      "bytes": 488,
+      "sha256": "62c7c66acbff7b9de58e093213b0450dc514e5ff5ab1c4be410a266f343b2245"
+    },
+    {
+      "path": "results/classical_multiseed_manifest_llm.json",
+      "bytes": 631,
+      "sha256": "de056411cf60b0cf0294bd176999a350f7dcefde0e56df70525eacd2420df1d0"
+    },
+    {
+      "path": "results/industry_llm_compute_audit/industry_llm_seed_aggregate.csv",
+      "bytes": 990,
+      "sha256": "4660d128eade4778e5a72068d5d4e36cf52c831df47099c5926ab2af316bdf1f"
+    },
+    {
+      "path": "results/industry_llm_compute_audit/seed_0/industry_llm_summary.csv",
+      "bytes": 779,
+      "sha256": "dfdc9f4d87c8fbd7fab1779d003df60d30673f03431ef40572f99839a357b289"
+    },
+    {
+      "path": "results/industry_llm_compute_audit/seed_1/industry_llm_summary.csv",
+      "bytes": 776,
+      "sha256": "8103490bece560a6574c4583bb62ed8c81dd87560c7e999dc8e196f6ebcedf9f"
+    },
+    {
+      "path": "results/industry_llm_compute_audit/seed_2/industry_llm_summary.csv",
+      "bytes": 772,
+      "sha256": "cfcee3dfed742d5d7060aca4dbb1515cc15b23399d158f84fe05c7c3fe2315a5"
+    },
+    {
+      "path": "results/approximate_metric_theorem_check.csv",
+      "bytes": 512,
+      "sha256": "2ef4d636b33309c4444e72b25f88d3657b41a88571d66e067506accbcce01f05"
+    },
+    {
+      "path": "results/pinn_multiseed_raw.csv",
+      "bytes": 1107,
+      "sha256": "b842cb12f91905d3cc7a77a2f7f62e3dc1eb0640ea7b9ca78c6a3a08110857db"
+    },
+    {
+      "path": "results/pinn_multiseed_summary.csv",
+      "bytes": 493,
+      "sha256": "e87e7acf3e1ebd35c23bee73a84b697123e0e89fc61afd7a2a74fc258e4e82cc"
+    },
+    {
+      "path": "results/pinn_multiseed_manifest.json",
+      "bytes": 669,
+      "sha256": "10fed9b32f0cbf9ca5412757fe2dd902b2b2607103088e69b576e315567171b9"
+    },
+    {
+      "path": "results/pinn_replication_cost/pinn_cost_raw.csv",
+      "bytes": 802,
+      "sha256": "b2654baa1267b1c58346f34808591efdc3566ac58e68251726b66f7e1adec58a"
+    },
+    {
+      "path": "results/pinn_replication_cost/pinn_cost_summary.json",
+      "bytes": 726,
+      "sha256": "4b576510cdcd067b696b35119cbc0e1c8224fe8ed8ec0d0e92782534c4b37cd5"
+    },
+    {
+      "path": "results/equal_budget_tuning/tuning_raw.csv",
+      "bytes": 9662,
+      "sha256": "75b8fdc6162150aa28045a82c77c98786c1b5c4fb43e9a3b114addde581bfbe5"
+    },
+    {
+      "path": "results/equal_budget_tuning/evaluation_raw.csv",
+      "bytes": 5211,
+      "sha256": "87568a72eacd7d196e8cb317ce4ca448cb060f458053ef6646aa84aadea97730"
+    },
+    {
+      "path": "results/equal_budget_tuning/paired_comparisons.csv",
+      "bytes": 639,
+      "sha256": "2ebaf3f6f8906b79511889196d20f64aefb48785b33491f1a061b1ccec4edac7"
+    },
+    {
+      "path": "results/equal_budget_tuning/manifest.json",
+      "bytes": 879,
+      "sha256": "68666b13b73b9fbcda6dc5af68787256827124d091ebb49a3e4dd80c15ae1339"
+    },
+    {
+      "path": "ablation styudy/results/architecture_raw.csv",
+      "bytes": 104275,
+      "sha256": "0ff879c5290c435424645db31ec2a9117208c5e056c50f4bea4bdfc56b5bad54"
+    },
+    {
+      "path": "ablation styudy/results/architecture_summary.csv",
+      "bytes": 2334,
+      "sha256": "249524eb17322b0f310e80db48cdd205131348e27f9795d8bebba89b17200751"
+    },
+    {
+      "path": "ablation styudy/results/quantum_raw.csv",
+      "bytes": 14427,
+      "sha256": "c1019e7dead8e8d58e4a79ca4ff39cea63d1d48e647e961aa57f3e192dada675"
+    },
+    {
+      "path": "ablation styudy/results/quantum_summary.csv",
+      "bytes": 1538,
+      "sha256": "8f2bde1d9cbb31866d6a38fbb6caa26dee187fbe68069bd39d3667ef7dc1eb79"
+    },
+    {
+      "path": "ablation styudy/results/gpu_raw.csv",
+      "bytes": 13230,
+      "sha256": "ecbeb40a71ad99c567497669f9556d7c6cb77055e5c45cba58129771b8e59feb"
+    },
+    {
+      "path": "ablation styudy/results/gpu_summary.csv",
+      "bytes": 850,
+      "sha256": "287355eb90b1f3125ebfebb0f487b246e06024be472dae0b1d1f957ceefc23bf"
+    },
+    {
+      "path": "ablation styudy/results/paired_tests.csv",
+      "bytes": 5047,
+      "sha256": "ee2918ab5a861744559f35032d9e41ad6c81facf0294fa293538ba947a8a252c"
+    },
+    {
+      "path": "ablation styudy/results/factorial_effects.csv",
+      "bytes": 3247,
+      "sha256": "7d0e85f84875761ca3d2f0126c7925daa20aef3f8da862114b7e0e0d9c93f552"
+    },
+    {
+      "path": "ablation styudy/results/metadata.json",
+      "bytes": 1088,
+      "sha256": "a5496d9f0dc14053e35f39faab0c3abbf5fe4a12c14ea382e81aff77ef3654a1"
+    },
+    {
+      "path": "ablation styudy/results/cuda_environment.json",
+      "bytes": 158,
+      "sha256": "57cef44216cffdd2f29a5041829c8b57bd856ab715a75c099bf5347dc034e5d7"
+    },
+    {
+      "path": "ppt_assets/test_result_media/runtime_normalized_comparison/runtime_normalized_comparison.csv",
+      "bytes": 3049,
+      "sha256": "ff1048d67049c74ed44c9ce8e72a2c025304fd31da554362cd99391e4b74bd9f"
+    },
+    {
+      "path": "ppt_assets/test_result_media/modern_optimizer_benchmark_paired/modern_optimizer_seed_sweep.csv",
+      "bytes": 4120,
+      "sha256": "0535d1a981bea2593aa5d66e28e889a3110d365055370fcb5c813c5a11df1678"
+    },
+    {
+      "path": "ppt_assets/test_result_media/modern_optimizer_benchmark_paired/modern_optimizer_scaling_sweep.csv",
+      "bytes": 2148,
+      "sha256": "196deac4cd74f96f861a5cdd776fda3633096a91a48587a005ba9b4aa6a05fde"
+    }
+  ],
+  "validated_counts": {
+    "paired_classical": 30,
+    "pinn": 10,
+    "equal_budget_tuning": 72,
+    "equal_budget_evaluation": 40,
+    "llm": 3,
+    "llm_compute_optimizers": 5,
+    "architecture": 640,
+    "quantum": 110,
+    "gpu": 60,
+    "modern_optimizer_seeds": 60,
+    "modern_optimizer_scaling": 30
+  },
+  "cuda_device": "NVIDIA GeForce GTX 1050"
+}

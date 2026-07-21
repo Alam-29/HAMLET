@@ -1,0 +1,5 @@
+optimizer,best_trial,final_train_loss,final_val_loss,final_train_accuracy,final_val_accuracy,runtime_s,hyperparameters
+hamiltonian_geometric,3,0.0221242296248,0.0402668273809,0.997777777778,0.993333333333,1.1009263,"{'learning_rate': 0.03, 'beta': 0.9, 'memory_coupling': 0.001, 'metric_decay': 0.99, 'metric_epsilon': 1e-08, 'weight_decay': 0.0001}"
+adamw,5,0.0269059308041,0.047775547018,0.998888888889,0.993333333333,1.28308959999,"{'learning_rate': 0.03, 'beta1': 0.9, 'beta2': 0.999, 'weight_decay': 0.0001}"
+nag,6,0.0662414995839,0.084290791259,0.981111111111,0.976666666667,1.02385780001,"{'learning_rate': 0.06, 'momentum': 0.9, 'weight_decay': 0.0001}"
+heavy_ball,6,0.0676070006287,0.0848794337147,0.98,0.976666666667,0.910518200006,"{'learning_rate': 0.06, 'momentum': 0.9, 'weight_decay': 0.0001}"

@@ -261,6 +261,8 @@ def run_gpu(args: argparse.Namespace) -> list[dict]:
     seeds = mode_value(args, 2, 10, "gpu_seeds")
     steps = mode_value(args, 40, 600, "gpu_steps")
     device = torch.device("cuda")
+    target_accuracy = 0.90
+    eval_every = 25
     rows: list[dict] = []
     variants = (
         ("HG_metric_momentum", "hg", {"beta": 0.90, "metric_decay": 0.96}),
@@ -279,6 +281,8 @@ def run_gpu(args: argparse.Namespace) -> list[dict]:
         y = (x @ teacher + 0.4 * torch.randn(32768, 10, generator=generator, device=device)).argmax(1)
         for label, kind, hp in variants:
             torch.manual_seed(40_000 + seed)
+            # Reset the stream so every optimizer receives identical minibatches.
+            batch_generator = torch.Generator(device=device).manual_seed(50_000 + seed)
             model = torch.nn.Sequential(
                 torch.nn.Linear(128, 512), torch.nn.GELU(),
                 torch.nn.Linear(512, 256), torch.nn.GELU(), torch.nn.Linear(256, 10),
@@ -294,8 +298,10 @@ def run_gpu(args: argparse.Namespace) -> list[dict]:
             start = time.perf_counter()
             initial_loss = math.nan
             final_loss = math.nan
+            target_step = None
+            target_time_s = None
             for step in range(steps):
-                idx = torch.randint(0, x.shape[0], (512,), generator=generator, device=device)
+                idx = torch.randint(0, x.shape[0] - 4096, (512,), generator=batch_generator, device=device)
                 optimizer.zero_grad(set_to_none=True)
                 logits = model(x[idx])
                 loss = torch.nn.functional.cross_entropy(logits, y[idx])
@@ -304,6 +310,14 @@ def run_gpu(args: argparse.Namespace) -> list[dict]:
                 loss.backward()
                 optimizer.step()
                 final_loss = float(loss.detach())
+                if (step + 1) % eval_every == 0 or step + 1 == steps:
+                    with torch.no_grad():
+                        checkpoint_logits = model(x[-4096:])
+                        checkpoint_accuracy = float((checkpoint_logits.argmax(1) == y[-4096:]).float().mean())
+                    if target_step is None and checkpoint_accuracy >= target_accuracy:
+                        torch.cuda.synchronize()
+                        target_step = step + 1
+                        target_time_s = time.perf_counter() - start
             torch.cuda.synchronize()
             runtime = time.perf_counter() - start
             with torch.no_grad():
@@ -317,6 +331,10 @@ def run_gpu(args: argparse.Namespace) -> list[dict]:
                 "validation_accuracy": accuracy, "runtime_s": runtime,
                 "examples_per_second": steps * 512 / runtime,
                 "peak_gpu_memory_mb": torch.cuda.max_memory_allocated() / 2**20,
+                "target_accuracy": target_accuracy,
+                "updates_to_target": target_step if target_step is not None else "",
+                "time_to_target_s": target_time_s if target_time_s is not None else "",
+                "target_reached": target_step is not None,
                 "device": info["device"], "torch_version": info["torch_version"],
             })
             print(f"gpu {label} seed={seed} accuracy={accuracy:.4f}", flush=True)
@@ -490,7 +508,8 @@ def tex_escape(value: object) -> str:
 
 
 def generate_tex(architecture_summary: list[dict], quantum_summary: list[dict],
-                 gpu_summary: list[dict], effects: list[dict], paired: list[dict], metadata: dict) -> None:
+                 gpu_summary: list[dict], effects: list[dict], paired: list[dict], metadata: dict,
+                 gpu_raw: list[dict] | None = None) -> None:
     main_effects = [r for r in effects if r["term"] in ("G", "M", "S")]
     effect_lines = "\n".join(
         f"{tex_escape(r['study'])}/{tex_escape(r['metric'])} & {r['term']} & {r['factorial_effect']:.3g} & {r['p']:.3g} \\\\" for r in main_effects
@@ -504,6 +523,18 @@ def generate_tex(architecture_summary: list[dict], quantum_summary: list[dict],
         for r in quantum_summary
     )
     if gpu_summary:
+        gpu_raw = gpu_raw or []
+        target_lines = []
+        for summary_row in gpu_summary:
+            label = summary_row["configuration"]
+            trials = [r for r in gpu_raw if r["configuration"] == label]
+            hits = [r for r in trials if str(r.get("target_reached", "")).lower() == "true"]
+            mean_updates = np.mean([float(r["updates_to_target"]) for r in hits]) if hits else math.nan
+            mean_target_s = np.mean([float(r["time_to_target_s"]) for r in hits]) if hits else math.nan
+            updates_text = f"{mean_updates:.1f}" if hits else "--"
+            time_text = f"{mean_target_s:.2f}" if hits else "--"
+            target_lines.append(f"{tex_escape(label)} & {len(hits)}/{len(trials)} & {updates_text} & {time_text} \\\\")
+        target_table_lines = "\n".join(target_lines)
         gpu_lines = "\n".join(
             f"{tex_escape(r['configuration'])} & {r['n']} & {r['median']:.4f} & [{r['ci95_low']:.4f}, {r['ci95_high']:.4f}] & {r['median_runtime_s']:.2f} \\\\"
             for r in gpu_summary
@@ -521,6 +552,16 @@ Configuration & $n$ & Accuracy & 95\% CI & Runtime (s) \\\midrule
 {gpu_lines}
 \bottomrule\end{{tabular}}
 \caption{{CUDA component-ablation results.}}
+\end{{table}}
+The protocol holds out the final 4096 examples, resets the minibatch stream
+for every optimizer within seed, and evaluates every 25 updates. Failures to
+reach validation accuracy $0.90$ are right-censored at the final update.
+\begin{{table}}[ht]\centering\small
+\begin{{tabular}}{{lrrr}}\toprule
+Configuration & Target hits & Updates$^\dagger$ & Time (s)$^\dagger$ \\\midrule
+{target_table_lines}
+\bottomrule\end{{tabular}}
+\caption{{CUDA time-to-target; $^\dagger$means among successful trials.}}
 \end{{table}}
 \begin{{figure}}[ht]\centering
 \includegraphics[width=.95\linewidth]{{figures/gpu_ablation.png}}
@@ -681,7 +722,7 @@ def main() -> None:
                                      capture_output=True, text=True).stdout.strip(),
     }
     (RESULTS / "metadata.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
-    generate_tex(architecture_summary, quantum_summary, gpu_summary, effects, paired, metadata)
+    generate_tex(architecture_summary, quantum_summary, gpu_summary, effects, paired, metadata, gpu)
     print(f"completed in {metadata['elapsed_s']:.1f}s; CUDA results={bool(gpu)}", flush=True)
     print(f"supplement = {HERE / 'supplementary_ablation.tex'}", flush=True)
 

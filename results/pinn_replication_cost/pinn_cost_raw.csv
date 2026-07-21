@@ -1,0 +1,16 @@
+path,steps,repeat,runtime_s
+literal_finite_difference_zero,1,0,3.196885299999849
+literal_finite_difference_zero,1,1,3.111946100005298
+literal_finite_difference_zero,1,2,3.4047912000096403
+literal_finite_difference_zero,2,0,6.383598800006439
+literal_finite_difference_zero,2,1,6.654455800002324
+literal_finite_difference_zero,2,2,5.817134500000975
+literal_finite_difference_zero,4,0,11.523781900003087
+literal_finite_difference_zero,4,1,11.033873499996844
+literal_finite_difference_zero,4,2,11.722992599999998
+literal_finite_difference_zero,8,0,24.105364199989708
+literal_finite_difference_zero,8,1,22.198168900009478
+literal_finite_difference_zero,8,2,22.803316000004997
+analytic_zero,600,0,4.217182500011404
+analytic_zero,600,1,3.977834300007089
+analytic_zero,600,2,3.4075290999899153

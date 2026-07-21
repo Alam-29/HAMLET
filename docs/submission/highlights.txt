@@ -1,0 +1,5 @@
+Exact Hessian metrics remove quadratic condition-number dependence.
+Spectral equivalence gives a stability bound for approximate metrics.
+Equal-budget tuning leaves diagonal HG statistically tied with AdamW.
+Ten-seed PINN tests favor HG; small LLM tests favor AdaFactor.
+Ablations show when geometric, memory, and spectral terms hurt.
