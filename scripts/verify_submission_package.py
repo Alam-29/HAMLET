@@ -80,6 +80,16 @@ def require(condition: bool, message: str) -> None:
         raise AssertionError(message)
 
 
+def holm_adjust(p_values: list[float]) -> list[float]:
+    """Return Holm step-down adjusted p-values in their original order."""
+    adjusted = [0.0] * len(p_values)
+    running_max = 0.0
+    for rank, index in enumerate(sorted(range(len(p_values)), key=p_values.__getitem__)):
+        running_max = max(running_max, (len(p_values) - rank) * p_values[index])
+        adjusted[index] = min(1.0, running_max)
+    return adjusted
+
+
 def verify() -> dict[str, object]:
     missing = [name for name in AUTHORITATIVE if not (ROOT / name).is_file()]
     require(not missing, f"missing authoritative files: {missing}")
@@ -163,6 +173,38 @@ def verify() -> dict[str, object]:
     interpretation = manuscript[table_end:table_end + 1400].lower()
     require("single seed" in interpretation and "no significance claim" in interpretation,
             "official DeepOBS manuscript caveat is missing")
+    classical_summary = rows("results/classical_multiseed_paired_summary.csv")
+    llm_summary = rows("results/classical_multiseed_summary_llm_audit.csv")
+    pinn_summary = rows("results/pinn_multiseed_summary.csv")
+    replication_rows = classical_summary + llm_summary + pinn_summary
+    require(len(replication_rows) == 5, "multi-seed replication summary must contain five rows")
+    adjusted_p = holm_adjust([float(row["paired_p"]) for row in replication_rows])
+    replication_start = manuscript.find(r"\label{tab:classical-multiseed}")
+    replication_table_start = manuscript.rfind(r"\begin{table*}", 0, replication_start)
+    replication_end = manuscript.find(r"\end{table*}", replication_start)
+    require(replication_table_start >= 0 and replication_end > replication_start,
+            "multi-seed manuscript table is missing")
+    replication_table = manuscript[replication_table_start:replication_end]
+    row_specs = (
+        ("MNIST (test loss)", classical_summary[0], 3, 3),
+        (r"Spiral MLP, tuned (val.\ loss)", classical_summary[1], 4, 3),
+        (r"Spiral MLP, fixed (val.\ loss)", classical_summary[2], 4, 3),
+        (r"WikiText-2 LLM (val.\ loss)", llm_summary[0], 3, 3),
+        ("Capacitor PINN (final loss)", pinn_summary[0], 3, 4),
+    )
+    for index, (label, row, mean_digits, p_digits) in enumerate(row_specs):
+        manuscript_row = next((line for line in replication_table.splitlines() if label in line), "")
+        expected_values = (
+            str(int(row["n"])),
+            f'{float(row["hg_mean"]):.{mean_digits}f}',
+            f'{float(row["hg_std"]):.3f}',
+            f'{float(row["other_mean"]):.{mean_digits}f}',
+            f'{float(row["other_std"]):.3f}',
+            f'{float(row["cohen_dz"]):.2f}',
+            f'{adjusted_p[index]:.{p_digits}f}',
+        )
+        require(manuscript_row and all(value in manuscript_row for value in expected_values),
+                f"multi-seed manuscript row is stale for {label}")
     pinn = rows("results/pinn_multiseed_raw.csv")
     require(len(pinn) == 10 and {int(row["seed"]) for row in pinn} == set(range(10)),
             "PINN replication must contain seeds 0--9")
