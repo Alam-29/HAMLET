@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.21)  21 JUL 2026 04:58
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.21)  21 JUL 2026 13:48
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -473,15 +473,14 @@ File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) [1
 
 {C:/Users/HP/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/HP/AppD
-ata/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}]
+ata/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}] [2] [3]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10.95> on input line 109.
- [2] [3{C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathit.
-enc}{C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-rm.enc}{C:
-/Users/HP/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathsy.enc}] [4] 
-[5
+(Font)              <10.95> on input line 139.
+ [4
 
-] [6] [7]
+{C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-rm.enc}{C:/Use
+rs/HP/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathsy.enc}{C:/Users/
+HP/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathit.enc}] [5]
 (hamiltonian_geometric_short_presentation_speech.aux)
  ***********
 LaTeX2e <2025-11-01>
@@ -492,9 +491,9 @@ ech.out' has not changed.
 (rerunfilecheck)             Checksum: 8D25CF4DBC59B77F98E974B10072529F;333.
  ) 
 Here is how much of TeX's memory you used:
- 11247 strings out of 467871
- 170755 string characters out of 5419828
- 600242 words of memory out of 5000000
+ 11240 strings out of 467871
+ 170709 string characters out of 5419828
+ 599251 words of memory out of 5000000
  39963 multiletter control sequences out of 15000+600000
  673637 words of font info for 73 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -510,10 +509,10 @@ al/Programs/MiKTeX/fonts/type1/public/lm/lmri10.pfb><C:/Users/HP/AppData/Local/
 Programs/MiKTeX/fonts/type1/public/lm/lmsy10.pfb><C:/Users/HP/AppData/Local/Pro
 grams/MiKTeX/fonts/type1/public/lm/lmsy8.pfb><C:/Users/HP/AppData/Local/Program
 s/MiKTeX/fonts/type1/public/lm/lmtt10.pfb>
-Output written on hamiltonian_geometric_short_presentation_speech.pdf (7 pages,
- 250514 bytes).
+Output written on hamiltonian_geometric_short_presentation_speech.pdf (5 pages,
+ 230496 bytes).
 PDF statistics:
- 127 PDF objects out of 1000 (max. 8388607)
- 23 named destinations out of 1000 (max. 500000)
+ 111 PDF objects out of 1000 (max. 8388607)
+ 16 named destinations out of 1000 (max. 500000)
  17 words of extra memory for PDF output out of 10000 (max. 10000000)
 
