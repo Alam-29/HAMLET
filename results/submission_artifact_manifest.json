@@ -77,6 +77,21 @@
       "sha256": "2f140c6b699741d1c7f5f2016780d0fa8cc3de4e19813d6aee74654c94fa0d9b"
     },
     {
+      "path": "results/official_deepobs/adamw/mnist_mlp/AdamWFixedDecay/num_epochs__20__batch_size__128__lr__3.e-03/random_seed__42__2026-07-21-10-26-02.json",
+      "bytes": 6631,
+      "sha256": "b13a5e6e8b17d80bde9831376442ba1776626dbe7c383e038e80b6d27f7db2b8"
+    },
+    {
+      "path": "results/official_deepobs/hamiltonian_geometric/mnist_mlp/HamiltonianGeometricTorch/num_epochs__20__batch_size__128__beta__9.e-01__lr__1.e-01/random_seed__42__2026-07-21-09-52-53.json",
+      "bytes": 6716,
+      "sha256": "923445eb1bbad3bd80815ac3734216710faa63cb99b4be3527ff7bfdcc9e65ad"
+    },
+    {
+      "path": "results/official_deepobs/sgd_momentum/mnist_mlp/SGD/num_epochs__20__batch_size__128__lr__1.e-01__momentum__9.e-01/random_seed__42__2026-07-21-10-09-14.json",
+      "bytes": 6702,
+      "sha256": "80f0adb789c9dda35a054f808d043b4134efb365c7ae4e6e320486999fa9031f"
+    },
+    {
       "path": "results/pinn_multiseed_raw.csv",
       "bytes": 1107,
       "sha256": "b842cb12f91905d3cc7a77a2f7f62e3dc1eb0640ea7b9ca78c6a3a08110857db"

@@ -34,6 +34,9 @@ AUTHORITATIVE = (
     "results/approximate_metric_theorem_check.csv",
     "results/official_deepobs/mnist_mlp_summary.csv",
     "results/official_deepobs/lr_sweep_notes.md",
+    "results/official_deepobs/adamw/mnist_mlp/AdamWFixedDecay/num_epochs__20__batch_size__128__lr__3.e-03/random_seed__42__2026-07-21-10-26-02.json",
+    "results/official_deepobs/hamiltonian_geometric/mnist_mlp/HamiltonianGeometricTorch/num_epochs__20__batch_size__128__beta__9.e-01__lr__1.e-01/random_seed__42__2026-07-21-09-52-53.json",
+    "results/official_deepobs/sgd_momentum/mnist_mlp/SGD/num_epochs__20__batch_size__128__lr__1.e-01__momentum__9.e-01/random_seed__42__2026-07-21-10-09-14.json",
     "results/pinn_multiseed_raw.csv",
     "results/pinn_multiseed_summary.csv",
     "results/pinn_multiseed_manifest.json",
@@ -114,6 +117,27 @@ def verify() -> dict[str, object]:
             min(float(deepobs_by_optimizer[name]["final_test_loss"])
                 for name in ("hamiltonian_geometric", "adamw")),
             "official DeepOBS loss ordering changed")
+    deepobs_raw_paths = {
+        "adamw": "results/official_deepobs/adamw/mnist_mlp/AdamWFixedDecay/num_epochs__20__batch_size__128__lr__3.e-03/random_seed__42__2026-07-21-10-26-02.json",
+        "hamiltonian_geometric": "results/official_deepobs/hamiltonian_geometric/mnist_mlp/HamiltonianGeometricTorch/num_epochs__20__batch_size__128__beta__9.e-01__lr__1.e-01/random_seed__42__2026-07-21-09-52-53.json",
+        "sgd_momentum": "results/official_deepobs/sgd_momentum/mnist_mlp/SGD/num_epochs__20__batch_size__128__lr__1.e-01__momentum__9.e-01/random_seed__42__2026-07-21-10-09-14.json",
+    }
+    expected_raw_names = {
+        "adamw": "AdamWFixedDecay",
+        "hamiltonian_geometric": "HamiltonianGeometricTorch",
+        "sgd_momentum": "SGD",
+    }
+    for name, relative in deepobs_raw_paths.items():
+        raw = json.loads((ROOT / relative).read_text(encoding="utf-8"))
+        require(raw["testproblem"] == "mnist_mlp" and raw["num_epochs"] == 20 and
+                raw["random_seed"] == 42 and raw["optimizer_name"] == expected_raw_names[name],
+                f"official DeepOBS raw metadata changed for {name}")
+        summary = deepobs_by_optimizer[name]
+        require(abs(raw["valid_losses"][-1] - float(summary["final_val_loss"])) < 1e-12 and
+                abs(raw["valid_accuracies"][-1] - float(summary["final_val_acc"])) < 1e-12 and
+                abs(raw["test_losses"][-1] - float(summary["final_test_loss"])) < 1e-12 and
+                abs(raw["test_accuracies"][-1] - float(summary["final_test_acc"])) < 1e-12,
+                f"official DeepOBS summary does not match raw runner output for {name}")
     pinn = rows("results/pinn_multiseed_raw.csv")
     require(len(pinn) == 10 and {int(row["seed"]) for row in pinn} == set(range(10)),
             "PINN replication must contain seeds 0--9")
