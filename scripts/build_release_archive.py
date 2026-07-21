@@ -10,10 +10,20 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "results" / "hamiltonian_geometric_submission_archive.zip"
 MANIFEST = ROOT / "results" / "submission_artifact_manifest.json"
+ZIP_TIMESTAMP = (1980, 1, 1, 0, 0, 0)
 
 
 def digest(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
+
+
+def deterministic_info(relative: str) -> zipfile.ZipInfo:
+    """Return platform-independent metadata for a reproducible ZIP member."""
+    info = zipfile.ZipInfo(relative.replace("\\", "/"), date_time=ZIP_TIMESTAMP)
+    info.compress_type = zipfile.ZIP_DEFLATED
+    info.create_system = 3
+    info.external_attr = 0o100644 << 16
+    return info
 
 
 def main() -> None:
@@ -49,10 +59,11 @@ def main() -> None:
             if path.suffix.lower() in {".json", ".csv", ".md", ".tex", ".txt", ".py", ".ps1"}:
                 if any(marker in data for marker in forbidden):
                     raise ValueError(f"absolute local path found in release file: {relative}")
-            archive.write(path, relative.replace("\\", "/"))
-            archive_manifest.append({"path": relative.replace("\\", "/"), "bytes": len(data), "sha256": digest(data)})
+            member = relative.replace("\\", "/")
+            archive.writestr(deterministic_info(member), data)
+            archive_manifest.append({"path": member, "bytes": len(data), "sha256": digest(data)})
         payload = (json.dumps({"schema_version": 1, "files": archive_manifest}, indent=2) + "\n").encode()
-        archive.writestr("RELEASE_MANIFEST.json", payload)
+        archive.writestr(deterministic_info("RELEASE_MANIFEST.json"), payload)
     archive_hash = digest(OUTPUT.read_bytes())
     OUTPUT.with_suffix(OUTPUT.suffix + ".sha256").write_text(
         f"{archive_hash}  {OUTPUT.name}\n", encoding="ascii"

@@ -100,7 +100,8 @@ Hamiltonian-geometric optimizer, read `docs/mathematical_validation.md`.
 The authoritative audit-grade results can be verified without rerunning the
 long experiments. The command also refreshes the SHA-256 manifest and rebuilds
 the privacy-checked release archive, preventing those deliverables from
-drifting behind the checked evidence:
+drifting behind the checked evidence. ZIP member timestamps and permissions
+are normalized, so identical inputs produce the same archive checksum:
 
 ```powershell
 .\scripts\reproduce_submission_evidence.ps1 -Mode verify
