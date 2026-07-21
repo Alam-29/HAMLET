@@ -25,7 +25,8 @@ is an internal reproducibility audit, not external peer review.
 
 - `scripts/verify_submission_package.py` checks authoritative paths, row
   counts, seed sets, CUDA provenance, theorem stability, PINN cost metadata,
-  tuning/evaluation separation, and artifact hashes.
+  tuning/evaluation separation, artifact hashes, and agreement between the
+  official DeepOBS raw output, summary CSV, and manuscript table.
 - `scripts/reproduce_submission_evidence.ps1 -Mode verify` runs the complete
   unit-test suite and rewrites the manifest.
 - The manuscript and supplementary sources must compile twice without

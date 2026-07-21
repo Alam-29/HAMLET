@@ -138,6 +138,31 @@ def verify() -> dict[str, object]:
                 abs(raw["test_losses"][-1] - float(summary["final_test_loss"])) < 1e-12 and
                 abs(raw["test_accuracies"][-1] - float(summary["final_test_acc"])) < 1e-12,
                 f"official DeepOBS summary does not match raw runner output for {name}")
+    manuscript = (ROOT / "docs/hamiltonian_geometric_consolidated_report.tex").read_text(encoding="utf-8")
+    table_start = manuscript.find(r"\label{tab:deepobs-official}")
+    table_end = manuscript.find(r"\end{table*}", table_start)
+    require(table_start >= 0 and table_end > table_start,
+            "official DeepOBS manuscript table is missing")
+    deepobs_table = manuscript[table_start:table_end]
+    display_names = {
+        "hamiltonian_geometric": "Hamiltonian-geometric",
+        "sgd_momentum": "SGD + momentum",
+        "adamw": "AdamW",
+    }
+    for name, row in deepobs_by_optimizer.items():
+        expected_values = (
+            f'{float(row["final_val_loss"]):.4f}',
+            f'{float(row["final_val_acc"]):.4f}',
+            f'{float(row["final_test_loss"]):.4f}',
+            f'{float(row["final_test_acc"]):.4f}',
+            f'{float(row["runtime_s"]):.1f}',
+        )
+        require(display_names[name] in deepobs_table and
+                all(value in deepobs_table for value in expected_values),
+                f"official DeepOBS manuscript row is stale for {name}")
+    interpretation = manuscript[table_end:table_end + 1400].lower()
+    require("single seed" in interpretation and "no significance claim" in interpretation,
+            "official DeepOBS manuscript caveat is missing")
     pinn = rows("results/pinn_multiseed_raw.csv")
     require(len(pinn) == 10 and {int(row["seed"]) for row in pinn} == set(range(10)),
             "PINN replication must contain seeds 0--9")
