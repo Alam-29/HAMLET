@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.21)  21 JUL 2026 04:58
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.21)  21 JUL 2026 13:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -739,21 +739,137 @@ ault.sty
 )
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/beamer\beamerouterthemedef
 ault.sty)))
-(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/beamer\beamerthemeMadrid.s
-ty
-(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/beamer\beamercolorthemewha
-le.sty)
-(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/beamer\beamercolorthemeorc
-hid.sty)
-(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/beamer\beamerinnerthemerou
-nded.sty)
-(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/beamer\beamerouterthemeinf
-olines.sty))
-(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/beamer\beamercolorthemesea
-horse.sty)
-(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/beamer\beamerfontthemeprof
-essionalfonts.sty)
-(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/base\fontenc.sty
+(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/beamertheme-metropolis\bea
+merthememetropolis.sty
+Package: beamerthememetropolis 2017/01/23 v1.2 Metropolis Beamer theme
+
+(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/pgfopts\pgfopts.sty
+Package: pgfopts 2014/07/10 v2.1a LaTeX package options with pgfkeys
+\pgfopts@list@add@a@toks=\toks46
+\pgfopts@list@add@b@toks=\toks47
+)
+(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/beamertheme-metropolis\bea
+merinnerthememetropolis.sty
+Package: beamerinnerthememetropolis 2017/01/23 Metropolis inner theme
+
+(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/tools\calc.sty
+Package: calc 2025/03/01 v4.3b Infix arithmetic (KKT,FJ)
+\calc@Acount=\count358
+\calc@Bcount=\count359
+\calc@Adimen=\dimen302
+\calc@Bdimen=\dimen303
+\calc@Askip=\skip67
+\calc@Bskip=\skip68
+LaTeX Info: Redefining \setlength on input line 86.
+LaTeX Info: Redefining \addtolength on input line 87.
+\calc@Ccount=\count360
+\calc@Cskip=\skip69
+)
+(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/pgf/frontendlayer\tikz.sty
+(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/pgf/basiclayer\pgf.sty
+Package: pgf 2025-08-29 v3.1.11a (3.1.11a)
+
+(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodulesha
+pes.code.tex
+File: pgfmoduleshapes.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+\pgfnodeparttextbox=\box78
+)
+(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmoduleplo
+t.code.tex
+File: pgfmoduleplot.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+)
+(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/pgf/compatibility\pgfcomp-
+version-0-65.sty
+Package: pgfcomp-version-0-65 2025-08-29 v3.1.11a (3.1.11a)
+\pgf@nodesepstart=\dimen304
+\pgf@nodesepend=\dimen305
+)
+(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/pgf/compatibility\pgfcomp-
+version-1-18.sty
+Package: pgfcomp-version-1-18 2025-08-29 v3.1.11a (3.1.11a)
+))
+(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/pgf/utilities\pgffor.sty
+(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgffor.cod
+e.tex
+Package: pgffor 2025-08-29 v3.1.11a (3.1.11a)
+\pgffor@iter=\dimen306
+\pgffor@skip=\dimen307
+\pgffor@stack=\toks48
+\pgffor@toks=\toks49
+))
+(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tikz\t
+ikz.code.tex
+Package: tikz 2025-08-29 v3.1.11a (3.1.11a)
+
+(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibrary
+plothandlers.code.tex
+File: pgflibraryplothandlers.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+\pgf@plot@mark@count=\count361
+\pgfplotmarksize=\dimen308
+)
+\tikz@lastx=\dimen309
+\tikz@lasty=\dimen310
+\tikz@lastxsaved=\dimen311
+\tikz@lastysaved=\dimen312
+\tikz@lastmovetox=\dimen313
+\tikz@lastmovetoy=\dimen314
+\tikzleveldistance=\dimen315
+\tikzsiblingdistance=\dimen316
+\tikz@figbox=\box79
+\tikz@figbox@bg=\box80
+\tikz@tempbox=\box81
+\tikz@tempbox@bg=\box82
+\tikztreelevel=\count362
+\tikznumberofchildren=\count363
+\tikznumberofcurrentchild=\count364
+\tikz@fig@count=\count365
+
+(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodulemat
+rix.code.tex
+File: pgfmodulematrix.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+\pgfmatrixcurrentrow=\count366
+\pgfmatrixcurrentcolumn=\count367
+\pgf@matrix@numberofcolumns=\count368
+)
+\tikz@expandcount=\count369
+
+(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tikz/l
+ibraries\tikzlibrarytopaths.code.tex
+File: tikzlibrarytopaths.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+)))
+\metropolis@titleseparator@linewidth=\skip70
+\metropolis@progressonsectionpage=\skip71
+\metropolis@progressonsectionpage@linewidth=\skip72
+\metropolis@blocksep=\skip73
+\metropolis@blockadjust=\skip74
+\metropolis@parskip=\skip75
+)
+(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/beamertheme-metropolis\bea
+merouterthememetropolis.sty
+Package: beamerouterthememetropolis 2017/01/23 Metropolis outer theme
+\metropolis@frametitle@padding=\skip76
+\metropolis@progressinheadfoot=\skip77
+\metropolis@progressinheadfoot@linewidth=\skip78
+)
+(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/beamertheme-metropolis\bea
+mercolorthememetropolis.sty
+Package: beamercolorthememetropolis 2017/01/23 Metropolis color theme
+)
+(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/beamertheme-metropolis\bea
+merfontthememetropolis.sty
+Package: beamerfontthememetropolis 2017/01/23 Metropolis font theme
+
+(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/generic/iftex\ifxetex.sty
+Package: ifxetex 2019/10/25 v0.7 ifxetex legacy package. Use iftex instead.
+)
+(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/generic/iftex\ifluatex.sty
+Package: ifluatex 2019/10/25 v1.5 ifluatex legacy package. Use iftex instead.
+)
+
+Package beamerthememetropolis Warning: You need to compile with XeLaTeX or LuaL
+aTeX to use the Fira fonts on input line 95.
+
+)) (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/base\fontenc.sty
 Package: fontenc 2025/07/18 v2.1d Standard LaTeX package
 )
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/lm\lmodern.sty
@@ -793,96 +909,24 @@ LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
 )
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/booktabs\booktabs.sty
 Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
-\heavyrulewidth=\dimen302
-\lightrulewidth=\dimen303
-\cmidrulewidth=\dimen304
-\belowrulesep=\dimen305
-\belowbottomsep=\dimen306
-\aboverulesep=\dimen307
-\abovetopsep=\dimen308
-\cmidrulesep=\dimen309
-\cmidrulekern=\dimen310
-\defaultaddspace=\dimen311
-\@cmidla=\count358
-\@cmidlb=\count359
-\@aboverulesep=\dimen312
-\@belowrulesep=\dimen313
-\@thisruleclass=\count360
-\@lastruleclass=\count361
-\@thisrulewidth=\dimen314
+\heavyrulewidth=\dimen317
+\lightrulewidth=\dimen318
+\cmidrulewidth=\dimen319
+\belowrulesep=\dimen320
+\belowbottomsep=\dimen321
+\aboverulesep=\dimen322
+\abovetopsep=\dimen323
+\cmidrulesep=\dimen324
+\cmidrulekern=\dimen325
+\defaultaddspace=\dimen326
+\@cmidla=\count370
+\@cmidlb=\count371
+\@aboverulesep=\dimen327
+\@belowrulesep=\dimen328
+\@thisruleclass=\count372
+\@lastruleclass=\count373
+\@thisrulewidth=\dimen329
 )
-(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/pgf/frontendlayer\tikz.sty
-(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/pgf/basiclayer\pgf.sty
-Package: pgf 2025-08-29 v3.1.11a (3.1.11a)
-
-(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodulesha
-pes.code.tex
-File: pgfmoduleshapes.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgfnodeparttextbox=\box78
-)
-(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmoduleplo
-t.code.tex
-File: pgfmoduleplot.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-)
-(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/pgf/compatibility\pgfcomp-
-version-0-65.sty
-Package: pgfcomp-version-0-65 2025-08-29 v3.1.11a (3.1.11a)
-\pgf@nodesepstart=\dimen315
-\pgf@nodesepend=\dimen316
-)
-(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/pgf/compatibility\pgfcomp-
-version-1-18.sty
-Package: pgfcomp-version-1-18 2025-08-29 v3.1.11a (3.1.11a)
-))
-(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/pgf/utilities\pgffor.sty
-(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgffor.cod
-e.tex
-Package: pgffor 2025-08-29 v3.1.11a (3.1.11a)
-\pgffor@iter=\dimen317
-\pgffor@skip=\dimen318
-\pgffor@stack=\toks46
-\pgffor@toks=\toks47
-))
-(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tikz\t
-ikz.code.tex
-Package: tikz 2025-08-29 v3.1.11a (3.1.11a)
-
-(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibrary
-plothandlers.code.tex
-File: pgflibraryplothandlers.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgf@plot@mark@count=\count362
-\pgfplotmarksize=\dimen319
-)
-\tikz@lastx=\dimen320
-\tikz@lasty=\dimen321
-\tikz@lastxsaved=\dimen322
-\tikz@lastysaved=\dimen323
-\tikz@lastmovetox=\dimen324
-\tikz@lastmovetoy=\dimen325
-\tikzleveldistance=\dimen326
-\tikzsiblingdistance=\dimen327
-\tikz@figbox=\box79
-\tikz@figbox@bg=\box80
-\tikz@tempbox=\box81
-\tikz@tempbox@bg=\box82
-\tikztreelevel=\count363
-\tikznumberofchildren=\count364
-\tikznumberofcurrentchild=\count365
-\tikz@fig@count=\count366
-
-(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodulemat
-rix.code.tex
-File: pgfmodulematrix.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgfmatrixcurrentrow=\count367
-\pgfmatrixcurrentcolumn=\count368
-\pgf@matrix@numberofcolumns=\count369
-)
-\tikz@expandcount=\count370
-
-(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tikz/l
-ibraries\tikzlibrarytopaths.code.tex
-File: tikzlibrarytopaths.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-)))
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tikz/l
 ibraries\tikzlibraryshapes.geometric.code.tex
 File: tikzlibraryshapes.geometric.code.tex 2025-08-29 v3.1.11a (3.1.11a)
@@ -894,10 +938,10 @@ File: pgflibraryshapes.geometric.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibrary
 arrows.meta.code.tex
 File: pgflibraryarrows.meta.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgfarrowinset=\dimen328
-\pgfarrowlength=\dimen329
-\pgfarrowwidth=\dimen330
-\pgfarrowlinewidth=\dimen331
+\pgfarrowinset=\dimen330
+\pgfarrowlength=\dimen331
+\pgfarrowwidth=\dimen332
+\pgfarrowlinewidth=\dimen333
 )
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tikz/l
 ibraries\tikzlibrarypositioning.code.tex
@@ -913,8 +957,8 @@ File: tikzlibrarybackgrounds.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 \pgf@layerbox@background=\box83
 \pgf@layerboxsaved@background=\box84
 )
-LaTeX Font Info:    Trying to load font information for T1+lmss on input line 9
-2.
+LaTeX Font Info:    Trying to load font information for T1+lmss on input line 4
+8.
 
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmss.fd
 File: t1lmss.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
@@ -922,28 +966,28 @@ File: t1lmss.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdftex
 .def
 File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count371
+\l__color_backend_stack_int=\count374
 ) (hamiltonian_geometric_short_presentation.aux)
 \openout1 = `hamiltonian_geometric_short_presentation.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 92.
-LaTeX Font Info:    ... okay on input line 92.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 92.
-LaTeX Font Info:    ... okay on input line 92.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 92.
-LaTeX Font Info:    ... okay on input line 92.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 92.
-LaTeX Font Info:    ... okay on input line 92.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 92.
-LaTeX Font Info:    ... okay on input line 92.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 92.
-LaTeX Font Info:    ... okay on input line 92.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 92.
-LaTeX Font Info:    ... okay on input line 92.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 92.
-LaTeX Font Info:    ... okay on input line 92.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 92.
-LaTeX Font Info:    ... okay on input line 92.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -953,14 +997,14 @@ LaTeX Font Info:    ... okay on input line 92.
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
 * modes: includehead includefoot 
-* h-part:(L,W,R)=(10.95003pt, 433.34402pt, 10.95003pt)
+* h-part:(L,W,R)=(28.45274pt, 398.3386pt, 28.45274pt)
 * v-part:(T,H,B)=(0.0pt, 256.0748pt, 0.0pt)
 * \paperwidth=455.24408pt
 * \paperheight=256.0748pt
-* \textwidth=433.34402pt
+* \textwidth=398.3386pt
 * \textheight=227.62207pt
-* \oddsidemargin=-61.31996pt
-* \evensidemargin=-61.31996pt
+* \oddsidemargin=-43.81725pt
+* \evensidemargin=-43.81725pt
 * \topmargin=-72.26999pt
 * \headheight=14.22636pt
 * \headsep=0.0pt
@@ -981,17 +1025,17 @@ LaTeX Font Info:    ... okay on input line 92.
 
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count372
-\scratchdimen=\dimen332
+\scratchcounter=\count375
+\scratchdimen=\dimen334
 \scratchbox=\box85
-\nofMPsegments=\count373
-\nofMParguments=\count374
-\everyMPshowfont=\toks48
-\MPscratchCnt=\count375
-\MPscratchDim=\dimen333
-\MPnumerator=\count376
-\makeMPintoPDFobject=\count377
-\everyMPtoPDFconversion=\toks49
+\nofMPsegments=\count376
+\nofMParguments=\count377
+\everyMPshowfont=\toks50
+\MPscratchCnt=\count378
+\MPscratchDim=\dimen335
+\MPnumerator=\count379
+\makeMPintoPDFobject=\count380
+\everyMPtoPDFconversion=\toks51
 )
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-base
 .sty
@@ -1002,12 +1046,58 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/00miktex\epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-Package hyperref Info: Link coloring OFF on input line 92.
+Package hyperref Info: Link coloring OFF on input line 48.
  (hamiltonian_geometric_short_presentation.out)
 (hamiltonian_geometric_short_presentation.out)
 \@outlinefile=\write5
 \openout5 = `hamiltonian_geometric_short_presentation.out'.
 
+LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
+(Font)                  OT1/lmr/m/n --> OT1/cmss/m/n on input line 48.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  OT1/lmr/bx/n --> OT1/cmss/b/n on input line 48.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
+(Font)                  OT1/cmss/m/n --> OT1/lmss/m/n on input line 48.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  OT1/cmss/b/n --> OT1/lmss/b/n on input line 48.
+\symnumbers=\mathgroup6
+\sympureletters=\mathgroup7
+LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `normal'
+(Font)                  OT1/lmss/m/n --> T1/lmr/m/n on input line 48.
+LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 48.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
+(Font)                  OT1/lmr/bx/n --> T1/lmss/b/n on input line 48.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
+(Font)                  OT1/lmr/bx/n --> T1/lmss/b/n on input line 48.
+LaTeX Font Info:    Redeclaring math alphabet \mathsf on input line 48.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
+(Font)                  OT1/lmss/m/n --> T1/lmss/m/n on input line 48.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
+(Font)                  OT1/lmss/bx/n --> T1/lmss/m/n on input line 48.
+LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 48.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
+(Font)                  OT1/lmr/m/it --> T1/lmss/m/it on input line 48.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
+(Font)                  OT1/lmr/bx/it --> T1/lmss/m/it on input line 48.
+LaTeX Font Info:    Redeclaring math alphabet \mathtt on input line 48.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
+(Font)                  OT1/lmtt/m/n --> T1/lmtt/m/n on input line 48.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
+(Font)                  OT1/lmtt/m/n --> T1/lmtt/m/n on input line 48.
+LaTeX Font Info:    Overwriting symbol font `numbers' in version `bold'
+(Font)                  T1/lmss/m/n --> T1/lmss/b/n on input line 48.
+LaTeX Font Info:    Overwriting symbol font `pureletters' in version `bold'
+(Font)                  T1/lmss/m/it --> T1/lmss/b/it on input line 48.
+LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `bold'
+(Font)                  OT1/lmss/b/n --> T1/lmr/b/n on input line 48.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
+(Font)                  T1/lmss/b/n --> T1/lmss/b/n on input line 48.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
+(Font)                  T1/lmss/m/n --> T1/lmss/b/n on input line 48.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
+(Font)                  T1/lmss/m/it --> T1/lmss/b/it on input line 48.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
+(Font)                  T1/lmtt/m/n --> T1/lmtt/b/n on input line 48.
 
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/translator\translator-basi
 c-dictionary-English.dict
@@ -1033,197 +1123,167 @@ Dictionary: translator-numbers-dictionary, Language: English
 rem-dictionary-English.dict
 Dictionary: translator-theorem-dictionary, Language: English 
 ) (hamiltonian_geometric_short_presentation.nav)
+Overfull \vbox (44.55624pt too high) detected at line 53
+ []
+
 [1
 
 {C:/Users/HP/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/HP/AppD
 ata/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}]
-LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 1
-12.
+LaTeX Font Info:    Trying to load font information for TS1+lmss on input line 
+68.
 
-(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/lm\ot1lmr.fd
-File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/lm\ts1lmss.fd
+File: ts1lmss.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OML+lmm on input line 1
-12.
+LaTeX Font Info:    Trying to load font information for OT1+lmss on input line 
+68.
+
+(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/lm\ot1lmss.fd
+File: ot1lmss.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 6
+8.
 
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/lm\omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-112.
+68.
 
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/lm\omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-112.
+68.
 
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/lm\omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10.95> on input line 112.
+(Font)              <10.95> on input line 68.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 112.
+(Font)              <8> on input line 68.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 112.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 112
-.
+(Font)              <6> on input line 68.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 68.
+
 
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 112
-.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 68.
+
 
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <10.95> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 112.
- [2
-
-{C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathit.enc}{C:
-/Users/HP/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-rm.enc}]
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 154.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 68.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <8> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 154.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 68.
+LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <6> not available
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 68.
+LaTeX Font Info:    Trying to load font information for T1+lmr on input line 68
+.
+
+(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmr.fd
+File: t1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
+
+LaTeX Font Warning: Font shape `T1/lmss/m/sc' in size <12> not available
+(Font)              Font shape `T1/lmr/m/sc' tried instead on input line 68.
+
+
+LaTeX Font Warning: Font shape `T1/lmss/bx/sc' undefined
+(Font)              using `T1/lmss/bx/n' instead on input line 68.
+
+[2
+
+{C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc}{C:/Us
+ers/HP/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathit.enc}{C:/Users
+/HP/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-rm.enc}]
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <5> on input line 108.
+LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <5> not available
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 108.
  [3
 
 {C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathsy.enc}]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 170.
+(Font)              <10> on input line 131.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 170.
+(Font)              <7> on input line 131.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <10> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 170.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 131.
+LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <7> not available
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 131.
  [4
 
-] [5
+{C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathex.enc}] [
+5
 
 ]
-LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <9> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 221.
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 1
+99.
+
+(C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmtt.fd
+File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
+LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <8> not available
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 199.
+
+
+LaTeX Font Warning: Font shape `T1/lmss/bx/scit' undefined
+(Font)              using `T1/lmss/bx/it' instead on input line 199.
+
+LaTeX Font Info:    Font shape `T1/lmss/bx/it' in size <12> not available
+(Font)              Font shape `T1/lmss/bx/sl' tried instead on input line 199.
+
+
+Overfull \vbox (21.05936pt too high) detected at line 199
+ []
 
 [6
 
 ]
-<../ppt_assets/test_result_media/mnist_optimizer_benchmark/mnist_test_accuracy.
-png, id=107, 650.43pt x 404.3105pt>
-File: ../ppt_assets/test_result_media/mnist_optimizer_benchmark/mnist_test_accu
-racy.png Graphic file (type png)
-<use ../ppt_assets/test_result_media/mnist_optimizer_benchmark/mnist_test_accur
-acy.png>
-Package pdftex.def Info: ../ppt_assets/test_result_media/mnist_optimizer_benchm
-ark/mnist_test_accuracy.png  used on input line 230.
-(pdftex.def)             Requested size: 121.3896pt x 75.45638pt.
-<../ppt_assets/test_result_media/deepobs_style_benchmark/deepobs_style_accuracy
-.png, id=109, 650.43pt x 419.166pt>
-File: ../ppt_assets/test_result_media/deepobs_style_benchmark/deepobs_style_acc
-uracy.png Graphic file (type png)
-<use ../ppt_assets/test_result_media/deepobs_style_benchmark/deepobs_style_accu
-racy.png>
-Package pdftex.def Info: ../ppt_assets/test_result_media/deepobs_style_benchmar
-k/deepobs_style_accuracy.png  used on input line 230.
-(pdftex.def)             Requested size: 117.08226pt x 75.45302pt.
-<../ppt_assets/test_result_media/algoperf_style_hg_nonzero_150epochs/algoperf_s
-tyle_validation_loss.png, id=110, 650.43pt x 419.166pt>
-File: ../ppt_assets/test_result_media/algoperf_style_hg_nonzero_150epochs/algop
-erf_style_validation_loss.png Graphic file (type png)
-<use ../ppt_assets/test_result_media/algoperf_style_hg_nonzero_150epochs/algope
-rf_style_validation_loss.png>
-Package pdftex.def Info: ../ppt_assets/test_result_media/algoperf_style_hg_nonz
-ero_150epochs/algoperf_style_validation_loss.png  used on input line 230.
-(pdftex.def)             Requested size: 117.08226pt x 75.45302pt.
-<../ppt_assets/test_result_media/industry_llm_benchmark_wikitext2_200steps/indu
-stry_llm_validation_loss.png, id=111, 628.3475pt x 375.804pt>
-File: ../ppt_assets/test_result_media/industry_llm_benchmark_wikitext2_200steps
-/industry_llm_validation_loss.png Graphic file (type png)
-<use ../ppt_assets/test_result_media/industry_llm_benchmark_wikitext2_200steps/
-industry_llm_validation_loss.png>
-Package pdftex.def Info: ../ppt_assets/test_result_media/industry_llm_benchmark
-_wikitext2_200steps/industry_llm_validation_loss.png  used on input line 230.
-(pdftex.def)             Requested size: 126.15625pt x 75.4519pt.
- [7
-
- <../ppt_assets/test_result_media/mnist_optimizer_benchmark/mnist_test_accuracy
-.png> <../ppt_assets/test_result_media/deepobs_style_benchmark/deepobs_style_ac
-curacy.png> <../ppt_assets/test_result_media/algoperf_style_hg_nonzero_150epoch
-s/algoperf_style_validation_loss.png> <../ppt_assets/test_result_media/industry
-_llm_benchmark_wikitext2_200steps/industry_llm_validation_loss.png>]
-Overfull \hbox (1.33167pt too wide) in paragraph at lines 252--252
-[][] 
- []
-
-[8
-
-] [9
-
-]
 <../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimizer_pa
-reto.png, id=139, 505.89pt x 397.485pt>
+reto.png, id=71, 505.89pt x 397.485pt>
 File: ../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimiz
 er_pareto.png Graphic file (type png)
 <use ../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimize
 r_pareto.png>
 Package pdftex.def Info: ../ppt_assets/test_result_media/modern_optimizer_bench
-mark/modern_optimizer_pareto.png  used on input line 291.
-(pdftex.def)             Requested size: 123.91711pt x 97.36345pt.
-<../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimizer_se
-ed_sweep.png, id=140, 578.16pt x 361.35pt>
-File: ../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimiz
-er_seed_sweep.png Graphic file (type png)
-<use ../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimize
-r_seed_sweep.png>
-Package pdftex.def Info: ../ppt_assets/test_result_media/modern_optimizer_bench
-mark/modern_optimizer_seed_sweep.png  used on input line 291.
-(pdftex.def)             Requested size: 138.673pt x 86.67062pt.
-<../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimizer_sc
-aling_sweep.png, id=141, 542.025pt x 361.35pt>
-File: ../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimiz
-er_scaling_sweep.png Graphic file (type png)
-<use ../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimize
-r_scaling_sweep.png>
-Package pdftex.def Info: ../ppt_assets/test_result_media/modern_optimizer_bench
-mark/modern_optimizer_scaling_sweep.png  used on input line 291.
-(pdftex.def)             Requested size: 138.67355pt x 92.44904pt.
- [10
+mark/modern_optimizer_pareto.png  used on input line 225.
+(pdftex.def)             Requested size: 145.19136pt x 114.07893pt.
+ [7
 
  <../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_optimizer_p
-areto.png> <../ppt_assets/test_result_media/modern_optimizer_benchmark/modern_o
-ptimizer_seed_sweep.png> <../ppt_assets/test_result_media/modern_optimizer_benc
-hmark/modern_optimizer_scaling_sweep.png>] [11
-
-]
-<../ablation styudy/figures/architecture_factorial.png, id=161, 867.24pt x 346.
-896pt>
+areto.png>]
+<../ablation styudy/figures/architecture_factorial.png, id=80, 867.24pt x 346.8
+96pt>
 File: ../ablation styudy/figures/architecture_factorial.png Graphic file (type 
 png)
 <use ../ablation styudy/figures/architecture_factorial.png>
 Package pdftex.def Info: ../ablation styudy/figures/architecture_factorial.png 
- used on input line 339.
-(pdftex.def)             Requested size: 138.6686pt x 55.46744pt.
-<../ablation styudy/figures/quantum_ablation.png, id=162, 722.7pt x 346.896pt>
+ used on input line 253.
+(pdftex.def)             Requested size: 127.46025pt x 50.9841pt.
+<../ablation styudy/figures/quantum_ablation.png, id=81, 722.7pt x 346.896pt>
 File: ../ablation styudy/figures/quantum_ablation.png Graphic file (type png)
 <use ../ablation styudy/figures/quantum_ablation.png>
 Package pdftex.def Info: ../ablation styudy/figures/quantum_ablation.png  used 
-on input line 339.
-(pdftex.def)             Requested size: 138.6708pt x 66.56198pt.
-<../ablation styudy/figures/gpu_ablation.png, id=163, 867.24pt x 346.896pt>
+on input line 253.
+(pdftex.def)             Requested size: 127.46686pt x 61.18408pt.
+<../ablation styudy/figures/gpu_ablation.png, id=82, 867.24pt x 346.896pt>
 File: ../ablation styudy/figures/gpu_ablation.png Graphic file (type png)
 <use ../ablation styudy/figures/gpu_ablation.png>
 Package pdftex.def Info: ../ablation styudy/figures/gpu_ablation.png  used on i
-nput line 339.
-(pdftex.def)             Requested size: 138.6686pt x 55.46744pt.
- [12
+nput line 253.
+(pdftex.def)             Requested size: 127.46025pt x 50.9841pt.
+ [8
 
  <../ablation styudy/figures/architecture_factorial.png> <../ablation styudy/fi
-gures/quantum_ablation.png> <../ablation styudy/figures/gpu_ablation.png>] [13
-
-] [14
-
-] [15
+gures/quantum_ablation.png> <../ablation styudy/figures/gpu_ablation.png>] [9
 
 ]
 \tf@nav=\write6
@@ -1235,52 +1295,54 @@ gures/quantum_ablation.png> <../ablation styudy/figures/gpu_ablation.png>] [13
 \tf@snm=\write8
 \openout8 = `hamiltonian_geometric_short_presentation.snm'.
 
-
-(hamiltonian_geometric_short_presentation.aux)
+ (hamiltonian_geometric_short_presentation.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
  ***********
+
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
 Package rerunfilecheck Info: File `hamiltonian_geometric_short_presentation.out
 ' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 26469 strings out of 467871
- 540599 string characters out of 5419828
- 920661 words of memory out of 5000000
- 54756 multiletter control sequences out of 15000+600000
- 718298 words of font info for 97 fonts, out of 8000000 for 9000
+ 26818 strings out of 467871
+ 548525 string characters out of 5419828
+ 929304 words of memory out of 5000000
+ 55098 multiletter control sequences out of 15000+600000
+ 729639 words of font info for 105 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 128i,15n,123p,417b,797s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx6.pfb><C
-:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx8.pfb><C:/Us
-ers/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmmi10.pfb><C:/Users
-/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmmi5.pfb><C:/Users/HP/
-AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmmi6.pfb><C:/Users/HP/AppD
-ata/Local/Programs/MiKTeX/fonts/type1/public/lm/lmmi7.pfb><C:/Users/HP/AppData/
-Local/Programs/MiKTeX/fonts/type1/public/lm/lmmi8.pfb><C:/Users/HP/AppData/Loca
-l/Programs/MiKTeX/fonts/type1/public/lm/lmr10.pfb><C:/Users/HP/AppData/Local/Pr
-ograms/MiKTeX/fonts/type1/public/lm/lmr5.pfb><C:/Users/HP/AppData/Local/Program
-s/MiKTeX/fonts/type1/public/lm/lmr6.pfb><C:/Users/HP/AppData/Local/Programs/MiK
-TeX/fonts/type1/public/lm/lmr7.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/f
-onts/type1/public/lm/lmr8.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/
-type1/public/lm/lmss10.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/typ
-e1/public/lm/lmss12.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/
-public/lm/lmss8.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/publ
-ic/lm/lmss9.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/l
-m/lmssbx10.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm
-/lmsso10.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/l
-msso8.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmss
-o9.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsy10.
-pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsy5.pfb>
-<C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsy6.pfb><C:/
-Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsy7.pfb><C:/User
-s/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsy8.pfb>
-Output written on hamiltonian_geometric_short_presentation.pdf (15 pages, 13748
-52 bytes).
+ 128i,13n,123p,1909b,807s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmex10.pfb><
+C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmmi10.pfb><C:/
+Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmmi5.pfb><C:/User
+s/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmmi6.pfb><C:/Users/HP
+/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmmi7.pfb><C:/Users/HP/App
+Data/Local/Programs/MiKTeX/fonts/type1/public/lm/lmmi8.pfb><C:/Users/HP/AppData
+/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr5.pfb><C:/Users/HP/AppData/Loca
+l/Programs/MiKTeX/fonts/type1/public/lm/lmr6.pfb><C:/Users/HP/AppData/Local/Pro
+grams/MiKTeX/fonts/type1/public/lm/lmr7.pfb><C:/Users/HP/AppData/Local/Programs
+/MiKTeX/fonts/type1/public/lm/lmss10.pfb><C:/Users/HP/AppData/Local/Programs/Mi
+KTeX/fonts/type1/public/lm/lmss12.pfb><C:/Users/HP/AppData/Local/Programs/MiKTe
+X/fonts/type1/public/lm/lmss8.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fo
+nts/type1/public/lm/lmss9.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/
+type1/public/lm/lmssbo10.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/t
+ype1/public/lm/lmssbx10.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/ty
+pe1/public/lm/lmsso10.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type
+1/public/lm/lmsso8.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/p
+ublic/lm/lmsy10.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/publ
+ic/lm/lmsy5.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/l
+m/lmsy6.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lm
+sy7.pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsy8.
+pfb><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtk10.pfb
+><C:/Users/HP/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt10.pfb>
+Output written on hamiltonian_geometric_short_presentation.pdf (9 pages, 673618
+ bytes).
 PDF statistics:
- 309 PDF objects out of 1000 (max. 8388607)
- 31 named destinations out of 1000 (max. 500000)
- 177 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 214 PDF objects out of 1000 (max. 8388607)
+ 19 named destinations out of 1000 (max. 500000)
+ 63 words of extra memory for PDF output out of 10000 (max. 10000000)
 

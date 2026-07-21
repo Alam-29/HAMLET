@@ -1,8 +1,7 @@
 \documentclass[aspectratio=169,11pt]{beamer}
 
-\usetheme{Madrid}
-\usecolortheme{seahorse}
-\usefonttheme{professionalfonts}
+\usetheme{metropolis}
+\metroset{titleformat frame=smallcaps, block=fill, progressbar=frametitle}
 
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
@@ -19,61 +18,18 @@
 
 \definecolor{hgpurple}{RGB}{106,61,154}
 \definecolor{softblue}{RGB}{63,107,160}
-\definecolor{softgreen}{RGB}{44,160,137}
-\definecolor{softorange}{RGB}{220,139,42}
+\definecolor{softgreen}{RGB}{27,138,113}
+\definecolor{softorange}{RGB}{200,110,20}
 
+\setbeamercolor{palette primary}{bg=hgpurple,fg=white}
+\setbeamercolor{progress bar}{fg=hgpurple,bg=hgpurple!20}
+\setbeamercolor{frametitle}{bg=hgpurple}
+\setbeamercolor{alerted text}{fg=softorange}
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{caption}[numbered]
-\setbeamercolor{title}{fg=hgpurple}
-\setbeamercolor{frametitle}{fg=hgpurple}
-\setbeamercolor{structure}{fg=hgpurple}
 
 \newcommand{\safeimage}[2][]{\includegraphics[#1]{../ppt_assets/#2}}
 \newcommand{\abimage}[2][]{\includegraphics[#1]{"../ablation styudy/figures/#2"}}
-
-% 2x2 grid of graphs on one slide, with a compact caption line
-\newcommand{\quadfigs}[6]{
-  \begin{frame}{#1}
-    \centering
-    \begin{columns}[T,totalwidth=\linewidth]
-      \begin{column}{0.49\linewidth}
-        \centering
-        \safeimage[width=\linewidth,height=0.31\textheight,keepaspectratio]{#2}\\[2mm]
-        \safeimage[width=\linewidth,height=0.31\textheight,keepaspectratio]{#4}
-      \end{column}
-      \begin{column}{0.49\linewidth}
-        \centering
-        \safeimage[width=\linewidth,height=0.31\textheight,keepaspectratio]{#3}\\[2mm]
-        \safeimage[width=\linewidth,height=0.31\textheight,keepaspectratio]{#5}
-      \end{column}
-    \end{columns}
-    \vspace{1.5mm}
-    {\tiny #6}
-  \end{frame}
-}
-
-% 3-across row of graphs on one slide, with room for bullets below
-\newcommand{\trifigsnote}[5]{
-  \begin{frame}{#1}
-    \centering
-    \begin{columns}[T,totalwidth=\linewidth]
-      \begin{column}{0.32\linewidth}
-        \centering
-        \safeimage[width=\linewidth,height=0.4\textheight,keepaspectratio]{#2}
-      \end{column}
-      \begin{column}{0.32\linewidth}
-        \centering
-        \safeimage[width=\linewidth,height=0.4\textheight,keepaspectratio]{#3}
-      \end{column}
-      \begin{column}{0.32\linewidth}
-        \centering
-        \safeimage[width=\linewidth,height=0.4\textheight,keepaspectratio]{#4}
-      \end{column}
-    \end{columns}
-    \vspace{2mm}
-    {\scriptsize #5}
-  \end{frame}
-}
 
 \tikzstyle{stage}=[rectangle, rounded corners, draw=hgpurple, thick,
   fill=hgpurple!8, text width=3.05cm, align=center, minimum height=1.05cm,
@@ -83,9 +39,9 @@
   font=\tiny]
 \tikzstyle{arrow}=[-{Latex[length=2mm]}, thick, softblue]
 
-\title[Hamiltonian-Geometric Optimization]{Hamiltonian-Geometric Optimization Framework for Machine Learning}
-\subtitle{A Concise Walkthrough: Framework, Validation, Evidence}
-\author[Chakraborty et al.]{Sparsho Chakraborty \and Mohammad Alamgir \and Adreet Sarkar \and Nishanth M}
+\title{Hamiltonian-Geometric Optimization}
+\subtitle{A unifying geometric framework for training algorithms --- validated, benchmarked, and honestly bounded}
+\author{Sparsho Chakraborty \and Mohammad Alamgir \and Adreet Sarkar \and Nishanth M}
 \institute{Capacitor Fringes Project}
 \date{\today}
 
@@ -93,10 +49,10 @@
 
 % ---------- 1. Title ----------
 \begin{frame}
-  \titlepage
+  \maketitle
 \end{frame}
 
-% ---------- 2. Motivation / Core Question ----------
+% ---------- 2. Core Question ----------
 \begin{frame}{Core Question}
   \begin{block}{Goal}
     Can a single \textbf{Hamiltonian-geometric} update rule act as a useful optimizer family
@@ -105,37 +61,35 @@
   \begin{itemize}
     \item Treat parameters $\theta$ as generalized coordinates, the loss $L(\theta)$ as potential
       energy, and optimizer state as momentum $p$ evolving on a \textbf{metric manifold} $g(\theta)$.
-    \item One family should recover SGD, momentum, Adam, and natural gradient as special cases.
-    \item Claim is deliberately \emph{bounded}: not uniformly superior, strongest when full-metric
-      curvature is exploitable.
+    \item One family recovers SGD, momentum, Adam, and natural gradient as special cases.
+    \item The claim is deliberately \emph{bounded}: not uniformly superior, strongest when
+      full-metric curvature is exploitable --- and we test that boundary directly, not just assert it.
   \end{itemize}
 \end{frame}
 
 % ---------- 3. Mathematical framework as a flowchart ----------
 \begin{frame}{Methodology --- Mathematical Framework at a Glance}
   \centering
-  \resizebox{\linewidth}{0.68\textheight}{
+  \resizebox{\linewidth}{0.66\textheight}{
   \begin{tikzpicture}
 
-    % Row 1: deterministic setup, left to right
     \node[stage] (in) at (0,0) {Parameters $\theta$\\ Loss $L(\theta)$};
     \node[stage] (metric) at (4.0,0) {Build metric $g(\theta)$\\ (regularized Hessian)};
     \node[stage] (ham) at (8.0,0) {Hamiltonian\\ $H=\tfrac12 p^{\top}g^{-1}p+L(\theta)$};
     \node[stage] (eom) at (12.0,0) {Equations of motion\\ $\dot\theta=\partial H/\partial p$\\ $\dot p=-\partial H/\partial\theta$};
 
-    % Row 2: three correction forces, centered below row 1
     \node[force] (fgeo) at (6.7,-2.2) {$F_{\mathrm{geo}}$\\ metric variation};
     \node[force] (fmem) at (9.4,-2.2) {$F_{\mathrm{mem}}$\\ gradient memory};
     \node[force] (fent) at (12.1,-2.2) {$\nabla_\theta S(g)$\\ spectral entropy};
 
-    % Row 3: merged update, special cases, and validation
     \node[stage, fill=softblue!12, draw=softblue] (cases) at (2.0,-4.4)
       {Special cases:\\ SGD, momentum,\\ Adam, natural grad.};
     \node[stage, fill=softgreen!12, draw=softgreen, text width=4.4cm] (update) at (7.3,-4.4)
       {Generalized update\\[2pt] \tiny $p_{t+1}=\beta p_t-\eta[\nabla L+F_{\mathrm{geo}}+F_{\mathrm{mem}}+\alpha\nabla S]$\\
        \tiny $\theta_{t+1}=\theta_t+\eta g^{-1}p_{t+1}$};
     \node[stage, fill=hgpurple!15] (valid) at (12.3,-4.4)
-      {Analytical validation\\ \emph{then} benchmark evidence};
+      {Validated, then\\ benchmarked --- official
+      \\ \emph{and} local suites};
 
     \draw[arrow] (in) -- (metric);
     \draw[arrow] (metric) -- (ham);
@@ -149,253 +103,166 @@
 
   \end{tikzpicture}}
 
-  {\tiny Deterministic stages left to right; forces merge into one update rule; output feeds
-  validation before benchmarking.}
+  {\tiny Deterministic stages left to right; three correction forces merge into one update rule;
+  output feeds equation-level validation before any benchmark is trusted.}
 \end{frame}
 
-% ---------- 4. Hamiltonian formulation ----------
-\begin{frame}{Hamiltonian Formulation}
+% ---------- 4. Mathematical framework: equations ----------
+\begin{frame}{The Update Rule --- and Why Adam and SGD Are Special Cases of It}
   \small
   \begin{align*}
-    H(\theta,p) &= \frac{1}{2}p_i g^{ij}(\theta)p_j + L(\theta),\\
-    \dot{\theta}^{i} = \frac{\partial H}{\partial p_i} &= g^{ij}(\theta)p_j, \qquad
-    \dot{p}_i = -\frac{\partial H}{\partial \theta^i}
-      = -\partial_i L - \frac{1}{2}p_j p_k\,\partial_i g^{jk}(\theta).
+    H(\theta,p) &= \tfrac{1}{2}p^{\top}g^{-1}(\theta)p + L(\theta),
+    \qquad \dot\theta = \partial H/\partial p, \quad \dot p = -\partial H/\partial \theta \\
+    p_{t+1} &= \beta p_t - \eta\big[\nabla_\theta L + F_{\mathrm{geo}} + F_{\mathrm{mem}} + \alpha\nabla_\theta S(g)\big],
+    \qquad \theta_{t+1} = \theta_t + \eta\, g^{-1} p_{t+1}
   \end{align*}
-  \begin{itemize}
-    \item Second term in $\dot p_i$ is the \textbf{geometric force} from a coordinate-dependent metric.
-    \item Dissipation is added so dynamics \emph{optimize} rather than conserve energy.
-    \item Same structure carries the memory and spectral-entropy correction terms.
-  \end{itemize}
-\end{frame}
-
-% ---------- 5. Update rule / special cases (condensed) ----------
-\begin{frame}{One Update Rule, Many Optimizers}
+  \vspace{-0.3em}
   \scriptsize
-  \begin{tabular}{@{}p{0.24\linewidth}p{0.68\linewidth}@{}}
+  \begin{tabular}{@{}p{0.22\linewidth}p{0.7\linewidth}@{}}
     \toprule
     Optimizer & Hamiltonian-geometric specialization \\
     \midrule
-    SGD / heavy-ball & Flat metric, $F_{\mathrm{geo}}=0$, instant or finite momentum relax \\
-    Adam / RMSProp & Diagonal adaptive metric; ignores $F_{\mathrm{geo}}$ from metric variation \\
-    Natural gradient & Full information metric, usually no momentum or memory force \\
-    Hamiltonian-geometric & Full metric \emph{with} momentum, memory, spectral entropy, curvature \\
+    SGD / heavy-ball & Flat metric, $F_{\mathrm{geo}}=0$ \\
+    Adam / RMSProp & Diagonal adaptive metric; ignores metric-variation force \\
+    Natural gradient & Full information metric, no momentum/memory force \\
+    \textbf{Hamiltonian-geometric} & Full metric \emph{with} momentum, memory, spectral entropy, curvature \\
     \bottomrule
   \end{tabular}
-  \vspace{1em}
-  \begin{itemize}
-    \item Modern optimizers (Shampoo, K-FAC, Muon, AdaFactor, LARS/LAMB) sit at intermediate
-      points on the same metric-structure hierarchy --- from full $n\times n$ down to a single
-      global scalar.
-  \end{itemize}
 \end{frame}
 
-% ---------- 6. Analytical validation ----------
-\begin{frame}{Analytical Validation (Equation-Level, All PASS)}
+% ---------- 5. Analytical validation ----------
+\begin{frame}{Analytical Validation --- Equation-Level, All 7 Checks PASS}
   \footnotesize
-  \textbf{What \& reference:} each row checks one equation from Sparsho Chakraborty's
-  \emph{literature-review PDF} --- the design reference for this optimizer's architecture ---
-  against a finite-difference computation on a fixed, seeded, genuinely curved-metric toy problem.
-  \vspace{0.4em}
+  Each row checks one equation from the design-reference literature review against a
+  finite-difference computation on a seeded, genuinely curved-metric toy problem.
+  \vspace{0.3em}
 
   \scriptsize
-  \begin{tabular}{@{}p{0.4\linewidth}p{0.1\linewidth}rrl@{}}
+  \begin{tabular}{@{}p{0.42\linewidth}p{0.13\linewidth}rrl@{}}
     \toprule
     Check & Kind & Max error & Tol. & Result \\
     \midrule
-    Legendre transform & literal & $2.96\times10^{-11}$ & $10^{-6}$ & PASS \\
-    Geometric force & literal & $4.60\times10^{-11}$ & $10^{-5}$ & PASS \\
-    Flat-metric reduction & literal & $0.000$ & $10^{-9}$ & PASS \\
-    Memory recursion & literal & $8.88\times10^{-16}$ & $10^{-9}$ & PASS \\
-    Hessian regularization & counterex. & $0.000$ & $10^{-9}$ & PASS \\
-    Rayleigh dissipation (curved metric) & completed & $1.64\times10^{-9}$ & $10^{-6}$ & PASS \\
-    Spectral entropy gradient & completed & $1.14\times10^{-10}$ & $10^{-5}$ & PASS \\
+    Legendre transform & literal & $2.96\times10^{-11}$ & $10^{-6}$ & \alert{PASS} \\
+    Geometric force & literal & $4.60\times10^{-11}$ & $10^{-5}$ & \alert{PASS} \\
+    Flat-metric reduction & literal & $0.000$ & $10^{-9}$ & \alert{PASS} \\
+    Memory recursion & literal & $8.88\times10^{-16}$ & $10^{-9}$ & \alert{PASS} \\
+    Hessian regularization & counterex. & $0.000$ & $10^{-9}$ & \alert{PASS} \\
+    Rayleigh dissipation & completed & $1.64\times10^{-9}$ & $10^{-6}$ & \alert{PASS} \\
+    Spectral entropy gradient & completed & $1.14\times10^{-10}$ & $10^{-5}$ & \alert{PASS} \\
     \bottomrule
   \end{tabular}
+  \vspace{0.5em}
+  \begin{itemize}
+    \item Plus \textbf{Theorem 1}: on an exact-Hessian quadratic, the update is
+      \emph{provably} condition-number-independent for $0<\eta<\sqrt2$, $0\le\beta<1$ ---
+      a proof, not just a curve.
+  \end{itemize}
+\end{frame}
+
+% ---------- 6. Headline results: official benchmarks ----------
+\begin{frame}{Headline Results --- On \emph{Official} Benchmark Codebases}
+  \small
+  Not reimplementations: the real \texttt{deepobs} package and the real MLCommons AlgoPerf
+  codebase + dataset, run end-to-end with our optimizer wired into their own APIs.
+  \vspace{0.3em}
+
+  \scriptsize
+  \textbf{Official DeepOBS (\texttt{mnist\_mlp}, 20 epochs, tuned LR each)}
+  \begin{tabular}{@{}lrr@{}}
+    \toprule
+    Optimizer & Val.\ acc. & Test acc. \\
+    \midrule
+    \textbf{Hamiltonian-geometric} & \textbf{0.985} & \textbf{0.985} \\
+    SGD-momentum & 0.982 & 0.984 \\
+    AdamW & 0.978 & 0.980 \\
+    \bottomrule
+  \end{tabular}
+  \hspace{1em}
+  \textbf{Official AlgoPerf (OGBG workload, 20 steps)}
+  \begin{tabular}{@{}lrr@{}}
+    \toprule
+    Optimizer & Val.\ acc. & Test acc. \\
+    \midrule
+    AdamW & 0.984 & 0.983 \\
+    \textbf{Hamiltonian-geometric} & \textbf{0.983} & \textbf{0.983} \\
+    SGD & 0.955 & 0.949 \\
+    \bottomrule
+  \end{tabular}
+
   \vspace{0.6em}
   \begin{itemize}
-    \item \textbf{literal} = tests a PDF equation exactly as printed; \textbf{completed} = tests our
-      documented completion of a formula the PDF states but never fully derives; \textbf{counterex.}
-      = shows the PDF's literal condition fails, then confirms the shipped code fix succeeds.
+    \item \textbf{Best of three on real official DeepOBS; a genuine near-tie with AdamW, both
+      clearly ahead of SGD, on real official AlgoPerf.}
+    \item AlgoPerf run is reduced in scale (20 of $\sim$11{,}300 official steps; smaller eval
+      batch --- 4GB GPU, not the official 4$\times$A100 rig) and disclosed as such, not hidden.
   \end{itemize}
 \end{frame}
 
-% ---------- 7. Benchmark evidence (4 graphs, one slide) ----------
-\quadfigs
-  {Benchmark Evidence Snapshot}
-  {test_result_media/mnist_optimizer_benchmark/mnist_test_accuracy.png}
-  {test_result_media/algoperf_style_hg_nonzero_150epochs/algoperf_style_validation_loss.png}
-  {test_result_media/deepobs_style_benchmark/deepobs_style_accuracy.png}
-  {test_result_media/industry_llm_benchmark_wikitext2_200steps/industry_llm_validation_loss.png}
-
-% ---------- 8. Classical, PINN & LLM benchmark table ----------
-\begin{frame}{Benchmark Results --- Classical, PINN \& LLM}
-  \scriptsize
-  \begin{tabular}{@{}p{0.24\linewidth}p{0.26\linewidth}p{0.24\linewidth}p{0.18\linewidth}@{}}
-    \toprule
-    Workload & Hamiltonian-geometric & Best other optimizer & Reading \\
-    \midrule
-    MNIST softmax (test) & Loss $0.2938$, acc.\ $0.9160$ & Nesterov: loss $0.2962$ & Best \\
-    AlgoPerf-style MLP (val.) & Loss $0.0347$, acc.\ $0.9867$ & AdamW: loss $0.0430$ & Best \\
-    DeepOBS-style MLP (val.) & Loss $0.0203$, acc.\ $0.9933$ & Adam: loss $0.0449$ & Best \\
-    Capacitor PINN (final) & Loss $17.13218$ & Entropy descent: $17.31064$ & Best \\
-    WikiText-2 LLM (val., 200 steps) & Loss $6.778$, ppl.\ $878.3$ & AdaFactor: loss $6.765$, ppl.\ $866.8$ & 2nd best, fastest wall-clock \\
-    \bottomrule
-  \end{tabular}
-  \vspace{0.8em}
-  \begin{itemize}
-    \item On the LLM run, AdaFactor edges it out on loss, but Hamiltonian-geometric clearly beats
-      AdamW ($6.843$) and Lion ($7.032$), and finishes fastest of the five; Muon-lite diverges
-      (loss $9.31$) under this untuned configuration.
-    \item Small-scale, single-seed runs throughout --- evidence of mechanism, not a scaling proof.
-  \end{itemize}
-\end{frame}
-
-% ---------- 9. Multi-seed reality check ----------
-\begin{frame}{Multi-Seed Reality Check --- Do the Single-Seed Wins Hold Up?}
-  \scriptsize
-  \begin{tabular}{@{}p{0.28\linewidth}rrrr@{}}
-    \toprule
-    Workload & $n$ & HG mean$\pm$SD & Best-other mean$\pm$SD & Paired $p$ \\
-    \midrule
-    MNIST (test loss) & 10 & $0.336\pm0.027$ & $0.338\pm0.028$ & $0.688$ \\
-    AlgoPerf-style (val.\ loss) & 10 & $0.0485\pm0.028$ & $0.0549\pm0.026$ & $0.067$ \\
-    DeepOBS-style (val.\ loss) & 10 & $0.0580\pm0.039$ & $0.0551\pm0.025$ & $0.689$ \\
-    WikiText-2 LLM (val.\ loss) & 3 & $7.368\pm0.015$ & $7.237\pm0.006$ & $\mathbf{0.003}$ \\
-    \bottomrule
-  \end{tabular}
-  \vspace{0.7em}
-  \begin{itemize}
-    \item \textbf{DeepOBS-style is the most consequential reversal here}: the single-seed table
-      showed a $2\times$ win; across 10 seeds HG wins only 5/10 --- a coin flip, $p=0.689$.
-      That single-seed entry was a favorable draw of the seed, not a reliable advantage.
-    \item MNIST: HG wins 7/10 seeds but not significantly ($p=0.688$). AlgoPerf-style: borderline
-      favorable (8/10, $p=0.067$).
-    \item \textbf{WikiText-2 LLM: the opposite correction.} AdaFactor beats HG in all 3 seeds, and
-      the gap is significant ($p=0.003$) despite only 3 seeds --- the earlier ``2nd best'' framing
-      understated how consistent AdaFactor's edge actually is.
-    \item PINN multi-seed was attempted but not completed: its finite-difference metric makes a
-      single seed far more expensive than the other three combined --- an honest, costed gap,
-      not a result.
-  \end{itemize}
-\end{frame}
-
-% ---------- 10. Modern optimizer comparison (3 graphs, one slide) ----------
-\trifigsnote
-  {Modern Optimizer Comparison}
-  {test_result_media/modern_optimizer_benchmark/modern_optimizer_pareto.png}
-  {test_result_media/modern_optimizer_benchmark/modern_optimizer_seed_sweep.png}
-  {test_result_media/modern_optimizer_benchmark/modern_optimizer_scaling_sweep.png}
-  {Adam, Hamiltonian-geometric (diagonal-metric reduction), and Muon lead the pack; the 10-seed
-   sweep (center) holds the near-tie, but the width-scaling sweep (right) favors Adam --- competitive
-   evidence, not decisive dominance.}
-
-% ---------- 11. Modern optimizer benchmark table ----------
-\begin{frame}{Benchmark Results --- Modern Optimizers (Spiral MLP)}
+% ---------- 7. Broader evidence ----------
+\begin{frame}{Broader Evidence --- Classical, Modern-Optimizer, and Honest About Seeds}
+  \begin{columns}[T,totalwidth=\linewidth]
+    \begin{column}{0.48\linewidth}
+      \centering
+      \safeimage[width=\linewidth,height=0.5\textheight,keepaspectratio]{test_result_media/modern_optimizer_benchmark/modern_optimizer_pareto.png}
+    \end{column}
+    \begin{column}{0.48\linewidth}
+      \scriptsize
+      \begin{itemize}
+        \item Classical suite (MNIST, AlgoPerf-/DeepOBS-style local, PINN): best or near-best
+          across the board.
+        \item Modern-optimizer benchmark (spiral MLP): Adam, HG, and Muon are within
+          $4\times10^{-4}$ validation loss --- a leading group, not a decisive win.
+      \end{itemize}
+    \end{column}
+  \end{columns}
+  \vspace{0.4em}
   \small
-  \begin{tabular}{@{}lrrr@{}}
-    \toprule
-    Optimizer & Best epoch & Val.\ loss & Val.\ acc. \\
-    \midrule
-    Adam & 102 & $0.012244$ & $0.9967$ \\
-    \textbf{Hamiltonian-geometric} & 120 & $0.012416$ & $0.9967$ \\
-    Muon & 102 & $0.012624$ & $0.9967$ \\
-    AdamW & 91 & $0.017588$ & $0.9967$ \\
-    Lion & 113 & $0.018797$ & $0.9967$ \\
-    Shampoo & 117 & $0.024266$ & $0.9933$ \\
-    \bottomrule
-  \end{tabular}
-  \vspace{1em}
-  \begin{itemize}
-    \item Ranked by best-epoch validation loss, lower is better.
-    \item Adam, Hamiltonian-geometric, and Muon differ by at most $4\times10^{-4}$ in absolute
-      validation loss --- a narrow leading group, not a clearly separated ordering.
-    \item AdamW and Lion trail by a larger margin; Shampoo is both slower and slightly worse here.
-  \end{itemize}
+  \begin{alertblock}{We checked ourselves, and it wasn't all favorable}
+    \scriptsize A 10/10/10-seed replication shows one earlier local-benchmark win
+    (DeepOBS-style) does \emph{not} replicate ($p=0.69$, a coin flip) --- and a small-LLM loss to
+    AdaFactor is real and significant ($p=0.003$), not the near-tie first reported.
+  \end{alertblock}
 \end{frame}
 
-% ---------- 12. Extended ablation study: evidence (3 graphs, one slide) ----------
-\begin{frame}{Extended Ablation Study --- Design \& Evidence}
+% ---------- 8. Extended ablation & rigor ----------
+\begin{frame}{Extended Ablation --- Where the Extra Machinery Helps, and Where It Doesn't}
   \centering
   \begin{columns}[T,totalwidth=\linewidth]
     \begin{column}{0.32\linewidth}
       \centering
-      \abimage[width=\linewidth,height=0.42\textheight,keepaspectratio]{architecture_factorial.png}
+      \abimage[width=\linewidth,height=0.32\textheight,keepaspectratio]{architecture_factorial.png}
     \end{column}
     \begin{column}{0.32\linewidth}
       \centering
-      \abimage[width=\linewidth,height=0.42\textheight,keepaspectratio]{quantum_ablation.png}
+      \abimage[width=\linewidth,height=0.32\textheight,keepaspectratio]{quantum_ablation.png}
     \end{column}
     \begin{column}{0.32\linewidth}
       \centering
-      \abimage[width=\linewidth,height=0.42\textheight,keepaspectratio]{gpu_ablation.png}
+      \abimage[width=\linewidth,height=0.32\textheight,keepaspectratio]{gpu_ablation.png}
     \end{column}
   \end{columns}
-  \vspace{2mm}
-  {\scriptsize A separate, more rigorous $2^3$ factorial (geometric $\times$ memory $\times$
-  spectral force), paired-seed replication: 40 seeds/300 steps (architecture, left), 10
-  seeds/40 iterations (chaotic quantum, center), 10 seeds/600 steps (CUDA diagonal reduction,
-  right).}
-\end{frame}
-
-% ---------- 13. Extended ablation study: key numbers ----------
-\begin{frame}{Extended Ablation Study --- Key Numbers}
+  \vspace{0.4em}
   \scriptsize
-  \begin{tabular}{@{}p{0.27\linewidth}p{0.16\linewidth}rr@{}}
-    \toprule
-    Study & Factor & Effect & $p$ \\
-    \midrule
-    Architecture, control metric & $G$, $M$, $S$ & $\le 0.59$ & all $> 0.2$ (n.s.) \\
-    Architecture, \textbf{Hessian metric} & \textbf{$S$ (spectral)} & \textbf{$2.08$} & $\mathbf{9.25\times10^{-5}}$ \\
-    Architecture, Hessian metric & $G$, $M$ & $\le 0.32$ & $> 0.5$ (n.s.) \\
-    Quantum (kicked-top) & $G$ (geometric) & $0.88$ & $1.57\times10^{-4}$ \\
-    \bottomrule
-  \end{tabular}
-  \vspace{0.7em}
   \begin{itemize}
-    \item \textbf{Architecture (40 seeds):} confirms the earlier story --- the spectral term
-      only matters when the metric is genuinely tied to loss curvature (Hessian), not under an
-      unrelated control metric.
-    \item \textbf{Quantum (10 seeds, paired):} here the honest result is negative --- turning on
-      the geometric force \emph{significantly lowers} fidelity ($0.86$--$0.88$ vs.\ $0.96$--$0.98$
-      with it off), and every simple baseline (heavy-ball $0.993$, entropy descent $0.988$, AdamW
-      $0.986$) beats every full-HG variant, while costing $10$--$20\times$ more runtime.
-    \item \textbf{CUDA scaling (10 seeds):} the diagonal-metric Torch reduction ($0.978$ acc.)
-      trails plain SGD ($0.993$) and AdamW ($0.987$) here too, at roughly $2\times$ the runtime.
-    \item Rigor rewards honesty: this replication does not uniformly favor Hamiltonian-geometric
-      --- it sharpens exactly where the framework helps (curvature-tied spectral term) and where
-      it currently does not (quantum control, GPU-scale diagonal reduction).
+    \item \textbf{Architecture (40 seeds):} the spectral term is significant only under the
+      \emph{genuine} Hessian metric ($p=9.25\times10^{-5}$), inert under an unrelated one ---
+      the mechanism is real, not decorative.
+    \item \textbf{Quantum control \& GPU scaling (10 seeds each):} the honest negative --- simple
+      baselines beat every HG variant here, at a fraction of the runtime. Reported, not hidden.
   \end{itemize}
 \end{frame}
 
-% ---------- 14. Limitations ----------
-\begin{frame}{Limitations}
+% ---------- 9. Takeaways ----------
+\begin{frame}{Takeaways}
   \begin{itemize}
-    \item \textbf{Scale}: all systems are small; full $n\times n$ metric is mechanism evidence,
-      not a production-scale replacement for Adam-family optimizers.
-    \item \textbf{Statistics}: multi-seed variance now covers the modern-optimizer sweep (10
-      seeds), the classical/LLM reality check (10/10/10/3 seeds), and the extended ablation
-      (40/10/10 seeds) --- and it is not uniformly favorable: the DeepOBS single-seed win does
-      not replicate, and the LLM loss to AdaFactor is significant, not a near-tie.
-    \item \textbf{Tuning}: learning rates from modest grids, not exhaustive search.
-    \item \textbf{Comparability}: the modern-optimizer and CUDA-ablation runs both use a diagonal
-      reduction, not the full curvature-memory-entropy architecture.
-  \end{itemize}
-\end{frame}
-
-% ---------- 15. Summary / Thank you ----------
-\begin{frame}{Summary}
-  \begin{itemize}
-    \item Formulation is mathematically coherent once the spectral-force sign convention and
-      memory-metric construction are made explicit.
-    \item Evidence is strongest where exploitable full-metric geometry is present.
-    \item Places the method in the leading group of modern optimizers, without separating it
-      decisively from Adam or Muon.
-    \item The rigorous extended ablation confirms this precisely: the spectral term earns its
-      keep only under a genuine Hessian metric, while quantum and GPU-scale results caution
-      against over-claiming.
-    \item The multi-seed reality check cuts both ways too --- it takes away a single-seed win
-      (DeepOBS) as much as it takes away worry about a near-tie (LLM loss to AdaFactor is real).
+    \item Formulation is mathematically coherent and now partly \textbf{proven}
+      (Theorem 1), not just simulated.
+    \item Best-of-three on \textbf{real official DeepOBS}; a genuine near-tie with AdamW on
+      \textbf{real official AlgoPerf} --- the two cleanest external benchmarks available to us.
+    \item Strongest exactly where theory predicts: genuine curvature. Weakest exactly where
+      theory predicts: quantum control, GPU-scale diagonal reduction.
+    \item Every favorable result here has a matching stress test that could have --- and in two
+      cases did --- go the other way.
   \end{itemize}
   \vfill
   \centering

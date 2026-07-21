@@ -32,3 +32,7 @@ results/official_algoperf/*smoketest*/
 
 # Generated benchmark/demo outputs (regenerate via README commands)
 visualizations/
+
+# Large binary checkpoints/event logs from official-benchmark runs (metrics are in the CSV/JSON)
+results/official_algoperf/**/checkpoint_*
+results/official_algoperf/**/events.out.tfevents.*

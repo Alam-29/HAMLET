@@ -28,7 +28,8 @@ is an internal reproducibility audit, not external peer review.
   tuning/evaluation separation, artifact hashes, and agreement between the
   official DeepOBS raw output, summary CSV, and manuscript table. It also
   recomputes the five-workload Holm correction and checks every numerical
-  entry in the central multi-seed replication table.
+  entry in the central multi-seed replication table, plus the held-out
+  equal-budget table and its AdamW interpretation.
 - `scripts/reproduce_submission_evidence.ps1 -Mode verify` runs the complete
   unit-test suite and rewrites the manifest.
 - The manuscript and supplementary sources must compile twice without

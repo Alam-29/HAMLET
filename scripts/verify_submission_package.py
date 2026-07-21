@@ -14,7 +14,9 @@ import argparse
 import csv
 import hashlib
 import json
+import math
 from pathlib import Path
+import statistics
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -220,6 +222,51 @@ def verify() -> dict[str, object]:
     require({int(row["seed"]) for row in tuning} == {100, 101, 102} and
             {int(row["seed"]) for row in evaluation} == set(range(10)),
             "equal-budget tuning/evaluation seeds overlap or are incomplete")
+    equal_budget_comparisons = rows("results/equal_budget_tuning/paired_comparisons.csv")
+    equal_budget_start = manuscript.find(r"\label{tab:equal-budget-tuning}")
+    equal_budget_table_start = manuscript.rfind(r"\begin{table}", 0, equal_budget_start)
+    equal_budget_end = manuscript.find(r"\end{table}", equal_budget_start)
+    require(equal_budget_table_start >= 0 and equal_budget_end > equal_budget_start,
+            "equal-budget manuscript table is missing")
+    equal_budget_table = manuscript[equal_budget_table_start:equal_budget_end]
+    evaluation_by_optimizer = {
+        name: [float(row["val_loss"]) for row in evaluation if row["optimizer"] == name]
+        for name in ("hamiltonian_geometric", "adamw", "nag", "heavy_ball")
+    }
+    comparisons_by_other = {
+        row["comparison"].removeprefix("hamiltonian_geometric-vs-"): row
+        for row in equal_budget_comparisons
+    }
+    equal_budget_specs = (
+        ("HG", "hamiltonian_geometric", None),
+        ("AdamW", "adamw", comparisons_by_other["adamw"]),
+        ("NAG", "nag", comparisons_by_other["nag"]),
+        ("Heavy-ball", "heavy_ball", comparisons_by_other["heavy_ball"]),
+    )
+    for label, name, comparison in equal_budget_specs:
+        manuscript_row = next((line for line in equal_budget_table.splitlines()
+                               if line.startswith(label + " &")), "")
+        values = evaluation_by_optimizer[name]
+        expected_values = (f"{statistics.mean(values):.5f}", f"{statistics.stdev(values):.5f}")
+        require(len(values) == 10 and manuscript_row and
+                all(value in manuscript_row for value in expected_values),
+                f"equal-budget manuscript mean/SD is stale for {label}")
+        if comparison is not None:
+            require(f'{comparison["hg_wins"]}/10' in manuscript_row,
+                    f"equal-budget manuscript win count is stale for {label}")
+            holm_p = float(comparison["holm_p"])
+            if holm_p >= 0.001:
+                displayed_p = f"{holm_p:.3f}"
+            else:
+                exponent = math.floor(math.log10(holm_p))
+                displayed_p = rf"{holm_p / 10**exponent:.2f}\times10^{{{exponent}}}"
+            require(displayed_p in manuscript_row,
+                    f"equal-budget manuscript Holm p-value is stale for {label}")
+    equal_budget_interpretation = manuscript[equal_budget_end:equal_budget_end + 500]
+    adamw_comparison = comparisons_by_other["adamw"]
+    require(f'{float(adamw_comparison["mean_difference"]):.5f}' in equal_budget_interpretation and
+            f'{float(adamw_comparison["cohen_dz"]):.2f}' in equal_budget_interpretation,
+            "equal-budget AdamW interpretation is stale")
 
     expected_counts = {
         "ablation styudy/results/architecture_raw.csv": 640,
