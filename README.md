@@ -98,7 +98,9 @@ Hamiltonian-geometric optimizer, read `docs/mathematical_validation.md`.
 ### Reproduce the submission evidence
 
 The authoritative audit-grade results can be verified without rerunning the
-long experiments:
+long experiments. The command also refreshes the SHA-256 manifest and rebuilds
+the privacy-checked release archive, preventing those deliverables from
+drifting behind the checked evidence:
 
 ```powershell
 .\scripts\reproduce_submission_evidence.ps1 -Mode verify

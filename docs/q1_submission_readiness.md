@@ -85,6 +85,7 @@ optimizer-specific-minibatch design and must not be used in the manuscript.
 - [x] CUDA device and software versions recorded.
 - [x] One command verifies the authoritative evidence; its `full` mode
   regenerates the ablation, paired classical/LLM, and runtime-normalized core.
+  Both modes refresh the manifest and privacy-checked release archive.
 - [x] Exact experiment dependency lock and SHA-256 archival artifact manifest.
 - [x] Privacy-checked code/data release archive with an internal
   per-file SHA-256 manifest; the builder rejects absolute local paths.

@@ -69,4 +69,7 @@ if ($Mode -eq "full") {
 & $PythonExe scripts\verify_submission_package.py --write-manifest
 if ($LASTEXITCODE -ne 0) { throw "Submission evidence verification failed" }
 
-Write-Host "Submission evidence verification completed successfully."
+& $PythonExe scripts\build_release_archive.py
+if ($LASTEXITCODE -ne 0) { throw "Submission release archive build failed" }
+
+Write-Host "Submission evidence verification and release archive build completed successfully."
