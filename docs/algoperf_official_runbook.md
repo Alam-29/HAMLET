@@ -66,7 +66,7 @@ cd .external\algorithmic-efficiency
   --tuning_search_space=..\..\algoperf_submissions\external_tuning\hamiltonian_geometric\tuning_search_space.json `
   --num_tuning_trials=15 `
   --data_dir=.\data `
-  --experiment_dir=C:\Users\Alam\Desktop\PYTHON\capacitor_fringes_project\visualizations\official_algoperf_runs `
+  --experiment_dir=..\..\results\official_algoperf `
   --experiment_name=mnist_hamiltonian_geometric `
   --overwrite
 ```
@@ -89,13 +89,11 @@ baseline submissions:
 .\scripts\run_algoperf_mnist_smoke_compare.ps1 -MaxGlobalSteps 5 -NumTuningTrials 1
 ```
 
-The extracted comparison artifacts from the current smoke run are:
-
-```text
-visualizations/official_algoperf_runs/mnist_official_smoke_comparison.csv
-visualizations/official_algoperf_runs/mnist_official_smoke_comparison.md
-visualizations/official_algoperf_runs/mnist_official_smoke_comparison.png
-```
+Smoke outputs are runner diagnostics only. They verify import, data selection,
+and optimizer updates, but are not benchmark evidence and are intentionally
+excluded from the manuscript and release archive. A publishable comparison
+requires completed evaluations under matched tuning budgets and multiple
+seeds; no such official AlgoPerf result is currently claimed.
 
 ## Important
 

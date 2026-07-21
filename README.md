@@ -132,6 +132,11 @@ python .\main\run_official_deepobs_benchmark.py --epochs 20 --seed 42
 Its downloaded MNIST data are intentionally ignored; runner JSON, tuning
 notes, and the consolidated CSV remain under `results/official_deepobs/`.
 
+An official-API AlgoPerf submission adapter and execution runbook are retained
+under `algoperf_submissions/` and `docs/algoperf_official_runbook.md`. Current
+AlgoPerf smoke runs validate integration only; they contain no completed,
+matched evaluation and are not manuscript evidence.
+
 ```powershell
 python .\main\run_models.py
 ```

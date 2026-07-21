@@ -76,6 +76,9 @@ optimizer-specific-minibatch design and must not be used in the manuscript.
   `StandardRunner`: three equally short-tuned optimizers, 20 epochs, seed 42.
   The paper reports HG's highest accuracy alongside SGD's lower loss and
   AdamW's lower runtime, and explicitly retains the single-seed limitation.
+- [x] Retained the official-API AlgoPerf adapter and portable runbook in the
+  release package. Current short smoke diagnostics are explicitly excluded
+  from evidence because no matched completed evaluation exists.
 
 ## Reproducibility
 

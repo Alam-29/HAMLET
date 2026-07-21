@@ -30,11 +30,11 @@ def main() -> None:
     evidence = json.loads(MANIFEST.read_text(encoding="utf-8"))
     paths = {item["path"] for item in evidence["authoritative_files"]}
     paths.update({"requirements.txt", "requirements-repro.txt", "README.md"})
-    for directory in ("src", "main", "tests", "scripts"):
+    for directory in ("src", "main", "tests", "scripts", "algoperf_submissions"):
         paths.update(
             str(path.relative_to(ROOT)).replace("\\", "/")
             for path in (ROOT / directory).rglob("*")
-            if path.is_file() and path.suffix in {".py", ".ps1", ".json"}
+            if path.is_file() and path.suffix in {".py", ".ps1", ".json", ".md", ".txt"}
             and "__pycache__" not in path.parts
         )
     paths.update({
@@ -45,6 +45,7 @@ def main() -> None:
         "docs/citation_audit.md",
         "docs/q1_submission_readiness.md",
         "docs/journal_targeting.md",
+        "docs/algoperf_official_runbook.md",
         "docs/submission/highlights.txt",
     })
     archive_manifest = []
