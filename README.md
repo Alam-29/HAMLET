@@ -118,6 +118,17 @@ hours and requires CUDA. `results/submission_artifact_manifest.json` identifies
 the authoritative artifacts; older unpaired `classical_multiseed_*` files are
 retained for audit history but are superseded and must not be cited.
 
+The separate official DeepOBS `mnist_mlp` comparison uses DeepOBS's own
+`StandardRunner` and data pipeline. The checked-in result is a 20-epoch,
+single-seed scope check, not a broad or statistically conclusive benchmark:
+
+```powershell
+python .\main\run_official_deepobs_benchmark.py --epochs 20 --seed 42
+```
+
+Its downloaded MNIST data are intentionally ignored; runner JSON, tuning
+notes, and the consolidated CSV remain under `results/official_deepobs/`.
+
 ```powershell
 python .\main\run_models.py
 ```

@@ -32,6 +32,8 @@ AUTHORITATIVE = (
     "results/industry_llm_compute_audit/seed_1/industry_llm_summary.csv",
     "results/industry_llm_compute_audit/seed_2/industry_llm_summary.csv",
     "results/approximate_metric_theorem_check.csv",
+    "results/official_deepobs/mnist_mlp_summary.csv",
+    "results/official_deepobs/lr_sweep_notes.md",
     "results/pinn_multiseed_raw.csv",
     "results/pinn_multiseed_summary.csv",
     "results/pinn_multiseed_manifest.json",
@@ -95,6 +97,23 @@ def verify() -> dict[str, object]:
     require(len(theorem) == 4, "approximate-metric theorem audit must contain four condition numbers")
     require(all(row["theorem_condition"] == "True" and row["empirically_stable"] == "True" for row in theorem),
             "approximate-metric theorem audit is not stable")
+    official_deepobs = rows("results/official_deepobs/mnist_mlp_summary.csv")
+    require(len(official_deepobs) == 3, "official DeepOBS summary must contain three optimizers")
+    require({row["optimizer"] for row in official_deepobs} ==
+            {"hamiltonian_geometric", "sgd_momentum", "adamw"},
+            "official DeepOBS optimizer set changed")
+    require(all(row["testproblem"] == "mnist_mlp" and int(row["epochs"]) == 20
+                for row in official_deepobs),
+            "official DeepOBS result must be the reported 20-epoch mnist_mlp run")
+    deepobs_by_optimizer = {row["optimizer"]: row for row in official_deepobs}
+    require(float(deepobs_by_optimizer["hamiltonian_geometric"]["final_test_acc"]) >
+            max(float(deepobs_by_optimizer[name]["final_test_acc"])
+                for name in ("sgd_momentum", "adamw")),
+            "official DeepOBS accuracy ordering changed")
+    require(float(deepobs_by_optimizer["sgd_momentum"]["final_test_loss"]) <
+            min(float(deepobs_by_optimizer[name]["final_test_loss"])
+                for name in ("hamiltonian_geometric", "adamw")),
+            "official DeepOBS loss ordering changed")
     pinn = rows("results/pinn_multiseed_raw.csv")
     require(len(pinn) == 10 and {int(row["seed"]) for row in pinn} == set(range(10)),
             "PINN replication must contain seeds 0--9")
@@ -141,7 +160,7 @@ def verify() -> dict[str, object]:
             {"path": name, "bytes": (ROOT / name).stat().st_size, "sha256": sha256(ROOT / name)}
             for name in AUTHORITATIVE
         ],
-        "validated_counts": {"paired_classical": 30, "pinn": 10, "equal_budget_tuning": 72, "equal_budget_evaluation": 40, "llm": 3, "llm_compute_optimizers": 5, "architecture": 640, "quantum": 110, "gpu": 60,
+        "validated_counts": {"paired_classical": 30, "official_deepobs": 3, "pinn": 10, "equal_budget_tuning": 72, "equal_budget_evaluation": 40, "llm": 3, "llm_compute_optimizers": 5, "architecture": 640, "quantum": 110, "gpu": 60,
                              "modern_optimizer_seeds": 60, "modern_optimizer_scaling": 30},
         "cuda_device": cuda["device"],
     }

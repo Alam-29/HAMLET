@@ -28,6 +28,7 @@ results/_classical_multiseed_tmp/
 results/_deepobs_smoketest/
 results/_hg_lr_sweep/
 results/_sgd_lr_sweep/
+results/official_algoperf/*smoketest*/
 
 # Generated benchmark/demo outputs (regenerate via README commands)
 visualizations/

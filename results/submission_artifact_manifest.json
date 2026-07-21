@@ -3,13 +3,13 @@
   "authoritative_files": [
     {
       "path": "docs/hamiltonian_geometric_consolidated_report.tex",
-      "bytes": 137756,
-      "sha256": "bcafdf0cd3aaae310453bd96f88feaff776808d2a4a5a7ca2bc45b96b1dc04eb"
+      "bytes": 139392,
+      "sha256": "1608407c29353498e55d36d01af31a3c763132beb20def94f5c3aadce27e73ac"
     },
     {
       "path": "docs/hamiltonian_geometric_consolidated_report.pdf",
-      "bytes": 2455823,
-      "sha256": "d485655dcc0cf354afe31d214092a25ca5c832470f1aad7270350cad140792f2"
+      "bytes": 2457666,
+      "sha256": "2f7ea54bc7753f1f938ba270312abfe3ca75919d727dfceeb57f99fecce1c85a"
     },
     {
       "path": "results/classical_multiseed_paired_raw.csv",
@@ -65,6 +65,16 @@
       "path": "results/approximate_metric_theorem_check.csv",
       "bytes": 512,
       "sha256": "2ef4d636b33309c4444e72b25f88d3657b41a88571d66e067506accbcce01f05"
+    },
+    {
+      "path": "results/official_deepobs/mnist_mlp_summary.csv",
+      "bytes": 471,
+      "sha256": "1e33c306e9662e859c1a8a38af765847c65e5d94ff82c4839e6eeec6eef1df1e"
+    },
+    {
+      "path": "results/official_deepobs/lr_sweep_notes.md",
+      "bytes": 1147,
+      "sha256": "2f140c6b699741d1c7f5f2016780d0fa8cc3de4e19813d6aee74654c94fa0d9b"
     },
     {
       "path": "results/pinn_multiseed_raw.csv",
@@ -179,6 +189,7 @@
   ],
   "validated_counts": {
     "paired_classical": 30,
+    "official_deepobs": 3,
     "pinn": 10,
     "equal_budget_tuning": 72,
     "equal_budget_evaluation": 40,

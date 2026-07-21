@@ -72,6 +72,10 @@ optimizer-specific-minibatch design and must not be used in the manuscript.
   evaluation on disjoint seeds 0--9; all 72 tuning and 40 evaluation rows are
   retained. The paper limits this claim to the principal tuned spiral-MLP
   protocol rather than implying exhaustive tuning on every workload.
+- [x] Added an official DeepOBS `mnist_mlp` scope check through its
+  `StandardRunner`: three equally short-tuned optimizers, 20 epochs, seed 42.
+  The paper reports HG's highest accuracy alongside SGD's lower loss and
+  AdamW's lower runtime, and explicitly retains the single-seed limitation.
 
 ## Reproducibility
 

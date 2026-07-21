@@ -1058,17 +1058,19 @@ production-scale competitor.
 The finite-plate capacitor fringing-field problem
 ($\nabla^2\varphi = 0$ with Dirichlet plate boundary conditions) is used as a
 physics-informed neural network benchmark. The present evaluation expands
-the empirical scope to six workloads: MNIST softmax
+the empirical scope to seven workloads: MNIST softmax
 regression~\cite{lecun1998mnist}, two synthetic spiral-MLP protocols (an
 equal-budget tuning protocol informed by AlgoPerf's evaluation
 principles~\cite{dahl2023algoperf}, and a fixed-hyperparameter robustness
-protocol informed by DeepOBS~\cite{schneider2019deepobs}), the capacitor PINN, a chaotic quantum
+protocol informed by DeepOBS~\cite{schneider2019deepobs}), the official
+DeepOBS \texttt{mnist\_mlp} problem, the capacitor PINN, a chaotic quantum
 kicked-top control problem, and an exact-statevector QAOA
 MaxCut~\cite{farhi2014qaoa} angle-optimization problem.
 These experiments are intended as controlled local benchmarks rather than
 official MLCommons~\cite{dahl2023algoperf} submissions. The two spiral-MLP
-protocols are local synthetic experiments, not results obtained from either
-official benchmark harness.
+protocols remain local synthetic experiments; only the explicitly labelled
+\texttt{mnist\_mlp} result below was obtained through an official benchmark
+harness.
 
 \textbf{Nomenclature.} ``Hamiltonian-geometric'' names five materially
 different configurations across this report, distinguished explicitly here
@@ -1104,6 +1106,33 @@ Entropy descent & 0.1663 & 0.3210 & 0.9513 & 0.9040 \\
 \bottomrule
 \end{tabular}
 \end{table*}
+
+\begin{table*}[t]
+\centering
+\caption{Single-seed official DeepOBS \texttt{mnist\_mlp} benchmark after 20
+epochs. Each optimizer's learning rate was selected by the same seven-or-fewer
+candidate, two-epoch validation sweep. Lower loss and runtime are better;
+higher accuracy is better.}
+\label{tab:deepobs-official}
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+Optimizer & Val. loss & Val. acc. & Test loss & Test acc. & Runtime (s) \\
+\midrule
+Hamiltonian-geometric & 0.1012 & \textbf{0.9847} & 0.0937 & \textbf{0.9854} & 980.7 \\
+SGD + momentum & \textbf{0.0986} & 0.9824 & \textbf{0.0874} & 0.9843 & 1008.6 \\
+AdamW & 0.1427 & 0.9777 & 0.1161 & 0.9802 & \textbf{529.0} \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+On this official problem, Hamiltonian-geometric has the highest validation and
+test accuracy, but SGD with momentum has the lowest validation and test loss,
+and AdamW is about $1.85\times$ faster than Hamiltonian-geometric. The result
+therefore supports task-metric competitiveness, not optimizer dominance. It is
+also a single seed and a single small MLP; no significance claim is attached
+to the sub-percentage-point accuracy differences. Raw runner JSON, the sweep
+record, and the extracted summary are retained under
+\texttt{results/official\_deepobs/}.
 
 \begin{table*}[t]
 \centering
@@ -1157,7 +1186,8 @@ Entropy descent & 17.31064 & 0.014716 & 0.188043 & 0.0023 & 2.0091 \\
 \end{tabular}
 \end{table*}
 
-Across the four classical tables above, Hamiltonian-geometric obtains the
+Across the four local classical tables above (excluding the separate official
+DeepOBS table), Hamiltonian-geometric obtains the
 best reported validation or test loss. This result depends on two
 methodological details that should be stated explicitly.
 
@@ -1197,7 +1227,7 @@ reducing the comparison to scalar loss alone.}
 \subsection{Multi-seed replication of the classical and LLM tables}
 \label{sec:classical-multiseed}
 
-Tables~\ref{tab:mnist}--\ref{tab:pinn} above, and the WikiText-2 LLM run
+The four local classical tables above, and the WikiText-2 LLM run
 (\S\ref{sec:experimental-validation}), are single-seed point estimates -- a
 limitation stated plainly elsewhere in this report
 (\S\ref{sec:limitations}, item 2). This subsection closes that gap directly
@@ -2375,9 +2405,9 @@ do.
 \item \textbf{No large-scale, standard deep-learning benchmark (ImageNet-scale
 vision, language-model pretraining) is included.} The two spiral-MLP benchmarks
 are local, small-scale synthetic protocols informed by, but not part of,
-AlgoPerf and DeepOBS; the official
-external dependencies are not present in this workspace
-(\S\ref{sec:experimental-validation}).
+AlgoPerf and DeepOBS. One official DeepOBS \texttt{mnist\_mlp} run is now
+included, but it is a single-seed, small-MLP result and does not close this
+scale or breadth gap (\S\ref{sec:experimental-validation}).
 \item \textbf{Under a fixed, non-task-tuned hyperparameter setting, the full
 architecture underperforms simple baselines on two workloads.} The extended
 ablation (\S\ref{sec:extended-ablation}) finds every Hamiltonian-geometric
@@ -2505,10 +2535,12 @@ mechanism-focused results from being extrapolated beyond their support.
 
 \begin{enumerate}
 \item \textbf{Official benchmark execution.} \S\ref{sec:experimental-validation}'s
-spiral-MLP workloads are local synthetic protocols, not results from the
-AlgoPerf or DeepOBS official harnesses. Those suite names are therefore not
-used as result labels or headline claims. Broader validation would require an
-official harness and established workloads beyond a single spiral MLP.
+spiral-MLP workloads are local synthetic protocols, not official AlgoPerf or
+DeepOBS results, and their labels remain explicitly local. A separate
+single-seed official DeepOBS \texttt{mnist\_mlp} experiment is reported in
+Table~\ref{tab:deepobs-official}; it does not constitute an official AlgoPerf
+submission or broad benchmark coverage. Broader validation requires multiple
+seeds and established workloads beyond one small MLP.
 \item \textbf{Multi-seed neural and LLM experiments with paired tests.}
 \S\ref{sec:classical-multiseed} now covers MNIST and both spiral-MLP protocols
 (10 seeds each), the capacitor PINN (10 seeds), and the WikiText-2 LLM run

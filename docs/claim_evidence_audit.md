@@ -16,8 +16,9 @@ is an internal reproducibility audit, not external peer review.
 | HG has no LLM systems advantage here | Synchronized time/update-to-target and peak-allocation columns in the compute audit | Supported: HG reaches the target later than AdaFactor and AdamW and uses slightly more allocated memory than AdamW |
 | Additional geometric/memory/spectral terms are not uniformly beneficial | 40-seed architecture factorial, 10-seed quantum ablation, corrected CUDA neural ablation | Supported; negative and divergent configurations remain in raw data |
 | Corrected CUDA neural results use held-out data and common minibatches | `ablation styudy/run_ablation_study.py` and 60-row `gpu_raw.csv` | Supported; supersedes the leaked exploratory result |
+| HG has the highest accuracy on the official DeepOBS `mnist_mlp` run | `results/official_deepobs/mnist_mlp_summary.csv` and retained runner JSON | Supported for one seed after an equal short learning-rate sweep; SGD has lower loss and AdamW is much faster, so no general superiority claim is allowed |
 | Modern-optimizer near-tie is robust but not scalable evidence | Paired 10-seed and width-scaling CSVs | Supported; Muon has the best mean at width 24 and Adam improves more consistently with width |
-| Results are from official AlgoPerf or DeepOBS harnesses | No such artifact exists | Rejected; manuscript labels them synthetic local protocols and uses suite citations only as design provenance |
+| The two spiral protocols are official AlgoPerf or DeepOBS results | Their scripts and paired artifacts use local synthetic data | Rejected; they remain explicitly local. A separately labelled official DeepOBS `mnist_mlp` result now exists and is not conflated with them |
 | HG is universally or state-of-the-art superior | Evidence is mixed and several baselines win | Rejected; manuscript conclusion is explicitly conditional |
 
 ## Mechanical integrity gates
