@@ -141,6 +141,36 @@ depends on $\theta$; the project's own capacitor benchmark has a metric that is 
 $\theta$, which would make $F_{\mathrm{geo}}$ and $\nabla_\theta S(g)$ trivially zero and prove
 nothing.
 
+\item \textbf{Where exactly did you verify the Legendre transform --- and the other checks? What's the actual setup?}\\
+All seven checks live in the same file, \texttt{src/paper\_math\_validation.py}, run against the
+same fixed, seeded 4-dimensional synthetic problem (seed \texttt{20260713}): a genuinely
+$\theta$-dependent metric $g(\theta)$ and a non-convex quartic loss
+$L(\theta)=\tfrac12\theta^{\top}Q\theta+c^{\top}\theta+0.1\sum\theta^4$. For the Legendre
+transform specifically: we compute the canonical momentum $p_i=\partial \mathcal L/\partial
+\dot\theta^i$ by \emph{central finite differences} (step $h=10^{-6}$) of the Lagrangian
+$\mathcal L=\tfrac12\dot\theta^{\top}g\dot\theta-L(\theta)$ evaluated at $\dot\theta=g^{-1}p$, and
+check it reproduces the momentum $p$ we started from to within $2.96\times10^{-11}$ (tolerance
+$10^{-6}$). Separately, we check that the direct Legendre-transform Hamiltonian
+$H=p^{\top}\dot\theta-\mathcal L$ equals the closed-form $H=\tfrac12p^{\top}g^{-1}p+L(\theta)$ to
+the same precision. Nothing here is asserted --- it's a finite-difference cross-check against the
+formula, on a problem instance chosen so every term is actually nonzero.
+
+\item \textbf{What was the actual capacitance you measured, and what did Hamiltonian-geometric give you for it?}\\
+Important distinction: capacitance itself is \emph{not} something any optimizer --- including
+HG --- produces. It comes from a separate, classical calculation: a real 3D finite-difference
+solve of Laplace's equation for the finite-plate capacitor (30$\times$20\,mm plates, 4.0\,mm gap),
+run through the Wolfram Engine (\texttt{src/capacitor\_3d.py} and
+\texttt{main/mathematica/capacitor\_3d\_solve.wls}). The three numbers we report side by side:
+ideal parallel-plate formula, $1.3281$\,pF; our analytic effective-area fringing heuristic,
+$1.5583$\,pF; the actual 3D finite-difference solve, $\mathbf{1.6557}$\,\textbf{pF}. Real fringing
+adds about 25\% capacitance over the naive ideal formula, and our heuristic captures most but not
+all of that gap. The optimizer comparison (HG vs.\ SGD vs.\ Adam vs.\ entropy descent) is a
+\emph{separate} track on the same physical geometry: those five optimizers train a
+physics-informed network to fit that same potential field, scored by final loss and PDE/boundary
+residual, not by a capacitance value directly --- HG's number there is the best final loss
+($17.13218$, against SGD's $19.99849$), not a picofarad figure. Worth clarifying up front if
+asked, since it's an easy point to conflate.
+
 \item \textbf{Is there any real theorem here, or is it all empirical?}\\
 One, stated and proved exactly where it's provable in closed form: for a quadratic loss with the
 metric set to the exact (constant) Hessian, every correction term vanishes identically, and the
